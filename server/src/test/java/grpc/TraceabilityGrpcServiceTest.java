@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 /**
  * Test af gRPC-laget: oversætter det korrekt mellem domænet og protokollen?
  *
- * Vi starter en rigtig gRPC-server, men "in-process" — den kører i samme JVM uden
+ * Starter en rigtig gRPC-server, men "in-process" — den kører i samme JVM uden
  * netværk eller portnummer. Vi tester altså rigtige gRPC-kald (serialisering, statuskoder),
  * bare uden at være afhængige af at en port er ledig.
  *
@@ -70,7 +70,7 @@ class TraceabilityGrpcServiceTest
     server.awaitTermination(5, TimeUnit.SECONDS);
   }
 
-  // Det glade scenarie: servicens liste skal ende i responsens repeated-felt.
+  // Happy case scenario: servicens liste skal ende i responsens repeated-felt.
   @Test
   void getAnimalsForProductReturnsTheAnimalIdsFromTheService()
   {

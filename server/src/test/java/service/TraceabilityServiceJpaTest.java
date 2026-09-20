@@ -22,13 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /*
- * Integrationstest: servicen kørt mod en rigtig database.
+ * Integrationstest: servicen kørt mod den rigtig database.
  *
- * Opgaven kræver at data kommer fra en database, og det er præcis det denne test beviser.
+ * Dataene kommer fra en database, hvilket denne test gerne skulle bevise at de gør.
  * Enhedstesten ved siden af mocker repositories væk — her bliver de afledte queries
- * (findByTrayIn, findDistinctByTraysIn) faktisk oversat til SQL og kørt.
+ * (findByTrayIn, findDistinctByTraysIn) oversat til SQL og kørt.
  *
- * @DataJpaTest starter kun JPA-delen af Spring (ingen gRPC-server) mod en H2-database
+ * @DataJpaTest starter kun JPA-delen af Spring (ingen gRPC-server) mod en database
  * i hukommelsen, og ruller hver test tilbage bagefter, så testene er uafhængige.
  * @ContextConfiguration peger på Server, fordi denne testklasse ligger i pakken
  * "service" og Spring ellers ikke selv kan finde konfigurationen.
