@@ -1,0 +1,789 @@
+{
+  "configuration" : {
+    "scope" : "SoftwareSystem"
+  },
+  "description" : "C4 model for the DSY course assignment: a slaughterhouse with full traceability from animal to product and back.",
+  "documentation" : { },
+  "id" : 1,
+  "lastModifiedDate" : "2026-09-20T11:31:09Z",
+  "model" : {
+    "people" : [ {
+      "description" : "Receives animals at the arrival end and records what came in.",
+      "id" : "1",
+      "name" : "Station 1 Operator",
+      "properties" : {
+        "structurizr.dsl.identifier" : "station1Operator"
+      },
+      "relationships" : [ {
+        "description" : "Registers and weighs arriving animals using",
+        "destinationId" : "10",
+        "id" : "40",
+        "sourceId" : "1",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Registers and weighs arriving animals using",
+        "destinationId" : "9",
+        "id" : "41",
+        "linkedRelationshipId" : "40",
+        "sourceId" : "1"
+      } ],
+      "tags" : "Element,Person"
+    }, {
+      "description" : "Cuts animals into parts and fills trays.",
+      "id" : "2",
+      "name" : "Station 2 Operator",
+      "properties" : {
+        "structurizr.dsl.identifier" : "station2Operator"
+      },
+      "relationships" : [ {
+        "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
+        "destinationId" : "11",
+        "id" : "42",
+        "sourceId" : "2",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
+        "destinationId" : "9",
+        "id" : "43",
+        "linkedRelationshipId" : "42",
+        "sourceId" : "2"
+      } ],
+      "tags" : "Element,Person"
+    }, {
+      "description" : "Packs products for distribution.",
+      "id" : "3",
+      "name" : "Station 3 Operator",
+      "properties" : {
+        "structurizr.dsl.identifier" : "station3Operator"
+      },
+      "relationships" : [ {
+        "description" : "Registers packed products and the trays they were packed from, using",
+        "destinationId" : "12",
+        "id" : "44",
+        "sourceId" : "3",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Registers packed products and the trays they were packed from, using",
+        "destinationId" : "9",
+        "id" : "45",
+        "linkedRelationshipId" : "44",
+        "sourceId" : "3"
+      } ],
+      "tags" : "Element,Person"
+    }, {
+      "description" : "Investigates problems with a slaughtered animal and decides which products must be recalled.",
+      "id" : "4",
+      "name" : "Quality / Recall Officer",
+      "properties" : {
+        "structurizr.dsl.identifier" : "qualityOfficer"
+      },
+      "relationships" : [ {
+        "description" : "Requests a recall lookup using",
+        "destinationId" : "8",
+        "id" : "46",
+        "sourceId" : "4",
+        "tags" : "Relationship"
+      } ],
+      "tags" : "Element,Person"
+    } ],
+    "softwareSystems" : [ {
+      "description" : "External party that delivers living animals. Exchanges happen physically and asynchronously, never through a synchronous call.",
+      "documentation" : { },
+      "id" : "5",
+      "name" : "Animal Supplier",
+      "properties" : {
+        "structurizr.dsl.identifier" : "supplier"
+      },
+      "relationships" : [ {
+        "description" : "Indirect: delivers animals",
+        "destinationId" : "10",
+        "id" : "47",
+        "sourceId" : "5",
+        "tags" : "Relationship",
+        "technology" : "Physical delivery"
+      }, {
+        "description" : "Indirect: delivers animals",
+        "destinationId" : "9",
+        "id" : "48",
+        "linkedRelationshipId" : "47",
+        "sourceId" : "5",
+        "technology" : "Physical delivery"
+      } ],
+      "tags" : "Element,Software System,External System"
+    }, {
+      "description" : "External party that collects packed products and handles distribution.",
+      "documentation" : { },
+      "id" : "6",
+      "name" : "Transport / Logistics",
+      "properties" : {
+        "structurizr.dsl.identifier" : "logistics"
+      },
+      "relationships" : [ {
+        "description" : "Distributes products",
+        "destinationId" : "7",
+        "id" : "51",
+        "sourceId" : "6",
+        "tags" : "Relationship",
+        "technology" : "Physical delivery"
+      } ],
+      "tags" : "Element,Software System,External System"
+    }, {
+      "description" : "External party that orders and receives products.",
+      "documentation" : { },
+      "id" : "7",
+      "name" : "Customer / Supermarket",
+      "properties" : {
+        "structurizr.dsl.identifier" : "customer"
+      },
+      "tags" : "Element,Software System,External System"
+    }, {
+      "description" : "System outside the slaughterhouse that asks which products may contain parts from a given animal.",
+      "documentation" : { },
+      "id" : "8",
+      "name" : "External Recall System",
+      "properties" : {
+        "structurizr.dsl.identifier" : "recallSystem"
+      },
+      "relationships" : [ {
+        "description" : "Direct: requests affected products for an animal",
+        "destinationId" : "20",
+        "id" : "52",
+        "sourceId" : "8",
+        "tags" : "Relationship",
+        "technology" : "gRPC / Protocol Buffers"
+      }, {
+        "description" : "Direct: requests affected products for an animal",
+        "destinationId" : "18",
+        "id" : "53",
+        "linkedRelationshipId" : "52",
+        "sourceId" : "8",
+        "technology" : "gRPC / Protocol Buffers"
+      }, {
+        "description" : "Direct: requests affected products for an animal",
+        "destinationId" : "9",
+        "id" : "54",
+        "linkedRelationshipId" : "52",
+        "sourceId" : "8",
+        "technology" : "gRPC / Protocol Buffers"
+      } ],
+      "tags" : "Element,Software System,External System"
+    }, {
+      "containers" : [ {
+        "description" : "Receives, weighs and registers arriving animals. Planned.",
+        "documentation" : { },
+        "id" : "10",
+        "name" : "Station 1 - Registration",
+        "properties" : {
+          "structurizr.dsl.identifier" : "station1"
+        },
+        "relationships" : [ {
+          "description" : "Writes registered animals to",
+          "destinationId" : "13",
+          "id" : "31",
+          "sourceId" : "10",
+          "tags" : "Relationship,Planned",
+          "technology" : "Local persistence"
+        } ],
+        "tags" : "Element,Container,Planned",
+        "technology" : "Java 21, Spring Boot"
+      }, {
+        "description" : "Cuts animals into parts, weighs each part and places it in a tray holding only one type of part. Planned.",
+        "documentation" : { },
+        "id" : "11",
+        "name" : "Station 2 - Cutting",
+        "properties" : {
+          "structurizr.dsl.identifier" : "station2"
+        },
+        "relationships" : [ {
+          "description" : "Writes registered parts and trays to",
+          "destinationId" : "14",
+          "id" : "32",
+          "sourceId" : "11",
+          "tags" : "Relationship,Planned",
+          "technology" : "Local persistence"
+        } ],
+        "tags" : "Element,Container,Planned",
+        "technology" : "Java 21, Spring Boot"
+      }, {
+        "description" : "Packs products from one or more trays and registers which trays were used. Planned.",
+        "documentation" : { },
+        "id" : "12",
+        "name" : "Station 3 - Packing",
+        "properties" : {
+          "structurizr.dsl.identifier" : "station3"
+        },
+        "relationships" : [ {
+          "description" : "Writes packed products to",
+          "destinationId" : "15",
+          "id" : "33",
+          "sourceId" : "12",
+          "tags" : "Relationship,Planned",
+          "technology" : "Local persistence"
+        }, {
+          "description" : "Indirect: hands over packed products",
+          "destinationId" : "6",
+          "id" : "49",
+          "sourceId" : "12",
+          "tags" : "Relationship",
+          "technology" : "Manual / physical process"
+        } ],
+        "tags" : "Element,Container,Planned",
+        "technology" : "Java 21, Spring Boot"
+      }, {
+        "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
+        "documentation" : { },
+        "id" : "13",
+        "name" : "Local Store - Station 1",
+        "properties" : {
+          "structurizr.dsl.identifier" : "store1"
+        },
+        "relationships" : [ {
+          "description" : "Forwards queued events when the network is available",
+          "destinationId" : "16",
+          "id" : "34",
+          "sourceId" : "13",
+          "tags" : "Relationship,Planned",
+          "technology" : "Asynchronous messaging"
+        } ],
+        "tags" : "Element,Container,Planned,Database",
+        "technology" : "Embedded database, e.g. H2 or SQLite"
+      }, {
+        "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
+        "documentation" : { },
+        "id" : "14",
+        "name" : "Local Store - Station 2",
+        "properties" : {
+          "structurizr.dsl.identifier" : "store2"
+        },
+        "relationships" : [ {
+          "description" : "Forwards queued events when the network is available",
+          "destinationId" : "16",
+          "id" : "35",
+          "sourceId" : "14",
+          "tags" : "Relationship,Planned",
+          "technology" : "Asynchronous messaging"
+        } ],
+        "tags" : "Element,Container,Planned,Database",
+        "technology" : "Embedded database, e.g. H2 or SQLite"
+      }, {
+        "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
+        "documentation" : { },
+        "id" : "15",
+        "name" : "Local Store - Station 3",
+        "properties" : {
+          "structurizr.dsl.identifier" : "store3"
+        },
+        "relationships" : [ {
+          "description" : "Forwards queued events when the network is available",
+          "destinationId" : "16",
+          "id" : "36",
+          "sourceId" : "15",
+          "tags" : "Relationship,Planned",
+          "technology" : "Asynchronous messaging"
+        } ],
+        "tags" : "Element,Container,Planned,Database",
+        "technology" : "Embedded database, e.g. H2 or SQLite"
+      }, {
+        "description" : "Middleware that carries events from the stations asynchronously. Indirect communication decouples the stations, so a partial failure in one does not stop the others. Planned.",
+        "documentation" : { },
+        "id" : "16",
+        "name" : "Message Broker",
+        "properties" : {
+          "structurizr.dsl.identifier" : "broker"
+        },
+        "relationships" : [ {
+          "description" : "Delivers animal, part, tray and product events to",
+          "destinationId" : "18",
+          "id" : "37",
+          "sourceId" : "16",
+          "tags" : "Relationship,Planned",
+          "technology" : "Asynchronous messaging"
+        } ],
+        "tags" : "Element,Container,Planned",
+        "technology" : "Message broker, e.g. RabbitMQ"
+      }, {
+        "description" : "Client application used to call the traceability service. Uses the client stub generated from traceability.proto.",
+        "documentation" : { },
+        "id" : "17",
+        "name" : "Client",
+        "properties" : {
+          "structurizr.dsl.identifier" : "client"
+        },
+        "relationships" : [ {
+          "description" : "Requests traceability information",
+          "destinationId" : "20",
+          "id" : "55",
+          "sourceId" : "17",
+          "tags" : "Relationship",
+          "technology" : "gRPC / Protocol Buffers"
+        }, {
+          "description" : "Requests traceability information",
+          "destinationId" : "18",
+          "id" : "56",
+          "linkedRelationshipId" : "55",
+          "sourceId" : "17",
+          "technology" : "gRPC / Protocol Buffers"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Java 21, gRPC, generated client stub"
+      }, {
+        "components" : [ {
+          "description" : "Starts the gRPC server on the configured port and registers both the service and reflection, so Postman and BloomRPC can discover the contract.",
+          "documentation" : { },
+          "id" : "19",
+          "name" : "gRPC Server Runner",
+          "properties" : {
+            "structurizr.dsl.identifier" : "grpcServerRunner"
+          },
+          "relationships" : [ {
+            "description" : "Registers as a gRPC service and starts",
+            "destinationId" : "20",
+            "id" : "25",
+            "sourceId" : "19",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring CommandLineRunner, gRPC"
+        }, {
+          "description" : "Implements the server stub generated from traceability.proto. Validates input and maps domain errors to status codes: NOT_FOUND, INVALID_ARGUMENT and INTERNAL.",
+          "documentation" : { },
+          "id" : "20",
+          "name" : "gRPC API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "grpcApi"
+          },
+          "relationships" : [ {
+            "description" : "Calls",
+            "destinationId" : "21",
+            "id" : "26",
+            "sourceId" : "20",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "gRPC, Protocol Buffers, generated server stub"
+        }, {
+          "description" : "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Knows nothing about JPA or gRPC.",
+          "documentation" : { },
+          "id" : "21",
+          "name" : "Traceability Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "traceabilityService"
+          },
+          "relationships" : [ {
+            "description" : "Reads traceability data via",
+            "destinationId" : "22",
+            "id" : "27",
+            "sourceId" : "21",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Java"
+        }, {
+          "description" : "AnimalRepository, AnimalPartRepository, TrayRepository and ProductRepository. Derived queries push the tracing down into the database.",
+          "documentation" : { },
+          "id" : "22",
+          "name" : "Repositories",
+          "properties" : {
+            "structurizr.dsl.identifier" : "persistence"
+          },
+          "relationships" : [ {
+            "description" : "Maps rows to",
+            "destinationId" : "23",
+            "id" : "29",
+            "sourceId" : "22",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Reads and writes data",
+            "destinationId" : "30",
+            "id" : "38",
+            "sourceId" : "22",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Data JPA"
+        }, {
+          "description" : "Animal, AnimalPart, Tray and Product, including the references that make tracing possible.",
+          "documentation" : { },
+          "id" : "23",
+          "name" : "Domain Entities",
+          "properties" : {
+            "structurizr.dsl.identifier" : "entities"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence"
+        }, {
+          "description" : "Creates demo data on startup. Disabled by default via app.seed-demo-data.",
+          "documentation" : { },
+          "id" : "24",
+          "name" : "Demo Data Seeder",
+          "properties" : {
+            "structurizr.dsl.identifier" : "demoDataSeeder"
+          },
+          "relationships" : [ {
+            "description" : "Writes demo data via",
+            "destinationId" : "22",
+            "id" : "28",
+            "sourceId" : "24",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring CommandLineRunner"
+        } ],
+        "description" : "Provides traceability lookups between animals and products. The read side is implemented; consuming station events is planned.",
+        "documentation" : { },
+        "id" : "18",
+        "name" : "Traceability Server",
+        "properties" : {
+          "structurizr.dsl.identifier" : "traceabilityServer"
+        },
+        "relationships" : [ {
+          "description" : "Reads and writes data",
+          "destinationId" : "30",
+          "id" : "39",
+          "linkedRelationshipId" : "38",
+          "sourceId" : "18",
+          "technology" : "JPA / JDBC"
+        } ],
+        "tags" : "Element,Container",
+        "technology" : "Java 21, Spring Boot, gRPC"
+      }, {
+        "description" : "Stores animals, animal parts, trays and products.",
+        "documentation" : { },
+        "id" : "30",
+        "name" : "Slaughterhouse Database",
+        "properties" : {
+          "structurizr.dsl.identifier" : "database"
+        },
+        "tags" : "Element,Container,Database",
+        "technology" : "PostgreSQL"
+      } ],
+      "description" : "Registers and traces animals, parts, trays and products, and supports product recall.",
+      "documentation" : { },
+      "id" : "9",
+      "name" : "Slaughterhouse System",
+      "properties" : {
+        "structurizr.dsl.identifier" : "slaughterhouse"
+      },
+      "relationships" : [ {
+        "description" : "Indirect: hands over packed products",
+        "destinationId" : "6",
+        "id" : "50",
+        "linkedRelationshipId" : "49",
+        "sourceId" : "9",
+        "technology" : "Manual / physical process"
+      } ],
+      "tags" : "Element,Software System"
+    } ]
+  },
+  "name" : "Slaughterhouse",
+  "properties" : {
+    "structurizr.inspection.error" : "14",
+    "structurizr.inspection.info" : "0",
+    "structurizr.inspection.ignore" : "0",
+    "structurizr.inspection.warning" : "0"
+  },
+  "views" : {
+    "componentViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "containerId" : "18",
+      "description" : "Component View of the Traceability Server. Mirrors the actual code in the server module.",
+      "elements" : [ {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "17",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "19",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "20",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "21",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "22",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "23",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "24",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "30",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "C3",
+      "name" : "Component View: Slaughterhouse System - Traceability Server",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "25"
+      }, {
+        "id" : "26"
+      }, {
+        "id" : "27"
+      }, {
+        "id" : "28"
+      }, {
+        "id" : "29"
+      }, {
+        "id" : "38"
+      }, {
+        "id" : "52"
+      }, {
+        "id" : "55"
+      } ]
+    } ],
+    "configuration" : {
+      "styles" : {
+        "elements" : [ {
+          "background" : "#85bbf0",
+          "color" : "#000000",
+          "tag" : "Component"
+        }, {
+          "background" : "#438dd5",
+          "color" : "#ffffff",
+          "tag" : "Container"
+        }, {
+          "shape" : "Cylinder",
+          "tag" : "Database"
+        }, {
+          "background" : "#8c8c8c",
+          "color" : "#ffffff",
+          "tag" : "External System"
+        }, {
+          "background" : "#08427b",
+          "color" : "#ffffff",
+          "shape" : "Person",
+          "tag" : "Person"
+        }, {
+          "background" : "#b3b3b3",
+          "border" : "Dashed",
+          "color" : "#000000",
+          "tag" : "Planned"
+        }, {
+          "background" : "#1168bd",
+          "color" : "#ffffff",
+          "tag" : "Software System"
+        } ],
+        "relationships" : [ {
+          "color" : "#808080",
+          "dashed" : true,
+          "tag" : "Planned"
+        } ]
+      },
+      "terminology" : { }
+    },
+    "containerViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "Container View. Shows the running parts and how each station keeps working when the network is down.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "10",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "12",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "13",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "15",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "16",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "17",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "18",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "30",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalSoftwareSystemBoundariesVisible" : false,
+      "key" : "C2",
+      "name" : "Container View: Slaughterhouse System",
+      "order" : 2,
+      "relationships" : [ {
+        "id" : "31"
+      }, {
+        "id" : "32"
+      }, {
+        "id" : "33"
+      }, {
+        "id" : "34"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "37"
+      }, {
+        "id" : "39"
+      }, {
+        "id" : "40"
+      }, {
+        "id" : "42"
+      }, {
+        "id" : "44"
+      }, {
+        "id" : "46"
+      }, {
+        "id" : "47"
+      }, {
+        "id" : "49"
+      }, {
+        "id" : "51"
+      }, {
+        "id" : "53"
+      }, {
+        "id" : "56"
+      } ],
+      "softwareSystemId" : "9"
+    } ],
+    "systemContextViews" : [ {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "description" : "System Context View. Focus is on the types of communication with the outside world rather than on technology.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "4",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "5",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "6",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "7",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "9",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "enterpriseBoundaryVisible" : true,
+      "key" : "C1",
+      "name" : "System Context View: Slaughterhouse System",
+      "order" : 1,
+      "relationships" : [ {
+        "id" : "41"
+      }, {
+        "id" : "43"
+      }, {
+        "id" : "45"
+      }, {
+        "id" : "46"
+      }, {
+        "id" : "48"
+      }, {
+        "id" : "50"
+      }, {
+        "id" : "51"
+      }, {
+        "id" : "54"
+      } ],
+      "softwareSystemId" : "9"
+    } ]
+  }
+}

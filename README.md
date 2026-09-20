@@ -21,17 +21,42 @@ Sporingskæden er en vigtig del af modellen:
 
 Et produkt peger på bakker, ikke på enkelte dele. Det matcher virkeligheden: når man pakker fra en bakke, ved man hvilke dyr der kan være i bakken, men ikke nødvendigvis hvilken del der er endt i hvilken pakke. Sporingen bliver derfor en bevidst overvurdering — den finder alle dyr der **kan** være i produktet.
 
-## Arkitekturoverblik (C1 - System Context)
-C1-diagrammet viser systemet som én blok og fokuserer på **typerne af kommunikation** med omverdenen frem for på teknologi.
+## Arkitektur (C4-modellen)
+Arkitekturen er modelleret i **Structurizr** med C4-modellens tre første niveauer. Kilden er én tekstfil, `docs/architecture/workspace.dsl`, som alle tre diagrammer genereres ud fra.
 
-![DSY-SlaughterHouse-C1-SystemContext.svg](docs/diagrams/DSY-SlaughterHouse-C1-SystemContext.svg)
+Diagrammerne er store. Klik på et diagram for at åbne det i fuld størrelse.
 
-- **Animal Supplier**, **Transport / Logistics** og **Customer / Supermarket** kommunikerer **indirekte** med systemet. De udveksler fysiske varer og beskeder, og systemet må ikke gå i stå fordi en af dem er utilgængelig.
-- **External Recall System** kommunikerer **direkte** med systemet. Det er her sporbarhedsopslaget bliver kaldt, og det er den del der er implementeret som gRPC-service i dette projekt.
+### C1 - System Context
+Hvad bygger vi, hvem bruger det, hvad gør brugerne, og hvordan passer systemet ind i det eksisterende systemlandskab. Fokus er på **typerne af kommunikation** frem for på teknologi.
 
-Krav til opgaven er at stationerne skal kunne arbejde så uafhængigt som muligt — arbejdet må ikke stoppe på en station bare fordi netværket er nede. Det er grunden til at kommunikationen udadtil er tegnet som overvejende indirekte.
+<a href="docs/diagrams/Structurizr-C1-SystemContext.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/Structurizr-C1-SystemContext.svg" alt="C1 - System Context View" width="600">
+</a>
 
+De blå figurer er systemets faktiske **brugere**: de tre stationsoperatører og en quality officer. De grå kasser er **eksterne systemer og parter** omkring systemet — de bruger ikke softwaren, men afgrænser processen.
 
+- **Animal Supplier**, **Transport / Logistics** og **Customer / Supermarket** kommunikerer **indirekte**. De udveksler fysiske varer, og systemet må ikke gå i stå fordi en af dem er utilgængelig.
+- **External Recall System** kommunikerer **direkte** over gRPC. Det er her sporbarhedsopslaget kaldes, og det er den del der er implementeret i dette projekt.
+
+### C2 - Container View
+Hvordan systemet er delt op i kørende enheder, og hvordan de taler sammen.
+
+<a href="docs/diagrams/Structurizr-C2-Container.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/Structurizr-C2-Container.svg" alt="C2 - Container View" width="600">
+</a>
+
+Det stiplede er **planlagt**, ikke bygget. Opgavens krav om at en station skal kunne arbejde videre selvom netværket er nede, er det der former hele diagrammet: hver station skriver først til sit **eget lokale lager** og sender først videre gennem en **message broker** når netværket er der igen. Ingen station afhænger af at en anden station, brokeren eller serveren kan nås. Fejlen forbliver **partiel**.
+
+### C3 - Component View
+Traceability Server zoomet ind. Diagrammet afspejler den faktiske kode i `server`-modulet.
+
+<a href="docs/diagrams/Structurizr-C3-Component.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/Structurizr-C3-Component.svg" alt="C3 - Component View" width="600">
+</a>
+
+Kontrakten bor i `traceability.proto`, og gRPC genererer en **client stub** og en **server stub** ud fra den. `gRPC API` implementerer server-stubben og oversætter domænefejl til statuskoder, mens `Traceability Service` holder selve sporingslogikken fri for både JPA og gRPC.
+
+I Structurizr ligger der også dokumentation under `docs/architecture/docs/`, som besvarer C4-spørgsmålene og kobler arkitekturen til kursets begreber: partiel fejl, transparens, heterogenitet og åbenhed.
 
 ## Oversigt over systemets struktur
 ```
@@ -143,13 +168,14 @@ Testene er kommenteret på dansk, da de også fungerer som mine egne noter til h
 - Spring Boot og Spring Data JPA
 - PostgreSQL (H2 i tests)
 - JUnit 5, Mockito og AssertJ
-- Astah til domænemodel og C4-diagrammer
+- Astah til domænemodel
+- Structurizr (DSL) til C4-diagrammerne
 
 ## Status
 Implementeret:
 
 - Domænemodel
-- C1 - System Context View
+- C1, C2 og C3 modelleret i Structurizr
 - gRPC-service med begge sporingsopslag
 - Persistens i PostgreSQL via Spring Data JPA
 - Eksplicit fejlhåndtering med gRPC-statuskoder
@@ -160,7 +186,6 @@ Implementeret:
 
 Ikke implementeret endnu:
 
-- C2 - Container View og C3 - Component View
 - De tre stationer som selvstændige, kørende enheder
 - Offline-drift, hvor en station kan arbejde videre uden netværk og synkronisere bagefter
 - Håndhævelse af bakkernes maksimale vægtkapacitet
