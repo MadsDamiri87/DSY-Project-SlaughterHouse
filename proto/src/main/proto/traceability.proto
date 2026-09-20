@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package traceability;
+
+option java_multiple_files = true;
+option java_package = "generated";
+option java_outer_classname = "TraceabilityProto";
+
+
+service TraceabilityService {
+
+  rpc GetAnimalsForProduct(GetAnimalsForProductRequest)
+      returns (GetAnimalsForProductResponse);
+
+  rpc GetProductsForAnimal(GetProductsForAnimalRequest)
+      returns (GetProductsForAnimalResponse);
+}
+
+message GetAnimalsForProductRequest {
+  string productId = 1;
+}
+
+message GetAnimalsForProductResponse {
+  repeated int32 animalIds = 1;
+}
+
+message GetProductsForAnimalRequest {
+  int32 animalId = 1;
+}
+
+message GetProductsForAnimalResponse {
+  repeated string productIds = 1;
+}
+
