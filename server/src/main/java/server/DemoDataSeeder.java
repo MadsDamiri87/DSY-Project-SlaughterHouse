@@ -46,9 +46,9 @@ public class DemoDataSeeder implements CommandLineRunner
       return;
     }
 
-    Animal pig1 = animal(1, "Pig", 95.0);
-    Animal pig2 = animal(2, "Pig", 102.5);
-    Animal pig3 = animal(3, "Pig", 88.0);
+    Animal pig1 = animal(1, "Pig", 95.0, "Nørregaard");
+    Animal pig2 = animal(2, "Pig", 102.5, "Nørregaard");
+    Animal pig3 = animal(3, "Pig", 88.0, "Søndergaard");
     animalRepository.saveAll(List.of(pig1, pig2, pig3));
 
     Tray loinTray = tray("TRAY-LOIN-1", "LOIN", 50.0);
@@ -69,10 +69,11 @@ public class DemoDataSeeder implements CommandLineRunner
     System.out.println("Demo data seeded");
   }
 
-  private Animal animal(int id, String species, double weight)
+  private Animal animal(int id, String species, double weight, String origin)
   {
     Animal animal = new Animal(id, weight);
     animal.setSpecies(species);
+    animal.setOrigin(origin);
     animal.setSlaughterDateTime(LocalDateTime.now());
     return animal;
   }

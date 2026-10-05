@@ -45,7 +45,7 @@ class TraceabilityServiceJpaTest
   /*
    * Bygger et lille slagteri op før hver test:
    *
-   *   gris 1 --> lænd  ---   *   gris 2 --> lænd  ----+--> TRAY-LOIN-1 --> PROD-LOIN-PACK og PROD-HALF-ANIMAL
+   *   gris 1 --> lænd  ---*---> gris 2 --> lænd  ----+--> TRAY-LOIN-1 --> PROD-LOIN-PACK og PROD-HALF-ANIMAL
    *   gris 1 --> bryst ----+--> TRAY-BELLY-1 -> PROD-HALF-ANIMAL
    *   gris 3 --> ribben ---+--> TRAY-RIB-1 ---> (intet produkt)
    *

@@ -12,6 +12,7 @@ public class Animal
   private int animalId;
 
   private String species;
+  private String origin;
 
   private double weight;
   private LocalDateTime arrivalDateTime = LocalDateTime.now();
@@ -70,5 +71,15 @@ public class Animal
   public void setSpecies(String species)
   {
     this.species = species;
+  }
+
+  public String getOrigin()
+  {
+    return origin;
+  }
+
+  public void setOrigin(String origin)
+  {
+    this.origin = origin;
   }
 }
