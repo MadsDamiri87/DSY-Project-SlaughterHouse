@@ -11,8 +11,10 @@
 
     <modules>
         <module>proto</module>
+        <module>shared</module>
         <module>server</module>
         <module>client</module>
+        <module>registration-service</module>
     </modules>
 
     <properties>
@@ -58,6 +60,11 @@
             <dependency>
                 <groupId>com.example</groupId>
                 <artifactId>proto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.example</groupId>
+                <artifactId>shared</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

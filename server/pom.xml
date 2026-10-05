@@ -71,7 +71,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>server.Server</mainClass>
+                    <mainClass>com.example.traceability.Server</mainClass>
                 </configuration>
                 <executions>
                     <execution>
