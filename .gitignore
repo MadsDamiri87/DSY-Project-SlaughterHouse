@@ -41,3 +41,4 @@ build/
 ### Project specific ###
 .idea/
 server/src/main/resources/application.properties
+.env

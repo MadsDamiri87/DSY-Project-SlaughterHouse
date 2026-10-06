@@ -11,7 +11,7 @@ Det centrale krav er **sporbarhed / tracking**. Hvis det senere viser sig at der
 ## Domænemodel
 Domænemodellen viser de centrale begreber i slagteriet og relationerne mellem dem.
 
-![DSY-SlaughterHouse-DomainModel.svg](docs/diagrams/DSY-SlaughterHouse-DomainModel.svg)
+![Slaughterhouse DomainModel - Mads Damiri.svg](docs/diagrams/Slaughterhouse%20DomainModel%20-%20Mads%20Damiri.svg)
 
 Sporingskæden er en vigtig del af modellen:
 
@@ -29,8 +29,8 @@ Diagrammerne er store. Klik på et diagram for at åbne det i fuld størrelse.
 ### C1 - System Context
 Hvad bygger vi, hvem bruger det, hvad gør brugerne, og hvordan passer systemet ind i det eksisterende systemlandskab. Fokus er på **typerne af kommunikation** frem for på teknologi.
 
-<a href="docs/diagrams/Structurizr-C1-SystemContext.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/Structurizr-C1-SystemContext.svg" alt="C1 - System Context View" width="600">
+<a href="docs/diagrams/C1-SystemContext.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/C1-SystemContext.svg" alt="C1 - System Context View" width="600">
 </a>
 
 De blå figurer er systemets faktiske **brugere**: de tre stationsoperatører og en quality officer. De grå kasser er **eksterne systemer og parter** omkring systemet — de bruger ikke softwaren, men afgrænser processen.
@@ -41,81 +41,64 @@ De blå figurer er systemets faktiske **brugere**: de tre stationsoperatører og
 ### C2 - Container View
 Hvordan systemet er delt op i kørende enheder, og hvordan de taler sammen.
 
-<a href="docs/diagrams/Structurizr-C2-Container.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/Structurizr-C2-Container.svg" alt="C2 - Container View" width="600">
+<a href="docs/diagrams/C2-Container.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/C2-Container.svg" alt="C2 - Container View" width="600">
 </a>
 
-Det stiplede er **planlagt**, ikke bygget. Opgavens krav om at en station skal kunne arbejde videre selvom netværket er nede, er det der former hele diagrammet: hver station skriver først til sit **eget lokale lager** og sender først videre gennem en **message broker** når netværket er der igen. Ingen station afhænger af at en anden station, brokeren eller serveren kan nås. Fejlen forbliver **partiel**.
+Det stiplede er **planlagt**, ikke bygget. Station 1, dens database, RabbitMQ og serverens `AnimalRegistered`-consumer er implementeret. Station 2 og Station 3 er stadig planlagte. Station 1 gemmer både dyret og en event i en transactional outbox, så registreringen kan gennemføres, selvom RabbitMQ eller serveren er nede. Eventen sendes automatisk, når forbindelsen er tilbage.
 
-### C3 - Component View
-Traceability Server zoomet ind. Diagrammet afspejler den faktiske kode i `server`-modulet.
+### C3 - Component View: Traceability Server
+Serveren zoomet ind. Diagrammet afspejler den faktiske kode i `server`-modulet.
 
-<a href="docs/diagrams/Structurizr-C3-Component.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/Structurizr-C3-Component.svg" alt="C3 - Component View" width="600">
+<a href="docs/diagrams/C3-Component-Traceability.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/C3-Component-Traceability.svg" alt="C3 - Component View: Traceability Server" width="600">
 </a>
 
-Kontrakten bor i `traceability.proto`, og gRPC genererer en **client stub** og en **server stub** ud fra den. `gRPC API` implementerer server-stubben og oversætter domænefejl til statuskoder, mens `Traceability Service` holder selve sporingslogikken fri for både JPA og gRPC.
+Kontrakten bor i `traceability.proto`, og gRPC genererer en **client stub** og en **server stub** ud fra den. `gRPC API` implementerer server-stubben og oversætter domænefejl til statuskoder, mens `Traceability Service` holder sporingslogikken fri for både JPA og gRPC. `Animal Registered Consumer` modtager events fra RabbitMQ og bruger registreringsnummeret som den fælles identitet på tværs af de to databaser.
+
+### C3 - Component View: Station 1 (Registration)
+Registration-servicen zoomet ind. Afspejler koden i `registration-service`-modulet.
+
+<a href="docs/diagrams/C3-Component-Registration.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/C3-Component-Registration.svg" alt="C3 - Component View: Station 1 Registration" width="600">
+</a>
+
+`Animal REST API` validerer input, `REST Exception Handler` oversætter domænefejl til 404, 409 og 400, og `Registration Outbox` gemmer eventen i samme transaktion som dyret. `Outbox Publisher` sender den videre, når RabbitMQ er tilgængelig.
 
 I Structurizr ligger der også dokumentation under `docs/architecture/docs/`, som besvarer C4-spørgsmålene og kobler arkitekturen til kursets begreber: partiel fejl, transparens, heterogenitet og åbenhed.
+
+## Lokal infrastruktur
+
+Traceability-serveren bruger PostgreSQL, mens Station 1 bruger sin egen lokale H2-fildatabase. De deler altså ikke database — compose starter kun Postgres til traceability.
+
+Kodeordet til Postgres ligger i en `.env`-fil, som ikke er i versionsstyring. Kopier `.env.example` til `.env` og udfyld den første gang. Derefter:
+
+```powershell
+docker compose up -d
+```
+
+- Traceability-serveren bruger PostgreSQL-databasen `slaughterhouse`.
+- Registration-service opretter automatisk sin lokale database under `registration-service/data/`.
+- RabbitMQ bruger port `5672`; administrationssiden ligger på `http://localhost:15672` med `guest` / `guest`.
+
+Start derefter `Server` og `RegistrationServiceApplication`. En `POST /animals` bliver først gemt i registration-servicens database. `AnimalRegisteredEvent` sendes derefter via RabbitMQ og gemmes idempotent i traceability-serverens database med samme registreringsnummer.
 
 ## Oversigt over systemets struktur
 ```
 DSY-SlaughterHouse/
-├── pom.xml                              (parent - styrer versioner for alle moduler)
-├── docs/
-│   └── diagrams/
-│       ├── DSY-SlaughterHouse-DomainModel.svg
-│       └── DSY-SlaughterHouse-C1-SystemContext.svg
-├── proto/
-│   ├── pom.xml
-│   └── src/main/proto/
-│       └── traceability.proto           (kontrakten - genererer Java-kode)
-├── server/
-│   ├── pom.xml
-│   └── src/
-│       ├── main/
-│       │   ├── java/
-│       │   │   ├── entity/              (Animal, AnimalPart, Tray, Product)
-│       │   │   ├── repository/          (Spring Data JPA interfaces)
-│       │   │   ├── service/             (TraceabilityService - sporingslogikken)
-│       │   │   ├── grpc/                (gRPC-laget og serverens opstart)
-│       │   │   └── server/              (Server, DemoDataSeeder)
-│       │   └── resources/
-│       │       └── application.properties
-│       └── test/
-│           ├── java/
-│           │   ├── service/             (enhedstest + integrationstest)
-│           │   └── grpc/                (test af gRPC-laget)
-│           └── resources/
-│               └── application.properties
-└── client/
-    ├── pom.xml
-    └── src/main/java/com/example/
-        └── Client.java                  (lille konsolklient til afprøvning)
+├── pom.xml                 parent, styrer versioner for alle moduler
+├── compose.yaml            PostgreSQL + RabbitMQ
+├── proto/                  gRPC-kontrakten
+├── shared/                 DTO'er og messaging-kontrakt mellem de to services
+├── server/                 Traceability: gRPC, PostgreSQL, event-consumer
+├── registration-service/   Station 1: REST, egen H2-database, outbox
+├── client/                 konsolklient til gRPC
+└── docs/
+    ├── architecture/       Structurizr workspace
+    └── diagrams/           eksporterede diagrammer
 ```
 
-Opdelingen i tre moduler er med vilje. `proto` indeholder kun kontrakten og kender hverken server eller klient. Både `server` og `client` afhænger af `proto`, men ikke af hinanden. Det gør det tydeligt at kontrakten er det eneste de to parter deler — hvilket er hele pointen i et distribueret system.
-
-## Tracking 
-Sporingen kan gå begge veje, og begge veje går gennem bakkerne.
-
-**Fra produkt til dyr** — `getAnimalsForProduct`:
-
-```
-Product -> Tray(s) -> AnimalPart(s) -> Animal(s)
-```
-
-Bruges når man har et produkt og vil vide hvilke dyr der kan indgå i det.
-
-**Fra dyr til produkt** — `getProductsForAnimal`:
-
-```
-Animal -> AnimalPart(s) -> Tray(s) -> Product(s)
-```
-
-Det er denne vej en tilbagekaldelse bruger: der er problemer med dyr nr. 1, hvilke produkter skal kaldes tilbage?
-
-Logikken ligger i `TraceabilityService` og er bevidst holdt fri for både JPA-detaljer og gRPC. Servicen kender kun domænet, hvilket gør den nem at teste isoleret.
+`proto` og `shared` indeholder kun kontrakter. `server` og `registration-service` afhænger af dem, men ikke af hinanden — de taler sammen over RabbitMQ. Det er hele pointen: kontrakten er det eneste de deler.
 
 ## gRPC-API
 Kontrakten er defineret i `proto/src/main/proto/traceability.proto`:
@@ -130,8 +113,6 @@ service TraceabilityService {
 }
 ```
 
-Maven genererer Java-klasser ud fra filen ved build, så både server og klient arbejder mod den samme kontrakt.
-
 Fejl oversættes til gRPC-statuskoder i stedet for at boble op som tekniske exceptions:
 
 | Situation | Statuskode |
@@ -144,21 +125,18 @@ Fejl oversættes til gRPC-statuskoder i stedet for at boble op som tekniske exce
 Et dyr der findes, men endnu ikke er pakket, er ikke en fejl. Det giver `OK` med en tom liste.
 
 ## Persistens
-Data hentes fra en **PostgreSQL**-database via Spring Data JPA. De fire entities er `Animal`, `AnimalPart`, `Tray` og `Product`.
 
-Selve opslagene bruger afledte queries, f.eks. `findByTrayIn(...)` og `findDistinctByTraysIn(...)`, så sporingen sker i databasen frem for i hukommelsen.
+De to services har hver sin database. Traceability-serveren bruger PostgreSQL; registration-servicen bruger sin egen H2-fil under `registration-service/data/`. De deler ikke skema, men holdes i sync gennem RabbitMQ.
+
+Systemet er derfor eventually consistent: et nyregistreret dyr er kendt i traceability-databasen inden for få sekunder, ikke med det samme. For sporbarhed er det acceptabelt, fordi opslaget alligevel er en bevidst overvurdering.
+
+Opslagene bruger afledte queries, fx `findByTrayIn(...)` og `findByOriginIgnoreCase(...)`, så filtreringen sker i databasen frem for i hukommelsen.
 
 ## Test
-Projektet har 19 tests fordelt på tre klasser, som tester hvert sit niveau:
 
-| Testklasse | Hvad den tester |
-| --- | --- |
-| `TraceabilityServiceTest` | Sporingslogikken isoleret. Repositories er Mockito-mocks, så der er hverken database eller netværk. |
-| `TraceabilityServiceJpaTest` | Servicen mod en rigtig database (H2 i hukommelsen). Beviser at de afledte queries faktisk oversættes til SQL der virker. |
-| `TraceabilityGrpcServiceTest` | gRPC-laget. Starter en rigtig gRPC-server "in-process" og kontrollerer at statuskoderne er rigtige. |
+Projektet har 43 tests, delt op efter lag: forretningslogikken isoleret med mocks, servicerne mod en database i hukommelsen, og yderlagene hver for sig — gRPC in-process, REST med MockMvc, og messaging med mocks.
 
-Testene er kommenteret på dansk, da de også fungerer som mine egne noter til hvad der bliver testet og hvorfor.
-
+Testene er kommenteret på dansk, da de også fungerer som mine egne noter til hvad der testes og hvorfor.
 
 ## Teknologier
 
@@ -166,7 +144,8 @@ Testene er kommenteret på dansk, da de også fungerer som mine egne noter til h
 - Maven multi-modul projekt
 - gRPC og Protocol Buffers
 - Spring Boot og Spring Data JPA
-- PostgreSQL (H2 i tests)
+- PostgreSQL og H2
+- RabbitMQ via Spring AMQP
 - JUnit 5, Mockito og AssertJ
 - Astah til domænemodel
 - Structurizr (DSL) til C4-diagrammerne
@@ -179,14 +158,16 @@ Implementeret:
 - gRPC-service med begge sporingsopslag
 - Persistens i PostgreSQL via Spring Data JPA
 - Eksplicit fejlhåndtering med gRPC-statuskoder
-- 19 tests på tre niveauer
+- 43 tests fordelt på lagene
 - Konsolklient til afprøvning
 - gRPC reflection, så servicen kan testes med Postman og BloomRPC
 - Demodata-seeder, der kan slås til og fra
+- Station 1 som selvstændig REST-service med egen database
+- Transactional outbox, så en registrering overlever at RabbitMQ er nede
+- Dead-letter-kø, så en ugyldig besked parkeres i stedet for at blokere
 
 Ikke implementeret endnu:
 
-- De tre stationer som selvstændige, kørende enheder
-- Offline-drift, hvor en station kan arbejde videre uden netværk og synkronisere bagefter
+- Station 2 og Station 3 som kørende enheder
 - Håndhævelse af bakkernes maksimale vægtkapacitet
 - Autentificering og autorisation

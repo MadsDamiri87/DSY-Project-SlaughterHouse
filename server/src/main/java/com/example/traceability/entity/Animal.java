@@ -53,6 +53,11 @@ public class Animal
     return arrivalDateTime;
   }
 
+  public void setArrivalDateTime(LocalDateTime arrivalDateTime)
+  {
+    this.arrivalDateTime = arrivalDateTime;
+  }
+
   public LocalDateTime getSlaughterDateTime()
   {
     return slaughterDateTime;

@@ -45,9 +45,50 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             description "Registers and traces animals, parts, trays and products, and supports product recall."
 
             station1 = container "Station 1 - Registration" {
-                description "Receives, weighs and registers arriving animals. Planned."
-                technology "Java 21, Spring Boot"
-                tags "Planned"
+                description "Registers arriving animals with date, weight, registration number and origin, and exposes them as a RESTful web service."
+                technology "Java 21, Spring Boot, REST"
+
+                animalApi = component "Animal REST API" {
+                    description "Handles POST /animals and the three required lookups: one animal, all animals arriving on a date, and all animals from an origin. Validates the request body before it reaches the service."
+                    technology "Spring MVC, Bean Validation"
+                }
+
+                restExceptionHandler = component "REST Exception Handler" {
+                    description "Turns domain exceptions into HTTP status codes: 404 when the animal is unknown, 409 when the registration number is already in use, and 400 when the request body fails validation."
+                    technology "Spring @RestControllerAdvice"
+                }
+
+                registrationService = component "Animal Registration Service" {
+                    description "Registration rules. Rejects a registration number that is already in use, and defaults the arrival time when the caller leaves it out. Knows nothing about HTTP."
+                    technology "Spring @Service"
+                }
+
+                registrationRepository = component "Animal Repository" {
+                    description "Derived queries for lookup by registration number, by arrival date as a half-open interval, and by origin."
+                    technology "Spring Data JPA"
+                }
+
+                registrationEntity = component "Animal Entity" {
+                    description "The registration service's own view of an animal: registration number, arrival date, weight and origin."
+                    technology "Jakarta Persistence"
+                }
+
+                registrationOutbox = component "Registration Outbox" {
+                    description "Stores AnimalRegistered events in the same transaction as the animal, so registrations are not lost when RabbitMQ is unavailable."
+                    technology "Spring Data JPA, H2"
+                }
+
+                outboxPublisher = component "Outbox Publisher" {
+                    description "Retries pending AnimalRegistered events and removes them from the outbox only after they have been sent to RabbitMQ."
+                    technology "Spring Scheduler, Spring AMQP"
+                }
+
+                animalApi -> registrationService "Calls"
+                restExceptionHandler -> animalApi "Converts exceptions thrown by"
+                registrationService -> registrationRepository "Reads and writes animals via"
+                registrationService -> registrationOutbox "Stores an AnimalRegistered event atomically in"
+                registrationRepository -> registrationEntity "Maps rows to"
+                outboxPublisher -> registrationOutbox "Reads pending events from"
             }
 
             station2 = container "Station 2 - Cutting" {
@@ -62,10 +103,10 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 tags "Planned"
             }
 
-            store1 = container "Local Store - Station 1" {
-                description "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned."
-                technology "Embedded database, e.g. H2 or SQLite"
-                tags "Planned,Database"
+            store1 = container "Registration Database" {
+                description "Owns registered animals and the transactional outbox. Lets Station 1 accept registrations while RabbitMQ or the backend is unavailable."
+                technology "Local persistent H2 database"
+                tags "Database"
             }
 
             store2 = container "Local Store - Station 2" {
@@ -81,9 +122,8 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             }
 
             broker = container "Message Broker" {
-                description "Middleware that carries events from the stations asynchronously. Indirect communication decouples the stations, so a partial failure in one does not stop the others. Planned."
-                technology "Message broker, e.g. RabbitMQ"
-                tags "Planned"
+                description "Carries station events asynchronously. Holds a dead-letter queue, so an event the consumer rejects is parked for inspection instead of being redelivered forever. AnimalRegistered is implemented; events from Station 2 and Station 3 are planned."
+                technology "RabbitMQ, topic exchange and dead-letter queue"
             }
 
             client = container "Client" {
@@ -92,7 +132,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             }
 
             traceabilityServer = container "Traceability Server" {
-                description "Provides traceability lookups between animals and products. The read side is implemented; consuming station events is planned."
+                description "Consumes animal registrations and provides traceability lookups between animals and products."
                 technology "Java 21, Spring Boot, gRPC"
 
                 grpcServerRunner = component "gRPC Server Runner" {
@@ -125,10 +165,16 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                     technology "Spring CommandLineRunner"
                 }
 
+                animalEventConsumer = component "Animal Registered Consumer" {
+                    description "Consumes AnimalRegistered events idempotently and maps the shared registration number to the server's Animal identity."
+                    technology "Spring AMQP"
+                }
+
                 grpcServerRunner -> grpcApi "Registers as a gRPC service and starts"
                 grpcApi -> traceabilityService "Calls"
                 traceabilityService -> persistence "Reads traceability data via"
                 demoDataSeeder -> persistence "Writes demo data via"
+                animalEventConsumer -> persistence "Upserts registered animals via"
                 persistence -> entities "Maps rows to"
             }
 
@@ -138,28 +184,34 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 tags "Database"
             }
 
-            station1 -> store1 "Writes registered animals to" "Local persistence" "Planned"
+            registrationRepository -> store1 "Reads and writes animal registrations" "JPA / JDBC"
+            registrationOutbox -> store1 "Stores pending events in" "JPA / JDBC"
+
             station2 -> store2 "Writes registered parts and trays to" "Local persistence" "Planned"
             station3 -> store3 "Writes packed products to" "Local persistence" "Planned"
 
-            store1 -> broker "Forwards queued events when the network is available" "Asynchronous messaging" "Planned"
+            outboxPublisher -> broker "Publishes AnimalRegistered events when available" "AMQP"
             store2 -> broker "Forwards queued events when the network is available" "Asynchronous messaging" "Planned"
             store3 -> broker "Forwards queued events when the network is available" "Asynchronous messaging" "Planned"
 
-            broker -> traceabilityServer "Delivers animal, part, tray and product events to" "Asynchronous messaging" "Planned"
+            broker -> animalEventConsumer "Delivers AnimalRegistered events to" "AMQP"
+            animalEventConsumer -> broker "Rejects invalid events to the dead-letter queue" "AMQP"
 
             persistence -> database "Reads and writes data" "JPA / JDBC"
         }
 
-        station1Operator -> station1 "Registers and weighs arriving animals using"
+        station1Operator -> slaughterhouse "Registers and weighs arriving animals using"
+        recallSystem -> slaughterhouse "Direct: requests affected products for an animal"
+
+        station1Operator -> animalApi "Registers and weighs arriving animals using" "REST / JSON"
         station2Operator -> station2 "Registers each part with its weight, its animal and the tray it goes into, using"
         station3Operator -> station3 "Registers packed products and the trays they were packed from, using"
 
         qualityOfficer -> recallSystem "Requests a recall lookup using"
 
-        supplier -> station1 "Indirect: delivers animals" "Physical delivery"
-        station3 -> logistics "Indirect: hands over packed products" "Manual / physical process"
-        logistics -> customer "Distributes products" "Physical delivery"
+        supplier -> station1 "Indirect: delivers animals"
+        station3 -> logistics "Indirect: hands over packed products"
+        logistics -> customer "Indirect: distributes products"
 
         recallSystem -> grpcApi "Direct: requests affected products for an animal" "gRPC / Protocol Buffers"
         client -> grpcApi "Requests traceability information" "gRPC / Protocol Buffers"
@@ -167,19 +219,24 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
 
     views {
 
-        systemContext slaughterhouse "C1" "System Context View. Focus is on the types of communication with the outside world rather than on technology." {
+        systemContext slaughterhouse "C1" "C1 - System Context View. Focus is on the types of communication with the outside world rather than on technology." {
             include *
             include qualityOfficer customer
             autolayout tb
         }
 
-        container slaughterhouse "C2" "Container View. Shows the running parts and how each station keeps working when the network is down." {
+        container slaughterhouse "C2" "C2 - Container View. Shows the running parts and how each station keeps working when the network is down." {
             include *
             include qualityOfficer customer
             autolayout tb
         }
 
-        component traceabilityServer "C3" "Component View of the Traceability Server. Mirrors the actual code in the server module." {
+        component traceabilityServer "C3-Traceability" "C3 - Component View of the Traceability Server. Mirrors the actual code in the server module." {
+            include *
+            autolayout tb
+        }
+
+        component station1 "C3-Registration" "C3 - Component View of Station 1 Registration. Mirrors the actual code in the registration-service module." {
             include *
             autolayout tb
         }

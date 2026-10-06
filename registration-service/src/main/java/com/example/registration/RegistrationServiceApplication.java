@@ -11,4 +11,5 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
     SpringApplication.run(RegistrationServiceApplication.class, args);
   }
 
+
 }

@@ -74,3 +74,203 @@ Action:
 
 Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
 
+2026-10-05T22:34:23.008+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-05T22:34:23.010+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :   _____ _                   _              _          
+2026-10-05T22:34:23.010+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  / ____| |                 | |            (_)         
+2026-10-05T22:34:23.010+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __ 
+2026-10-05T22:34:23.010+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2026-10-05T22:34:23.011+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |   
+2026-10-05T22:34:23.011+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|   
+2026-10-05T22:34:23.011+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :                                                       
+2026-10-05T22:34:23.011+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : Local v2026.09.19
+2026-10-05T22:34:23.011+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.authentication: none
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.autorefreshinterval: 0
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.autosaveinterval: 5000
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.cache: none
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.data: file
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.datadirectory: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.debug: false
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.editable: true
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.logging.filename: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\.structurizr\logs\structurizr.log
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.network.timeout: 60000
+2026-10-05T22:34:23.012+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.network.urls.allowed: .*
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.search: lucene
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.themes: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\themes\
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.maxsize: 1MB
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.threads: 10
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             :  - structurizr.workspaces: 1
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : Themes:
+2026-10-05T22:34:23.013+02:00  INFO 48776 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T10:34:32.908+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :   _____ _                   _              _          
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  / ____| |                 | |            (_)         
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __ 
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |   
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|   
+2026-10-06T10:34:32.919+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :                                                       
+2026-10-06T10:34:32.920+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : Local v2026.09.19
+2026-10-06T10:34:32.920+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.authentication: none
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.autorefreshinterval: 0
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.autosaveinterval: 5000
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.cache: none
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.data: file
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.datadirectory: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.debug: false
+2026-10-06T10:34:32.921+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.editable: true
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.logging.filename: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\.structurizr\logs\structurizr.log
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.network.timeout: 60000
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.network.urls.allowed: .*
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.search: lucene
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.themes: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\themes\
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.maxsize: 1MB
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.threads: 10
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             :  - structurizr.workspaces: 1
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T10:34:32.922+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : Themes:
+2026-10-06T10:34:32.923+02:00  INFO 71728 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T10:34:41.246+02:00 ERROR 48776 --- [http-nio-8080-exec-6] c.s.s.w.a.AbstractWorkspaceApiController : com.structurizr.server.component.workspace.WorkspaceComponentException: com.structurizr.dsl.StructurizrDslParserException: A relationship between "Person://Station 1 Operator" and "SoftwareSystem://Slaughterhouse System" already exists at line 207 of C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\workspace.dsl: station1Operator -> slaughterhouse "Registers and weighs arriving animals using"
+2026-10-06T10:34:42.203+02:00  WARN 71728 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-10-06T10:34:42.209+02:00  INFO 71728 --- [main] com.structurizr.server.AbstractServer    : ********************************************************
+2026-10-06T10:34:42.209+02:00  INFO 71728 --- [main] com.structurizr.server.AbstractServer    :  Stopping Structurizr
+2026-10-06T10:34:42.209+02:00  INFO 71728 --- [main] com.structurizr.server.AbstractServer    : ********************************************************
+2026-10-06T10:34:42.243+02:00 ERROR 71728 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2026-10-06T11:21:25.592+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :   _____ _                   _              _          
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  / ____| |                 | |            (_)         
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __ 
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |   
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|   
+2026-10-06T11:21:25.593+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :                                                       
+2026-10-06T11:21:25.594+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : Local v2026.09.19
+2026-10-06T11:21:25.594+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:21:25.594+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.authentication: none
+2026-10-06T11:21:25.594+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.autorefreshinterval: 0
+2026-10-06T11:21:25.594+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.autosaveinterval: 5000
+2026-10-06T11:21:25.594+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.cache: none
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.data: file
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.datadirectory: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.debug: false
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.editable: true
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.logging.filename: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\.structurizr\logs\structurizr.log
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.network.timeout: 60000
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.network.urls.allowed: .*
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.search: lucene
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.themes: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\themes\
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.maxsize: 1MB
+2026-10-06T11:21:25.595+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.threads: 10
+2026-10-06T11:21:25.596+02:00  INFO 74940 --- [main] com.structurizr.server.Local             :  - structurizr.workspaces: 1
+2026-10-06T11:21:25.596+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:21:25.596+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : Themes:
+2026-10-06T11:21:25.596+02:00  INFO 74940 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:21:33.850+02:00  WARN 74940 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-10-06T11:21:33.856+02:00  INFO 74940 --- [main] com.structurizr.server.AbstractServer    : ********************************************************
+2026-10-06T11:21:33.856+02:00  INFO 74940 --- [main] com.structurizr.server.AbstractServer    :  Stopping Structurizr
+2026-10-06T11:21:33.857+02:00  INFO 74940 --- [main] com.structurizr.server.AbstractServer    : ********************************************************
+2026-10-06T11:21:33.907+02:00 ERROR 74940 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2026-10-06T11:23:24.414+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :   _____ _                   _              _          
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  / ____| |                 | |            (_)         
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __ 
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |   
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|   
+2026-10-06T11:23:24.415+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :                                                       
+2026-10-06T11:23:24.416+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : Local v2026.09.19
+2026-10-06T11:23:24.416+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:23:24.416+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.authentication: none
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.autorefreshinterval: 0
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.autosaveinterval: 5000
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.cache: none
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.data: file
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.datadirectory: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.debug: false
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.editable: true
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.logging.filename: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\.structurizr\logs\structurizr.log
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.network.timeout: 60000
+2026-10-06T11:23:24.417+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.network.urls.allowed: .*
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.search: lucene
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.themes: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\themes\
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.maxsize: 1MB
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.threads: 10
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             :  - structurizr.workspaces: 1
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : Themes:
+2026-10-06T11:23:24.418+02:00  INFO 90260 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:25:58.378+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:25:58.380+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :   _____ _                   _              _          
+2026-10-06T11:25:58.380+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  / ____| |                 | |            (_)         
+2026-10-06T11:25:58.380+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : | (___ | |_ _ __ _   _  ___| |_ _   _ _ __ _ _____ __ 
+2026-10-06T11:25:58.380+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  \___ \| __| '__| | | |/ __| __| | | | '__| |_  / '__|
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  ____) | |_| |  | |_| | (__| |_| |_| | |  | |/ /| |   
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : |_____/ \__|_|   \__,_|\___|\__|\__,_|_|  |_/___|_|   
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :                                                       
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : Local v2026.09.19
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.authentication: none
+2026-10-06T11:25:58.389+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.autorefreshinterval: 0
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.autosaveinterval: 5000
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.cache: none
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.data: file
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.datadirectory: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.debug: false
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.editable: true
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.logging.filename: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\.structurizr\logs\structurizr.log
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.network.timeout: 60000
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.network.urls.allowed: .*
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.search: lucene
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.themes: C:\Users\madsc\Desktop\Skole - Programmer\SEM3\DSY - Distribuerede systemer\Projects\TestProject\DSY-SlaughterHouse\docs\architecture\.\themes\
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.maxsize: 1MB
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.workspace.threads: 10
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             :  - structurizr.workspaces: 1
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:25:58.390+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : Themes:
+2026-10-06T11:25:58.391+02:00  INFO 80612 --- [main] com.structurizr.server.Local             : ***********************************************************************************
+2026-10-06T11:26:06.975+02:00  WARN 80612 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-10-06T11:26:06.980+02:00  INFO 80612 --- [main] com.structurizr.server.AbstractServer    : ********************************************************
+2026-10-06T11:26:06.980+02:00  INFO 80612 --- [main] com.structurizr.server.AbstractServer    :  Stopping Structurizr
+2026-10-06T11:26:06.980+02:00  INFO 80612 --- [main] com.structurizr.server.AbstractServer    : ********************************************************
+2026-10-06T11:26:07.005+02:00 ERROR 80612 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+

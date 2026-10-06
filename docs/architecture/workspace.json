@@ -5,7 +5,7 @@
   "description" : "C4 model for the DSY course assignment: a slaughterhouse with full traceability from animal to product and back.",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-09-20T11:31:09Z",
+  "lastModifiedDate" : "2026-10-06T09:31:22Z",
   "model" : {
     "people" : [ {
       "description" : "Receives animals at the arrival end and records what came in.",
@@ -16,16 +16,24 @@
       },
       "relationships" : [ {
         "description" : "Registers and weighs arriving animals using",
-        "destinationId" : "10",
-        "id" : "40",
+        "destinationId" : "9",
+        "id" : "61",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Registers and weighs arriving animals using",
-        "destinationId" : "9",
-        "id" : "41",
-        "linkedRelationshipId" : "40",
-        "sourceId" : "1"
+        "destinationId" : "11",
+        "id" : "63",
+        "sourceId" : "1",
+        "tags" : "Relationship",
+        "technology" : "REST / JSON"
+      }, {
+        "description" : "Registers and weighs arriving animals using",
+        "destinationId" : "10",
+        "id" : "64",
+        "linkedRelationshipId" : "63",
+        "sourceId" : "1",
+        "technology" : "REST / JSON"
       } ],
       "tags" : "Element,Person"
     }, {
@@ -37,15 +45,15 @@
       },
       "relationships" : [ {
         "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
-        "destinationId" : "11",
-        "id" : "42",
+        "destinationId" : "24",
+        "id" : "65",
         "sourceId" : "2",
         "tags" : "Relationship"
       }, {
         "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
         "destinationId" : "9",
-        "id" : "43",
-        "linkedRelationshipId" : "42",
+        "id" : "66",
+        "linkedRelationshipId" : "65",
         "sourceId" : "2"
       } ],
       "tags" : "Element,Person"
@@ -58,15 +66,15 @@
       },
       "relationships" : [ {
         "description" : "Registers packed products and the trays they were packed from, using",
-        "destinationId" : "12",
-        "id" : "44",
+        "destinationId" : "25",
+        "id" : "67",
         "sourceId" : "3",
         "tags" : "Relationship"
       }, {
         "description" : "Registers packed products and the trays they were packed from, using",
         "destinationId" : "9",
-        "id" : "45",
-        "linkedRelationshipId" : "44",
+        "id" : "68",
+        "linkedRelationshipId" : "67",
         "sourceId" : "3"
       } ],
       "tags" : "Element,Person"
@@ -80,7 +88,7 @@
       "relationships" : [ {
         "description" : "Requests a recall lookup using",
         "destinationId" : "8",
-        "id" : "46",
+        "id" : "69",
         "sourceId" : "4",
         "tags" : "Relationship"
       } ],
@@ -97,17 +105,15 @@
       "relationships" : [ {
         "description" : "Indirect: delivers animals",
         "destinationId" : "10",
-        "id" : "47",
+        "id" : "70",
         "sourceId" : "5",
-        "tags" : "Relationship",
-        "technology" : "Physical delivery"
+        "tags" : "Relationship"
       }, {
         "description" : "Indirect: delivers animals",
         "destinationId" : "9",
-        "id" : "48",
-        "linkedRelationshipId" : "47",
-        "sourceId" : "5",
-        "technology" : "Physical delivery"
+        "id" : "71",
+        "linkedRelationshipId" : "70",
+        "sourceId" : "5"
       } ],
       "tags" : "Element,Software System,External System"
     }, {
@@ -119,12 +125,11 @@
         "structurizr.dsl.identifier" : "logistics"
       },
       "relationships" : [ {
-        "description" : "Distributes products",
+        "description" : "Indirect: distributes products",
         "destinationId" : "7",
-        "id" : "51",
+        "id" : "74",
         "sourceId" : "6",
-        "tags" : "Relationship",
-        "technology" : "Physical delivery"
+        "tags" : "Relationship"
       } ],
       "tags" : "Element,Software System,External System"
     }, {
@@ -146,30 +151,163 @@
       },
       "relationships" : [ {
         "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "20",
-        "id" : "52",
+        "destinationId" : "9",
+        "id" : "62",
+        "sourceId" : "8",
+        "tags" : "Relationship"
+      }, {
+        "description" : "Direct: requests affected products for an animal",
+        "destinationId" : "33",
+        "id" : "75",
         "sourceId" : "8",
         "tags" : "Relationship",
         "technology" : "gRPC / Protocol Buffers"
       }, {
         "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "18",
-        "id" : "53",
-        "linkedRelationshipId" : "52",
-        "sourceId" : "8",
-        "technology" : "gRPC / Protocol Buffers"
-      }, {
-        "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "9",
-        "id" : "54",
-        "linkedRelationshipId" : "52",
+        "destinationId" : "31",
+        "id" : "76",
+        "linkedRelationshipId" : "75",
         "sourceId" : "8",
         "technology" : "gRPC / Protocol Buffers"
       } ],
       "tags" : "Element,Software System,External System"
     }, {
       "containers" : [ {
-        "description" : "Receives, weighs and registers arriving animals. Planned.",
+        "components" : [ {
+          "description" : "Handles POST /animals and the three required lookups: one animal, all animals arriving on a date, and all animals from an origin. Validates the request body before it reaches the service.",
+          "documentation" : { },
+          "id" : "11",
+          "name" : "Animal REST API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "animalApi"
+          },
+          "relationships" : [ {
+            "description" : "Calls",
+            "destinationId" : "13",
+            "id" : "18",
+            "sourceId" : "11",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC, Bean Validation"
+        }, {
+          "description" : "Turns domain exceptions into HTTP status codes: 404 when the animal is unknown, 409 when the registration number is already in use, and 400 when the request body fails validation.",
+          "documentation" : { },
+          "id" : "12",
+          "name" : "REST Exception Handler",
+          "properties" : {
+            "structurizr.dsl.identifier" : "restExceptionHandler"
+          },
+          "relationships" : [ {
+            "description" : "Converts exceptions thrown by",
+            "destinationId" : "11",
+            "id" : "19",
+            "sourceId" : "12",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @RestControllerAdvice"
+        }, {
+          "description" : "Registration rules. Rejects a registration number that is already in use, and defaults the arrival time when the caller leaves it out. Knows nothing about HTTP.",
+          "documentation" : { },
+          "id" : "13",
+          "name" : "Animal Registration Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationService"
+          },
+          "relationships" : [ {
+            "description" : "Reads and writes animals via",
+            "destinationId" : "14",
+            "id" : "20",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Stores an AnimalRegistered event atomically in",
+            "destinationId" : "16",
+            "id" : "21",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Service"
+        }, {
+          "description" : "Derived queries for lookup by registration number, by arrival date as a half-open interval, and by origin.",
+          "documentation" : { },
+          "id" : "14",
+          "name" : "Animal Repository",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationRepository"
+          },
+          "relationships" : [ {
+            "description" : "Maps rows to",
+            "destinationId" : "15",
+            "id" : "22",
+            "sourceId" : "14",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Reads and writes animal registrations",
+            "destinationId" : "26",
+            "id" : "46",
+            "sourceId" : "14",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Data JPA"
+        }, {
+          "description" : "The registration service's own view of an animal: registration number, arrival date, weight and origin.",
+          "documentation" : { },
+          "id" : "15",
+          "name" : "Animal Entity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationEntity"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence"
+        }, {
+          "description" : "Stores AnimalRegistered events in the same transaction as the animal, so registrations are not lost when RabbitMQ is unavailable.",
+          "documentation" : { },
+          "id" : "16",
+          "name" : "Registration Outbox",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationOutbox"
+          },
+          "relationships" : [ {
+            "description" : "Stores pending events in",
+            "destinationId" : "26",
+            "id" : "48",
+            "sourceId" : "16",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Data JPA, H2"
+        }, {
+          "description" : "Retries pending AnimalRegistered events and removes them from the outbox only after they have been sent to RabbitMQ.",
+          "documentation" : { },
+          "id" : "17",
+          "name" : "Outbox Publisher",
+          "properties" : {
+            "structurizr.dsl.identifier" : "outboxPublisher"
+          },
+          "relationships" : [ {
+            "description" : "Reads pending events from",
+            "destinationId" : "16",
+            "id" : "23",
+            "sourceId" : "17",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Publishes AnimalRegistered events when available",
+            "destinationId" : "29",
+            "id" : "51",
+            "sourceId" : "17",
+            "tags" : "Relationship",
+            "technology" : "AMQP"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Scheduler, Spring AMQP"
+        } ],
+        "description" : "Registers arriving animals with date, weight, registration number and origin, and exposes them as a RESTful web service.",
         "documentation" : { },
         "id" : "10",
         "name" : "Station 1 - Registration",
@@ -177,28 +315,35 @@
           "structurizr.dsl.identifier" : "station1"
         },
         "relationships" : [ {
-          "description" : "Writes registered animals to",
-          "destinationId" : "13",
-          "id" : "31",
+          "description" : "Reads and writes animal registrations",
+          "destinationId" : "26",
+          "id" : "47",
+          "linkedRelationshipId" : "46",
           "sourceId" : "10",
-          "tags" : "Relationship,Planned",
-          "technology" : "Local persistence"
+          "technology" : "JPA / JDBC"
+        }, {
+          "description" : "Publishes AnimalRegistered events when available",
+          "destinationId" : "29",
+          "id" : "52",
+          "linkedRelationshipId" : "51",
+          "sourceId" : "10",
+          "technology" : "AMQP"
         } ],
-        "tags" : "Element,Container,Planned",
-        "technology" : "Java 21, Spring Boot"
+        "tags" : "Element,Container",
+        "technology" : "Java 21, Spring Boot, REST"
       }, {
         "description" : "Cuts animals into parts, weighs each part and places it in a tray holding only one type of part. Planned.",
         "documentation" : { },
-        "id" : "11",
+        "id" : "24",
         "name" : "Station 2 - Cutting",
         "properties" : {
           "structurizr.dsl.identifier" : "station2"
         },
         "relationships" : [ {
           "description" : "Writes registered parts and trays to",
-          "destinationId" : "14",
-          "id" : "32",
-          "sourceId" : "11",
+          "destinationId" : "27",
+          "id" : "49",
+          "sourceId" : "24",
           "tags" : "Relationship,Planned",
           "technology" : "Local persistence"
         } ],
@@ -207,59 +352,50 @@
       }, {
         "description" : "Packs products from one or more trays and registers which trays were used. Planned.",
         "documentation" : { },
-        "id" : "12",
+        "id" : "25",
         "name" : "Station 3 - Packing",
         "properties" : {
           "structurizr.dsl.identifier" : "station3"
         },
         "relationships" : [ {
           "description" : "Writes packed products to",
-          "destinationId" : "15",
-          "id" : "33",
-          "sourceId" : "12",
+          "destinationId" : "28",
+          "id" : "50",
+          "sourceId" : "25",
           "tags" : "Relationship,Planned",
           "technology" : "Local persistence"
         }, {
           "description" : "Indirect: hands over packed products",
           "destinationId" : "6",
-          "id" : "49",
-          "sourceId" : "12",
-          "tags" : "Relationship",
-          "technology" : "Manual / physical process"
+          "id" : "72",
+          "sourceId" : "25",
+          "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Planned",
         "technology" : "Java 21, Spring Boot"
       }, {
-        "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
+        "description" : "Owns registered animals and the transactional outbox. Lets Station 1 accept registrations while RabbitMQ or the backend is unavailable.",
         "documentation" : { },
-        "id" : "13",
-        "name" : "Local Store - Station 1",
+        "id" : "26",
+        "name" : "Registration Database",
         "properties" : {
           "structurizr.dsl.identifier" : "store1"
         },
-        "relationships" : [ {
-          "description" : "Forwards queued events when the network is available",
-          "destinationId" : "16",
-          "id" : "34",
-          "sourceId" : "13",
-          "tags" : "Relationship,Planned",
-          "technology" : "Asynchronous messaging"
-        } ],
-        "tags" : "Element,Container,Planned,Database",
-        "technology" : "Embedded database, e.g. H2 or SQLite"
+        "tags" : "Element,Container,Database",
+        "technology" : "Local persistent H2 database"
       }, {
         "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
         "documentation" : { },
-        "id" : "14",
+        "id" : "27",
         "name" : "Local Store - Station 2",
         "properties" : {
           "structurizr.dsl.identifier" : "store2"
         },
         "relationships" : [ {
           "description" : "Forwards queued events when the network is available",
-          "destinationId" : "16",
-          "id" : "35",
-          "sourceId" : "14",
+          "destinationId" : "29",
+          "id" : "53",
+          "sourceId" : "27",
           "tags" : "Relationship,Planned",
           "technology" : "Asynchronous messaging"
         } ],
@@ -268,60 +404,67 @@
       }, {
         "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
         "documentation" : { },
-        "id" : "15",
+        "id" : "28",
         "name" : "Local Store - Station 3",
         "properties" : {
           "structurizr.dsl.identifier" : "store3"
         },
         "relationships" : [ {
           "description" : "Forwards queued events when the network is available",
-          "destinationId" : "16",
-          "id" : "36",
-          "sourceId" : "15",
+          "destinationId" : "29",
+          "id" : "54",
+          "sourceId" : "28",
           "tags" : "Relationship,Planned",
           "technology" : "Asynchronous messaging"
         } ],
         "tags" : "Element,Container,Planned,Database",
         "technology" : "Embedded database, e.g. H2 or SQLite"
       }, {
-        "description" : "Middleware that carries events from the stations asynchronously. Indirect communication decouples the stations, so a partial failure in one does not stop the others. Planned.",
+        "description" : "Carries station events asynchronously. Holds a dead-letter queue, so an event the consumer rejects is parked for inspection instead of being redelivered forever. AnimalRegistered is implemented; events from Station 2 and Station 3 are planned.",
         "documentation" : { },
-        "id" : "16",
+        "id" : "29",
         "name" : "Message Broker",
         "properties" : {
           "structurizr.dsl.identifier" : "broker"
         },
         "relationships" : [ {
-          "description" : "Delivers animal, part, tray and product events to",
-          "destinationId" : "18",
-          "id" : "37",
-          "sourceId" : "16",
-          "tags" : "Relationship,Planned",
-          "technology" : "Asynchronous messaging"
+          "description" : "Delivers AnimalRegistered events to",
+          "destinationId" : "38",
+          "id" : "55",
+          "sourceId" : "29",
+          "tags" : "Relationship",
+          "technology" : "AMQP"
+        }, {
+          "description" : "Delivers AnimalRegistered events to",
+          "destinationId" : "31",
+          "id" : "56",
+          "linkedRelationshipId" : "55",
+          "sourceId" : "29",
+          "technology" : "AMQP"
         } ],
-        "tags" : "Element,Container,Planned",
-        "technology" : "Message broker, e.g. RabbitMQ"
+        "tags" : "Element,Container",
+        "technology" : "RabbitMQ, topic exchange and dead-letter queue"
       }, {
         "description" : "Client application used to call the traceability service. Uses the client stub generated from traceability.proto.",
         "documentation" : { },
-        "id" : "17",
+        "id" : "30",
         "name" : "Client",
         "properties" : {
           "structurizr.dsl.identifier" : "client"
         },
         "relationships" : [ {
           "description" : "Requests traceability information",
-          "destinationId" : "20",
-          "id" : "55",
-          "sourceId" : "17",
+          "destinationId" : "33",
+          "id" : "77",
+          "sourceId" : "30",
           "tags" : "Relationship",
           "technology" : "gRPC / Protocol Buffers"
         }, {
           "description" : "Requests traceability information",
-          "destinationId" : "18",
-          "id" : "56",
-          "linkedRelationshipId" : "55",
-          "sourceId" : "17",
+          "destinationId" : "31",
+          "id" : "78",
+          "linkedRelationshipId" : "77",
+          "sourceId" : "30",
           "technology" : "gRPC / Protocol Buffers"
         } ],
         "tags" : "Element,Container",
@@ -330,16 +473,16 @@
         "components" : [ {
           "description" : "Starts the gRPC server on the configured port and registers both the service and reflection, so Postman and BloomRPC can discover the contract.",
           "documentation" : { },
-          "id" : "19",
+          "id" : "32",
           "name" : "gRPC Server Runner",
           "properties" : {
             "structurizr.dsl.identifier" : "grpcServerRunner"
           },
           "relationships" : [ {
             "description" : "Registers as a gRPC service and starts",
-            "destinationId" : "20",
-            "id" : "25",
-            "sourceId" : "19",
+            "destinationId" : "33",
+            "id" : "39",
+            "sourceId" : "32",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
@@ -347,16 +490,16 @@
         }, {
           "description" : "Implements the server stub generated from traceability.proto. Validates input and maps domain errors to status codes: NOT_FOUND, INVALID_ARGUMENT and INTERNAL.",
           "documentation" : { },
-          "id" : "20",
+          "id" : "33",
           "name" : "gRPC API",
           "properties" : {
             "structurizr.dsl.identifier" : "grpcApi"
           },
           "relationships" : [ {
             "description" : "Calls",
-            "destinationId" : "21",
-            "id" : "26",
-            "sourceId" : "20",
+            "destinationId" : "34",
+            "id" : "40",
+            "sourceId" : "33",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
@@ -364,16 +507,16 @@
         }, {
           "description" : "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Knows nothing about JPA or gRPC.",
           "documentation" : { },
-          "id" : "21",
+          "id" : "34",
           "name" : "Traceability Service",
           "properties" : {
             "structurizr.dsl.identifier" : "traceabilityService"
           },
           "relationships" : [ {
             "description" : "Reads traceability data via",
-            "destinationId" : "22",
-            "id" : "27",
-            "sourceId" : "21",
+            "destinationId" : "35",
+            "id" : "41",
+            "sourceId" : "34",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
@@ -381,22 +524,22 @@
         }, {
           "description" : "AnimalRepository, AnimalPartRepository, TrayRepository and ProductRepository. Derived queries push the tracing down into the database.",
           "documentation" : { },
-          "id" : "22",
+          "id" : "35",
           "name" : "Repositories",
           "properties" : {
             "structurizr.dsl.identifier" : "persistence"
           },
           "relationships" : [ {
             "description" : "Maps rows to",
-            "destinationId" : "23",
-            "id" : "29",
-            "sourceId" : "22",
+            "destinationId" : "36",
+            "id" : "44",
+            "sourceId" : "35",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes data",
-            "destinationId" : "30",
-            "id" : "38",
-            "sourceId" : "22",
+            "destinationId" : "45",
+            "id" : "59",
+            "sourceId" : "35",
             "tags" : "Relationship",
             "technology" : "JPA / JDBC"
           } ],
@@ -405,7 +548,7 @@
         }, {
           "description" : "Animal, AnimalPart, Tray and Product, including the references that make tracing possible.",
           "documentation" : { },
-          "id" : "23",
+          "id" : "36",
           "name" : "Domain Entities",
           "properties" : {
             "structurizr.dsl.identifier" : "entities"
@@ -415,34 +558,65 @@
         }, {
           "description" : "Creates demo data on startup. Disabled by default via app.seed-demo-data.",
           "documentation" : { },
-          "id" : "24",
+          "id" : "37",
           "name" : "Demo Data Seeder",
           "properties" : {
             "structurizr.dsl.identifier" : "demoDataSeeder"
           },
           "relationships" : [ {
             "description" : "Writes demo data via",
-            "destinationId" : "22",
-            "id" : "28",
-            "sourceId" : "24",
+            "destinationId" : "35",
+            "id" : "42",
+            "sourceId" : "37",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Spring CommandLineRunner"
+        }, {
+          "description" : "Consumes AnimalRegistered events idempotently and maps the shared registration number to the server's Animal identity.",
+          "documentation" : { },
+          "id" : "38",
+          "name" : "Animal Registered Consumer",
+          "properties" : {
+            "structurizr.dsl.identifier" : "animalEventConsumer"
+          },
+          "relationships" : [ {
+            "description" : "Upserts registered animals via",
+            "destinationId" : "35",
+            "id" : "43",
+            "sourceId" : "38",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Rejects invalid events to the dead-letter queue",
+            "destinationId" : "29",
+            "id" : "57",
+            "sourceId" : "38",
+            "tags" : "Relationship",
+            "technology" : "AMQP"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring AMQP"
         } ],
-        "description" : "Provides traceability lookups between animals and products. The read side is implemented; consuming station events is planned.",
+        "description" : "Consumes animal registrations and provides traceability lookups between animals and products.",
         "documentation" : { },
-        "id" : "18",
+        "id" : "31",
         "name" : "Traceability Server",
         "properties" : {
           "structurizr.dsl.identifier" : "traceabilityServer"
         },
         "relationships" : [ {
+          "description" : "Rejects invalid events to the dead-letter queue",
+          "destinationId" : "29",
+          "id" : "58",
+          "linkedRelationshipId" : "57",
+          "sourceId" : "31",
+          "technology" : "AMQP"
+        }, {
           "description" : "Reads and writes data",
-          "destinationId" : "30",
-          "id" : "39",
-          "linkedRelationshipId" : "38",
-          "sourceId" : "18",
+          "destinationId" : "45",
+          "id" : "60",
+          "linkedRelationshipId" : "59",
+          "sourceId" : "31",
           "technology" : "JPA / JDBC"
         } ],
         "tags" : "Element,Container",
@@ -450,7 +624,7 @@
       }, {
         "description" : "Stores animals, animal parts, trays and products.",
         "documentation" : { },
-        "id" : "30",
+        "id" : "45",
         "name" : "Slaughterhouse Database",
         "properties" : {
           "structurizr.dsl.identifier" : "database"
@@ -468,17 +642,16 @@
       "relationships" : [ {
         "description" : "Indirect: hands over packed products",
         "destinationId" : "6",
-        "id" : "50",
-        "linkedRelationshipId" : "49",
-        "sourceId" : "9",
-        "technology" : "Manual / physical process"
+        "id" : "73",
+        "linkedRelationshipId" : "72",
+        "sourceId" : "9"
       } ],
       "tags" : "Element,Software System"
     } ]
   },
   "name" : "Slaughterhouse",
   "properties" : {
-    "structurizr.inspection.error" : "14",
+    "structurizr.inspection.error" : "26",
     "structurizr.inspection.info" : "0",
     "structurizr.inspection.ignore" : "0",
     "structurizr.inspection.warning" : "0"
@@ -492,10 +665,116 @@
         "rankSeparation" : 100,
         "vertices" : true
       },
-      "containerId" : "18",
-      "description" : "Component View of the Traceability Server. Mirrors the actual code in the server module.",
+      "containerId" : "31",
+      "description" : "C3 - Component View of the Traceability Server. Mirrors the actual code in the server module.",
       "elements" : [ {
         "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "29",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "30",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "32",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "33",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "34",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "35",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "36",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "37",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "38",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "45",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "C3-Traceability",
+      "name" : "Component View: Slaughterhouse System - Traceability Server",
+      "order" : 3,
+      "relationships" : [ {
+        "id" : "39"
+      }, {
+        "id" : "40"
+      }, {
+        "id" : "41"
+      }, {
+        "id" : "42"
+      }, {
+        "id" : "43"
+      }, {
+        "id" : "44"
+      }, {
+        "id" : "55"
+      }, {
+        "id" : "57"
+      }, {
+        "id" : "59"
+      }, {
+        "id" : "75"
+      }, {
+        "id" : "77"
+      } ]
+    }, {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "containerId" : "10",
+      "description" : "C3 - Component View of Station 1 Registration. Mirrors the actual code in the registration-service module.",
+      "elements" : [ {
+        "id" : "1",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "11",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "12",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "13",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "14",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "15",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "16",
         "x" : 0,
         "y" : 0
       }, {
@@ -503,54 +782,38 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "19",
+        "id" : "26",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "20",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "21",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "22",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "23",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "24",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "30",
+        "id" : "29",
         "x" : 0,
         "y" : 0
       } ],
       "externalContainerBoundariesVisible" : false,
-      "key" : "C3",
-      "name" : "Component View: Slaughterhouse System - Traceability Server",
-      "order" : 3,
+      "key" : "C3-Registration",
+      "name" : "Component View: Slaughterhouse System - Station 1 - Registration",
+      "order" : 4,
       "relationships" : [ {
-        "id" : "25"
+        "id" : "18"
       }, {
-        "id" : "26"
+        "id" : "19"
       }, {
-        "id" : "27"
+        "id" : "20"
       }, {
-        "id" : "28"
+        "id" : "21"
       }, {
-        "id" : "29"
+        "id" : "22"
       }, {
-        "id" : "38"
+        "id" : "23"
       }, {
-        "id" : "52"
+        "id" : "46"
       }, {
-        "id" : "55"
+        "id" : "48"
+      }, {
+        "id" : "51"
+      }, {
+        "id" : "63"
       } ]
     } ],
     "configuration" : {
@@ -601,7 +864,7 @@
         "rankSeparation" : 100,
         "vertices" : true
       },
-      "description" : "Container View. Shows the running parts and how each station keeps working when the network is down.",
+      "description" : "C2 - Container View. Shows the running parts and how each station keeps working when the network is down.",
       "elements" : [ {
         "id" : "1",
         "x" : 0,
@@ -639,39 +902,39 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "11",
+        "id" : "24",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "12",
+        "id" : "25",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "13",
+        "id" : "26",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "14",
+        "id" : "27",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "15",
+        "id" : "28",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "16",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "17",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "18",
+        "id" : "29",
         "x" : 0,
         "y" : 0
       }, {
         "id" : "30",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "31",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "45",
         "x" : 0,
         "y" : 0
       } ],
@@ -680,39 +943,41 @@
       "name" : "Container View: Slaughterhouse System",
       "order" : 2,
       "relationships" : [ {
-        "id" : "31"
-      }, {
-        "id" : "32"
-      }, {
-        "id" : "33"
-      }, {
-        "id" : "34"
-      }, {
-        "id" : "35"
-      }, {
-        "id" : "36"
-      }, {
-        "id" : "37"
-      }, {
-        "id" : "39"
-      }, {
-        "id" : "40"
-      }, {
-        "id" : "42"
-      }, {
-        "id" : "44"
-      }, {
-        "id" : "46"
-      }, {
         "id" : "47"
       }, {
         "id" : "49"
       }, {
-        "id" : "51"
+        "id" : "50"
+      }, {
+        "id" : "52"
       }, {
         "id" : "53"
       }, {
+        "id" : "54"
+      }, {
         "id" : "56"
+      }, {
+        "id" : "58"
+      }, {
+        "id" : "60"
+      }, {
+        "id" : "64"
+      }, {
+        "id" : "65"
+      }, {
+        "id" : "67"
+      }, {
+        "id" : "69"
+      }, {
+        "id" : "70"
+      }, {
+        "id" : "72"
+      }, {
+        "id" : "74"
+      }, {
+        "id" : "76"
+      }, {
+        "id" : "78"
       } ],
       "softwareSystemId" : "9"
     } ],
@@ -724,7 +989,7 @@
         "rankSeparation" : 100,
         "vertices" : true
       },
-      "description" : "System Context View. Focus is on the types of communication with the outside world rather than on technology.",
+      "description" : "C1 - System Context View. Focus is on the types of communication with the outside world rather than on technology.",
       "elements" : [ {
         "id" : "1",
         "x" : 0,
@@ -767,21 +1032,21 @@
       "name" : "System Context View: Slaughterhouse System",
       "order" : 1,
       "relationships" : [ {
-        "id" : "41"
+        "id" : "61"
       }, {
-        "id" : "43"
+        "id" : "62"
       }, {
-        "id" : "45"
+        "id" : "66"
       }, {
-        "id" : "46"
+        "id" : "68"
       }, {
-        "id" : "48"
+        "id" : "69"
       }, {
-        "id" : "50"
+        "id" : "71"
       }, {
-        "id" : "51"
+        "id" : "73"
       }, {
-        "id" : "54"
+        "id" : "74"
       } ],
       "softwareSystemId" : "9"
     } ]
