@@ -69,19 +69,39 @@ I Structurizr ligger der også dokumentation under `docs/architecture/docs/`, so
 
 ## Lokal infrastruktur
 
-Traceability-serveren bruger PostgreSQL, mens Station 1 bruger sin egen lokale H2-fildatabase. De deler altså ikke database — compose starter kun Postgres til traceability.
+De to services har hver sin database: traceability bruger PostgreSQL, Station 1 bruger sin egen H2-fil under `DSY-SlaughterHouse/data/`. RabbitMQ binder dem sammen.
 
-Kodeordet til Postgres ligger i en `.env`-fil, som ikke er i versionsstyring. Kopier `.env.example` til `.env` og udfyld den første gang. Derefter:
+PostgreSQL kører som en lokal installation på maskinen, så kun RabbitMQ startes fra Docker:
 
 ```powershell
-docker compose up -d
+docker compose up -d rabbitmq
 ```
 
-- Traceability-serveren bruger PostgreSQL-databasen `slaughterhouse`.
-- Registration-service opretter automatisk sin lokale database under `registration-service/data/`.
-- RabbitMQ bruger port `5672`; administrationssiden ligger på `http://localhost:15672` med `guest` / `guest`.
+Starter du hele `compose.yaml`, kolliderer dens Postgres med den lokale på port 5432. Vil du i stedet køre Postgres i Docker, skal den lokale tjeneste stoppes først, og `.env` oprettes ud fra `.env.example`.
 
-Start derefter `Server` og `RegistrationServiceApplication`. En `POST /animals` bliver først gemt i registration-servicens database. `AnimalRegisteredEvent` sendes derefter via RabbitMQ og gemmes idempotent i traceability-serverens database med samme registreringsnummer.
+RabbitMQs administrationsside ligger på `http://localhost:15672` med `guest` / `guest`.
+
+## Sådan ser du flowet køre
+
+Start RabbitMQ som ovenfor, og derefter `Server` og `RegistrationServiceApplication` fra IDE'en.
+
+Slå først et ukendt dyr op. Traceability svarer `NOT_FOUND`:
+
+```powershell
+mvn -pl client exec:java "-Dexec.mainClass=com.example.Client" "-Dexec.args=PROD-X 9001"
+```
+
+Registrér så dyret i Station 1. Brug et registreringsnummer der ikke findes i forvejen, ellers får du `409 Conflict`:
+
+```powershell
+Invoke-RestMethod -Uri http://localhost:8081/animals -Method Post -ContentType "application/json" -Body '{"registrationNumber":9001,"weight":97.5,"origin":"Noerregaard"}'
+```
+
+Vent et par sekunder og gentag opslaget. Nu svarer traceability `OK` med en tom liste — dyret er kendt, men endnu ikke pakket i noget produkt.
+
+Det er beviset på at kæden virker: dyret blev aldrig skrevet direkte til PostgreSQL. Det kom via outbox-tabellen i H2, gennem RabbitMQ, til traceability-serverens consumer.
+
+Undervejs kan du følge med i `http://localhost:15672` under **Queues and Streams**. Køen `traceability.animal-registered` har dead-letter-argumenterne sat, og `traceability.animal-registered.dlq` står tom, så længe intet fejler.
 
 ## Oversigt over systemets struktur
 ```
@@ -126,9 +146,7 @@ Et dyr der findes, men endnu ikke er pakket, er ikke en fejl. Det giver `OK` med
 
 ## Persistens
 
-De to services har hver sin database. Traceability-serveren bruger PostgreSQL; registration-servicen bruger sin egen H2-fil under `registration-service/data/`. De deler ikke skema, men holdes i sync gennem RabbitMQ.
-
-Systemet er derfor eventually consistent: et nyregistreret dyr er kendt i traceability-databasen inden for få sekunder, ikke med det samme. For sporbarhed er det acceptabelt, fordi opslaget alligevel er en bevidst overvurdering.
+De to services deler ikke skema. De holdes i sync gennem RabbitMQ, og systemet er derfor eventually consistent: et nyregistreret dyr er kendt i traceability-databasen inden for få sekunder, ikke med det samme. For sporbarhed er det acceptabelt, fordi opslaget alligevel er en bevidst overvurdering.
 
 Opslagene bruger afledte queries, fx `findByTrayIn(...)` og `findByOriginIgnoreCase(...)`, så filtreringen sker i databasen frem for i hukommelsen.
 

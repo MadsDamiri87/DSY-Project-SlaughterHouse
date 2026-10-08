@@ -42,3 +42,6 @@ build/
 .idea/
 server/src/main/resources/application.properties
 .env
+
+### H2-database for registration-service ###
+data/
