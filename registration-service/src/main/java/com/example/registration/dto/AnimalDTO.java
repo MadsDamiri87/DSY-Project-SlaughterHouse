@@ -1,4 +1,4 @@
-package com.example.shared.dto;
+package com.example.registration.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

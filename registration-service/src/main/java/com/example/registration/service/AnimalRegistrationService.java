@@ -1,10 +1,8 @@
 package com.example.registration.service;
 
 import com.example.registration.entity.Animal;
-import com.example.registration.entity.AnimalRegistrationOutbox;
 import com.example.registration.repository.AnimalRepository;
-import com.example.registration.repository.AnimalRegistrationOutboxRepository;
-import com.example.shared.dto.AnimalDTO;
+import com.example.registration.dto.AnimalDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +14,10 @@ import java.util.List;
 public class AnimalRegistrationService
 {
   private final AnimalRepository animalRepository;
-  private final AnimalRegistrationOutboxRepository outboxRepository;
 
-  public AnimalRegistrationService(AnimalRepository animalRepository,
-                                   AnimalRegistrationOutboxRepository outboxRepository)
+  public AnimalRegistrationService(AnimalRepository animalRepository)
   {
     this.animalRepository = animalRepository;
-    this.outboxRepository = outboxRepository;
   }
 
   @Transactional
@@ -38,8 +33,6 @@ public class AnimalRegistrationService
 
     Animal saved = animalRepository.save(
         new Animal(animal.registrationNumber(), arrival, animal.weight(), animal.origin()));
-
-    outboxRepository.save(AnimalRegistrationOutbox.from(saved));
 
     return toDto(saved);
   }

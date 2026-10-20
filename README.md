@@ -22,7 +22,7 @@ Sporingskæden er en vigtig del af modellen:
 Et produkt peger på bakker, ikke på enkelte dele. Det matcher virkeligheden: når man pakker fra en bakke, ved man hvilke dyr der kan være i bakken, men ikke nødvendigvis hvilken del der er endt i hvilken pakke. Sporingen bliver derfor en bevidst overvurdering — den finder alle dyr der **kan** være i produktet.
 
 ## Arkitektur (C4-modellen)
-Arkitekturen er modelleret i **Structurizr** med C4-modellens tre første niveauer. Kilden er én tekstfil, `docs/architecture/workspace.dsl`, som alle tre diagrammer genereres ud fra.
+Arkitekturen er modelleret i **Structurizr** med C4-modellens tre første niveauer. Kilden er én tekstfil, `docs/architecture/workspace.dsl`, som alle diagrammerne genereres ud fra.
 
 Diagrammerne er store. Klik på et diagram for at åbne det i fuld størrelse.
 
@@ -45,7 +45,9 @@ Hvordan systemet er delt op i kørende enheder, og hvordan de taler sammen.
   <img src="docs/diagrams/C2-Container.svg" alt="C2 - Container View" width="600">
 </a>
 
-Det stiplede er **planlagt**, ikke bygget. Station 1, dens database, RabbitMQ og serverens `AnimalRegistered`-consumer er implementeret. Station 2 og Station 3 er stadig planlagte. Station 1 gemmer både dyret og en event i en transactional outbox, så registreringen kan gennemføres, selvom RabbitMQ eller serveren er nede. Eventen sendes automatisk, når forbindelsen er tilbage.
+Det stiplede er **planlagt**, ikke bygget. Station 1, dens database, traceability-serveren og dens PostgreSQL er implementeret. Station 2 og Station 3 er stadig planlagte.
+
+Hver station har sin egen lokale database. Det er den del der opfylder casens krav om at *"work shouldn't stop at a station just because the network is down"* — en station kan registrere videre uden at være afhængig af resten af systemet. Selve synkroniseringen op til traceability-databasen er modelleret som indirekte kommunikation, men ligger uden for opgavens rammer og er derfor ikke implementeret.
 
 ### C3 - Component View: Traceability Server
 Serveren zoomet ind. Diagrammet afspejler den faktiske kode i `server`-modulet.
@@ -54,7 +56,7 @@ Serveren zoomet ind. Diagrammet afspejler den faktiske kode i `server`-modulet.
   <img src="docs/diagrams/C3-Component-Traceability.svg" alt="C3 - Component View: Traceability Server" width="600">
 </a>
 
-Kontrakten bor i `traceability.proto`, og gRPC genererer en **client stub** og en **server stub** ud fra den. `gRPC API` implementerer server-stubben og oversætter domænefejl til statuskoder, mens `Traceability Service` holder sporingslogikken fri for både JPA og gRPC. `Animal Registered Consumer` modtager events fra RabbitMQ og bruger registreringsnummeret som den fælles identitet på tværs af de to databaser.
+Kontrakten bor i `traceability.proto`, og gRPC genererer en **client stub** og en **server stub** ud fra den. `gRPC API` implementerer server-stubben og oversætter domænefejl til statuskoder, mens `Traceability Service` holder sporingslogikken fri for både JPA og gRPC.
 
 ### C3 - Component View: Station 1 (Registration)
 Registration-servicen zoomet ind. Afspejler koden i `registration-service`-modulet.
@@ -63,62 +65,75 @@ Registration-servicen zoomet ind. Afspejler koden i `registration-service`-modul
   <img src="docs/diagrams/C3-Component-Registration.svg" alt="C3 - Component View: Station 1 Registration" width="600">
 </a>
 
-`Animal REST API` validerer input, `REST Exception Handler` oversætter domænefejl til 404, 409 og 400, og `Registration Outbox` gemmer eventen i samme transaktion som dyret. `Outbox Publisher` sender den videre, når RabbitMQ er tilgængelig.
-
-I Structurizr ligger der også dokumentation under `docs/architecture/docs/`, som besvarer C4-spørgsmålene og kobler arkitekturen til kursets begreber: partiel fejl, transparens, heterogenitet og åbenhed.
+`Animal REST API` validerer input og holder HTTP ude af resten, `Animal Registration Service` har registreringsreglerne, og `REST Exception Handler` oversætter domænefejl til 404, 409 og 400.
 
 ## Lokal infrastruktur
 
-De to services har hver sin database: traceability bruger PostgreSQL, Station 1 bruger sin egen H2-fil under `DSY-SlaughterHouse/data/`. RabbitMQ binder dem sammen.
+De to services har hver sin database: traceability bruger PostgreSQL, Station 1 bruger sin egen H2-fil under `DSY-SlaughterHouse/data/`. H2 er indlejret og kræver ingen opsætning.
 
-PostgreSQL kører som en lokal installation på maskinen, så kun RabbitMQ startes fra Docker:
+Serverens egen `application.properties` er ikke i versionsstyring, fordi den indeholder databasekodeordet. Kopiér `server/src/main/resources/application.properties.example` til `application.properties` og udfyld `DB_PASSWORD` første gang.
 
-```powershell
-docker compose up -d rabbitmq
-```
-
-Starter du hele `compose.yaml`, kolliderer dens Postgres med den lokale på port 5432. Vil du i stedet køre Postgres i Docker, skal den lokale tjeneste stoppes først, og `.env` oprettes ud fra `.env.example`.
-
-RabbitMQs administrationsside ligger på `http://localhost:15672` med `guest` / `guest`.
-
-## Sådan ser du flowet køre
-
-Start RabbitMQ som ovenfor, og derefter `Server` og `RegistrationServiceApplication` fra IDE'en.
-
-Slå først et ukendt dyr op. Traceability svarer `NOT_FOUND`:
+PostgreSQL kører som en lokal installation på maskinen. Vil du i stedet køre den i Docker, skal den lokale tjeneste stoppes først, og `.env` oprettes ud fra `.env.example`:
 
 ```powershell
-mvn -pl client exec:java "-Dexec.mainClass=com.example.Client" "-Dexec.args=PROD-X 9001"
+docker compose up -d
 ```
 
-Registrér så dyret i Station 1. Brug et registreringsnummer der ikke findes i forvejen, ellers får du `409 Conflict`:
+## Sådan afprøver du systemet
+
+### Traceability over gRPC
+
+Sæt `app.seed-demo-data=true` i `server/src/main/resources/application.properties` første gang. Seederen opretter tre dyr (`1`, `2`, `3`), tre bakker, fire dele og to produkter: `PROD-LOIN-PACK` og `PROD-HALF-ANIMAL`.
+
+Den kører **kun hvis `animal`-tabellen er tom**. Har databasen data fra tidligere, springer den over, og id'erne nedenfor findes ikke. Tjek hvad der faktisk ligger i den:
+
+```powershell
+psql -h localhost -U postgres -d slaughterhouse -c "select product_id from product" -c "select animal_id from animal"
+```
+
+Start `Server` fra IDE'en og kør konsolklienten med et produkt-id og et dyre-id:
+
+```powershell
+mvn -pl client exec:java "-Dexec.mainClass=com.example.Client" "-Dexec.args=PROD-LOIN-PACK 1"
+```
+
+Med demodata svarer den `Animals in product PROD-LOIN-PACK: [1, 2]` og `Products from animal 1: [PROD-HALF-ANIMAL, PROD-LOIN-PACK]` — begge sporingsretninger på én gang.
+
+Et ukendt id giver `NOT_FOUND`. Et kendt dyr der endnu ikke er pakket giver `OK` med en tom liste. Servicen kan også kaldes fra Postman eller BloomRPC — gRPC reflection er slået til, så kontrakten kan hentes automatisk.
+
+### Registrering over REST
+
+Start `RegistrationServiceApplication` fra IDE'en.
 
 ```powershell
 Invoke-RestMethod -Uri http://localhost:8081/animals -Method Post -ContentType "application/json" -Body '{"registrationNumber":9001,"weight":97.5,"origin":"Noerregaard"}'
 ```
 
-Vent et par sekunder og gentag opslaget. Nu svarer traceability `OK` med en tom liste — dyret er kendt, men endnu ikke pakket i noget produkt.
+Svaret er `201 Created` med en `Location`-header. Udelades `arrivalDateTime`, sætter servicen den til nu, så datoopslaget nedenfor skal bruge dagens dato:
 
-Det er beviset på at kæden virker: dyret blev aldrig skrevet direkte til PostgreSQL. Det kom via outbox-tabellen i H2, gennem RabbitMQ, til traceability-serverens consumer.
+```powershell
+Invoke-RestMethod -Uri http://localhost:8081/animals/9001
+Invoke-RestMethod -Uri "http://localhost:8081/animals?date=2026-10-20"
+Invoke-RestMethod -Uri "http://localhost:8081/animals?origin=Noerregaard"
+```
 
-Undervejs kan du følge med i `http://localhost:15672` under **Queues and Streams**. Køen `traceability.animal-registered` har dead-letter-argumenterne sat, og `traceability.animal-registered.dlq` står tom, så længe intet fejler.
+Samme registreringsnummer to gange giver `409 Conflict`, et ukendt nummer giver `404 Not Found`, og en ugyldig body giver `400 Bad Request`.
 
 ## Oversigt over systemets struktur
 ```
 DSY-SlaughterHouse/
 ├── pom.xml                 parent, styrer versioner for alle moduler
-├── compose.yaml            PostgreSQL + RabbitMQ
+├── compose.yaml            PostgreSQL
 ├── proto/                  gRPC-kontrakten
-├── shared/                 DTO'er og messaging-kontrakt mellem de to services
-├── server/                 Traceability: gRPC, PostgreSQL, event-consumer
-├── registration-service/   Station 1: REST, egen H2-database, outbox
+├── server/                 Traceability: gRPC, PostgreSQL
+├── registration-service/   Station 1: REST, egen H2-database
 ├── client/                 konsolklient til gRPC
 └── docs/
     ├── architecture/       Structurizr workspace
     └── diagrams/           eksporterede diagrammer
 ```
 
-`proto` og `shared` indeholder kun kontrakter. `server` og `registration-service` afhænger af dem, men ikke af hinanden — de taler sammen over RabbitMQ. Det er hele pointen: kontrakten er det eneste de deler.
+`proto` indeholder kun gRPC-kontrakten. `server` og `registration-service` er to selvstændige Spring Boot-applikationer med hver sin database, og de afhænger hverken af hinanden eller af de samme moduler.
 
 ## gRPC-API
 Kontrakten er defineret i `proto/src/main/proto/traceability.proto`:
@@ -144,15 +159,40 @@ Fejl oversættes til gRPC-statuskoder i stedet for at boble op som tekniske exce
 
 Et dyr der findes, men endnu ikke er pakket, er ikke en fejl. Det giver `OK` med en tom liste.
 
+## REST-API
+
+Registreringsservicen ligger på `http://localhost:8081`.
+
+| Metode og sti | Betydning | Svar |
+| --- | --- | --- |
+| `POST /animals` | Registrér et dyr | `201` med `Location` |
+| `GET /animals/{registrationNumber}` | Ét bestemt dyr | `200` eller `404` |
+| `GET /animals?date=2026-10-20` | Alle dyr ankommet den dato | `200` |
+| `GET /animals?origin=Noerregaard` | Alle dyr fra den gård | `200` |
+| `GET /animals` | Alle dyr | `200` |
+
+De to filtre kan ikke kombineres — `?date=…&origin=…` svarer `400` i stedet for at ignorere det ene i stilhed.
+
+Fejl følger samme princip som på gRPC-siden — domænefejl bliver til statuskoder, ikke stacktraces:
+
+| Situation | Statuskode |
+| --- | --- |
+| Ukendt registreringsnummer | `404 Not Found` |
+| Registreringsnummer allerede i brug | `409 Conflict` |
+| Manglende eller ugyldigt felt i body | `400 Bad Request` |
+| `date` og `origin` i samme kald | `400 Bad Request` |
+
+Datoopslaget bruger et halvåbent interval `[dagen 00:00, dagen efter 00:00)`, så et dyr der ankom 23:59 tæller med på sin egen dag. Opslag på gård er ikke versalfølsomt.
+
 ## Persistens
 
-De to services deler ikke skema. De holdes i sync gennem RabbitMQ, og systemet er derfor eventually consistent: et nyregistreret dyr er kendt i traceability-databasen inden for få sekunder, ikke med det samme. For sporbarhed er det acceptabelt, fordi opslaget alligevel er en bevidst overvurdering.
+De to services deler hverken database eller skema. Traceability ejer `animal`, `animal_part`, `tray` og `product` i PostgreSQL; registration ejer `registered_animal` i sin egen H2-fil. De kan startes, stoppes og udvikles uafhængigt af hinanden.
 
 Opslagene bruger afledte queries, fx `findByTrayIn(...)` og `findByOriginIgnoreCase(...)`, så filtreringen sker i databasen frem for i hukommelsen.
 
 ## Test
 
-Projektet har 43 tests, delt op efter lag: forretningslogikken isoleret med mocks, servicerne mod en database i hukommelsen, og yderlagene hver for sig — gRPC in-process, REST med MockMvc, og messaging med mocks.
+Projektet har 45 tests, delt op efter lag: forretningslogikken isoleret med mocks, servicerne mod en database i hukommelsen, og yderlagene hver for sig — gRPC in-process og REST med MockMvc. Begge applikationer har desuden en `contextLoads`-test, der beviser at de overhovedet starter.
 
 Testene er kommenteret på dansk, da de også fungerer som mine egne noter til hvad der testes og hvorfor.
 
@@ -163,7 +203,6 @@ Testene er kommenteret på dansk, da de også fungerer som mine egne noter til h
 - gRPC og Protocol Buffers
 - Spring Boot og Spring Data JPA
 - PostgreSQL og H2
-- RabbitMQ via Spring AMQP
 - JUnit 5, Mockito og AssertJ
 - Astah til domænemodel
 - Structurizr (DSL) til C4-diagrammerne
@@ -176,16 +215,16 @@ Implementeret:
 - gRPC-service med begge sporingsopslag
 - Persistens i PostgreSQL via Spring Data JPA
 - Eksplicit fejlhåndtering med gRPC-statuskoder
-- 43 tests fordelt på lagene
+- 45 tests fordelt på lagene
 - Konsolklient til afprøvning
 - gRPC reflection, så servicen kan testes med Postman og BloomRPC
 - Demodata-seeder, der kan slås til og fra
 - Station 1 som selvstændig REST-service med egen database
-- Transactional outbox, så en registrering overlever at RabbitMQ er nede
-- Dead-letter-kø, så en ugyldig besked parkeres i stedet for at blokere
+- Eksplicit fejlhåndtering med HTTP-statuskoder: 201, 400, 404 og 409
 
 Ikke implementeret endnu:
 
 - Station 2 og Station 3 som kørende enheder
+- Synkronisering af stationernes lokale data op til traceability-databasen
 - Håndhævelse af bakkernes maksimale vægtkapacitet
 - Autentificering og autorisation

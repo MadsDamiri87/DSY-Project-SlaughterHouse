@@ -4,12 +4,14 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.protobuf.services.ProtoReflectionService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
 @Order(100)
+@ConditionalOnProperty(name = "grpc.server.enabled", matchIfMissing = true)
 public class GrpcServerRunner implements CommandLineRunner
 {
   private final TraceabilityGrpcService grpcService;

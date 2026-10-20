@@ -21,11 +21,11 @@ message GetAnimalsForProductRequest {
 }
 
 message GetAnimalsForProductResponse {
-  repeated int32 animalIds = 1;
+  repeated int32 registrationNumbers = 1;
 }
 
 message GetProductsForAnimalRequest {
-  int32 animalId = 1;
+  int32 registrationNumber = 1;
 }
 
 message GetProductsForAnimalResponse {

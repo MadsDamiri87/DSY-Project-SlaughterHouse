@@ -137,6 +137,71 @@ class TraceabilityServiceTest
   }
 
   // Små hjælpemetoder holder selve testene korte og læsbare.
+  /*
+   * Servicen holder styr pa de sporingssager den har behandlet - det er attributterne
+   * casesRegistered, currentCase, requestDate og status fra domaenemodellen.
+   * Her: et opslag der lykkes skal taelles med og gemmes som den aktuelle sag.
+   */
+  @Test
+  void aSuccessfulLookupIsRegisteredAsACompletedCase()
+  {
+    Animal animal = animal(1);
+    Tray tray = tray("TRAY-1");
+    when(productRepository.findById("PROD-1")).thenReturn(Optional.of(product("PROD-1", List.of(tray))));
+    when(animalPartRepository.findByTrayIn(anyList())).thenReturn(List.of(part("PART-1", animal, tray)));
+
+    service.getAnimalsForProduct("PROD-1");
+
+    assertThat(service.getCasesRegistered()).isEqualTo(1);
+    assertThat(service.getCurrentCase()).hasValueSatisfying(c -> {
+      assertThat(c.subject()).isEqualTo("product PROD-1");
+      assertThat(c.status()).isEqualTo(CaseStatus.COMPLETED);
+      assertThat(c.requestDate()).isNotNull();
+    });
+  }
+
+  /*
+   * Et mislykket opslag er ogsa en sag. Ellers kunne man ikke se bagefter
+   * at nogen har spurgt efter et produkt der ikke findes.
+   */
+  @Test
+  void aFailedLookupIsRegisteredAsANotFoundCase()
+  {
+    when(animalRepository.findById(99)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> service.getProductsForAnimal(99))
+        .isInstanceOf(NoSuchElementException.class);
+
+    assertThat(service.getCasesRegistered()).isEqualTo(1);
+    assertThat(service.getCurrentCase()).hasValueSatisfying(c -> {
+      assertThat(c.subject()).isEqualTo("animal 99");
+      assertThat(c.status()).isEqualTo(CaseStatus.NOT_FOUND);
+    });
+  }
+
+  // Taelleren skal laegge sammen, og currentCase skal pege pa det seneste opslag - ikke det foerste.
+  @Test
+  void currentCaseAlwaysReflectsTheMostRecentLookup()
+  {
+    when(productRepository.findById("PROD-X")).thenReturn(Optional.empty());
+    when(animalRepository.findById(7)).thenReturn(Optional.empty());
+
+    assertThatThrownBy(() -> service.getAnimalsForProduct("PROD-X"));
+    assertThatThrownBy(() -> service.getProductsForAnimal(7));
+
+    assertThat(service.getCasesRegistered()).isEqualTo(2);
+    assertThat(service.getCurrentCase()).hasValueSatisfying(c ->
+        assertThat(c.subject()).isEqualTo("animal 7"));
+  }
+
+  // Foer det foerste opslag er der ingen aktuel sag.
+  @Test
+  void thereIsNoCurrentCaseBeforeTheFirstLookup()
+  {
+    assertThat(service.getCasesRegistered()).isZero();
+    assertThat(service.getCurrentCase()).isEmpty();
+  }
+
   private Animal animal(int id)
   {
     return new Animal(id, 100.0);

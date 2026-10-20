@@ -1,7 +1,5 @@
 workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterhouse with full traceability from animal to product and back." {
 
-    !docs docs
-
     model {
         !impliedRelationships true
 
@@ -49,7 +47,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 technology "Java 21, Spring Boot, REST"
 
                 animalApi = component "Animal REST API" {
-                    description "Handles POST /animals and the three required lookups: one animal, all animals arriving on a date, and all animals from an origin. Validates the request body before it reaches the service."
+                    description "Handles POST /animals and the three required lookups: one animal, all animals arriving on a date, and all animals from an origin. Without a filter it returns every registered animal; the two filters cannot be combined. Validates the request body before it reaches the service."
                     technology "Spring MVC, Bean Validation"
                 }
 
@@ -73,22 +71,10 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                     technology "Jakarta Persistence"
                 }
 
-                registrationOutbox = component "Registration Outbox" {
-                    description "Stores AnimalRegistered events in the same transaction as the animal, so registrations are not lost when RabbitMQ is unavailable."
-                    technology "Spring Data JPA, H2"
-                }
-
-                outboxPublisher = component "Outbox Publisher" {
-                    description "Retries pending AnimalRegistered events and removes them from the outbox only after they have been sent to RabbitMQ."
-                    technology "Spring Scheduler, Spring AMQP"
-                }
-
                 animalApi -> registrationService "Calls"
                 restExceptionHandler -> animalApi "Converts exceptions thrown by"
                 registrationService -> registrationRepository "Reads and writes animals via"
-                registrationService -> registrationOutbox "Stores an AnimalRegistered event atomically in"
                 registrationRepository -> registrationEntity "Maps rows to"
-                outboxPublisher -> registrationOutbox "Reads pending events from"
             }
 
             station2 = container "Station 2 - Cutting" {
@@ -104,7 +90,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             }
 
             store1 = container "Registration Database" {
-                description "Owns registered animals and the transactional outbox. Lets Station 1 accept registrations while RabbitMQ or the backend is unavailable."
+                description "Owns the registered animals. Station 1 has its own store, so a registration can be accepted without any other part of the system being available."
                 technology "Local persistent H2 database"
                 tags "Database"
             }
@@ -121,18 +107,13 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 tags "Planned,Database"
             }
 
-            broker = container "Message Broker" {
-                description "Carries station events asynchronously. Holds a dead-letter queue, so an event the consumer rejects is parked for inspection instead of being redelivered forever. AnimalRegistered is implemented; events from Station 2 and Station 3 are planned."
-                technology "RabbitMQ, topic exchange and dead-letter queue"
-            }
-
             client = container "Client" {
                 description "Client application used to call the traceability service. Uses the client stub generated from traceability.proto."
                 technology "Java 21, gRPC, generated client stub"
             }
 
             traceabilityServer = container "Traceability Server" {
-                description "Consumes animal registrations and provides traceability lookups between animals and products."
+                description "Provides traceability lookups between animals and products."
                 technology "Java 21, Spring Boot, gRPC"
 
                 grpcServerRunner = component "gRPC Server Runner" {
@@ -146,7 +127,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 traceabilityService = component "Traceability Service" {
-                    description "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Knows nothing about JPA or gRPC."
+                    description "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Keeps track of the traceability cases it has handled: how many, and the subject, date and outcome of the most recent one. Knows nothing about JPA or gRPC."
                     technology "Java"
                 }
 
@@ -165,16 +146,10 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                     technology "Spring CommandLineRunner"
                 }
 
-                animalEventConsumer = component "Animal Registered Consumer" {
-                    description "Consumes AnimalRegistered events idempotently and maps the shared registration number to the server's Animal identity."
-                    technology "Spring AMQP"
-                }
-
                 grpcServerRunner -> grpcApi "Registers as a gRPC service and starts"
                 grpcApi -> traceabilityService "Calls"
                 traceabilityService -> persistence "Reads traceability data via"
                 demoDataSeeder -> persistence "Writes demo data via"
-                animalEventConsumer -> persistence "Upserts registered animals via"
                 persistence -> entities "Maps rows to"
             }
 
@@ -185,17 +160,13 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             }
 
             registrationRepository -> store1 "Reads and writes animal registrations" "JPA / JDBC"
-            registrationOutbox -> store1 "Stores pending events in" "JPA / JDBC"
 
             station2 -> store2 "Writes registered parts and trays to" "Local persistence" "Planned"
             station3 -> store3 "Writes packed products to" "Local persistence" "Planned"
 
-            outboxPublisher -> broker "Publishes AnimalRegistered events when available" "AMQP"
-            store2 -> broker "Forwards queued events when the network is available" "Asynchronous messaging" "Planned"
-            store3 -> broker "Forwards queued events when the network is available" "Asynchronous messaging" "Planned"
-
-            broker -> animalEventConsumer "Delivers AnimalRegistered events to" "AMQP"
-            animalEventConsumer -> broker "Rejects invalid events to the dead-letter queue" "AMQP"
+            station1 -> traceabilityServer "Indirect: forwards registrations when the network is available" "" "Planned"
+            station2 -> traceabilityServer "Indirect: forwards parts and trays when the network is available" "" "Planned"
+            station3 -> traceabilityServer "Indirect: forwards packed products when the network is available" "" "Planned"
 
             persistence -> database "Reads and writes data" "JPA / JDBC"
         }

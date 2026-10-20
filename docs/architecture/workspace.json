@@ -5,7 +5,7 @@
   "description" : "C4 model for the DSY course assignment: a slaughterhouse with full traceability from animal to product and back.",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-10-06T09:31:22Z",
+  "lastModifiedDate" : "2026-10-20T18:07:41Z",
   "model" : {
     "people" : [ {
       "description" : "Receives animals at the arrival end and records what came in.",
@@ -17,21 +17,21 @@
       "relationships" : [ {
         "description" : "Registers and weighs arriving animals using",
         "destinationId" : "9",
-        "id" : "61",
+        "id" : "48",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Registers and weighs arriving animals using",
         "destinationId" : "11",
-        "id" : "63",
+        "id" : "50",
         "sourceId" : "1",
         "tags" : "Relationship",
         "technology" : "REST / JSON"
       }, {
         "description" : "Registers and weighs arriving animals using",
         "destinationId" : "10",
-        "id" : "64",
-        "linkedRelationshipId" : "63",
+        "id" : "51",
+        "linkedRelationshipId" : "50",
         "sourceId" : "1",
         "technology" : "REST / JSON"
       } ],
@@ -45,15 +45,15 @@
       },
       "relationships" : [ {
         "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
-        "destinationId" : "24",
-        "id" : "65",
+        "destinationId" : "20",
+        "id" : "52",
         "sourceId" : "2",
         "tags" : "Relationship"
       }, {
         "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
         "destinationId" : "9",
-        "id" : "66",
-        "linkedRelationshipId" : "65",
+        "id" : "53",
+        "linkedRelationshipId" : "52",
         "sourceId" : "2"
       } ],
       "tags" : "Element,Person"
@@ -66,15 +66,15 @@
       },
       "relationships" : [ {
         "description" : "Registers packed products and the trays they were packed from, using",
-        "destinationId" : "25",
-        "id" : "67",
+        "destinationId" : "21",
+        "id" : "54",
         "sourceId" : "3",
         "tags" : "Relationship"
       }, {
         "description" : "Registers packed products and the trays they were packed from, using",
         "destinationId" : "9",
-        "id" : "68",
-        "linkedRelationshipId" : "67",
+        "id" : "55",
+        "linkedRelationshipId" : "54",
         "sourceId" : "3"
       } ],
       "tags" : "Element,Person"
@@ -88,7 +88,7 @@
       "relationships" : [ {
         "description" : "Requests a recall lookup using",
         "destinationId" : "8",
-        "id" : "69",
+        "id" : "56",
         "sourceId" : "4",
         "tags" : "Relationship"
       } ],
@@ -105,14 +105,14 @@
       "relationships" : [ {
         "description" : "Indirect: delivers animals",
         "destinationId" : "10",
-        "id" : "70",
+        "id" : "57",
         "sourceId" : "5",
         "tags" : "Relationship"
       }, {
         "description" : "Indirect: delivers animals",
         "destinationId" : "9",
-        "id" : "71",
-        "linkedRelationshipId" : "70",
+        "id" : "58",
+        "linkedRelationshipId" : "57",
         "sourceId" : "5"
       } ],
       "tags" : "Element,Software System,External System"
@@ -127,7 +127,7 @@
       "relationships" : [ {
         "description" : "Indirect: distributes products",
         "destinationId" : "7",
-        "id" : "74",
+        "id" : "61",
         "sourceId" : "6",
         "tags" : "Relationship"
       } ],
@@ -152,21 +152,21 @@
       "relationships" : [ {
         "description" : "Direct: requests affected products for an animal",
         "destinationId" : "9",
-        "id" : "62",
+        "id" : "49",
         "sourceId" : "8",
         "tags" : "Relationship"
       }, {
         "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "33",
-        "id" : "75",
+        "destinationId" : "28",
+        "id" : "62",
         "sourceId" : "8",
         "tags" : "Relationship",
         "technology" : "gRPC / Protocol Buffers"
       }, {
         "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "31",
-        "id" : "76",
-        "linkedRelationshipId" : "75",
+        "destinationId" : "26",
+        "id" : "63",
+        "linkedRelationshipId" : "62",
         "sourceId" : "8",
         "technology" : "gRPC / Protocol Buffers"
       } ],
@@ -174,7 +174,7 @@
     }, {
       "containers" : [ {
         "components" : [ {
-          "description" : "Handles POST /animals and the three required lookups: one animal, all animals arriving on a date, and all animals from an origin. Validates the request body before it reaches the service.",
+          "description" : "Handles POST /animals and the three required lookups: one animal, all animals arriving on a date, and all animals from an origin. Without a filter it returns every registered animal; the two filters cannot be combined. Validates the request body before it reaches the service.",
           "documentation" : { },
           "id" : "11",
           "name" : "Animal REST API",
@@ -184,7 +184,7 @@
           "relationships" : [ {
             "description" : "Calls",
             "destinationId" : "13",
-            "id" : "18",
+            "id" : "16",
             "sourceId" : "11",
             "tags" : "Relationship"
           } ],
@@ -201,7 +201,7 @@
           "relationships" : [ {
             "description" : "Converts exceptions thrown by",
             "destinationId" : "11",
-            "id" : "19",
+            "id" : "17",
             "sourceId" : "12",
             "tags" : "Relationship"
           } ],
@@ -218,13 +218,7 @@
           "relationships" : [ {
             "description" : "Reads and writes animals via",
             "destinationId" : "14",
-            "id" : "20",
-            "sourceId" : "13",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Stores an AnimalRegistered event atomically in",
-            "destinationId" : "16",
-            "id" : "21",
+            "id" : "18",
             "sourceId" : "13",
             "tags" : "Relationship"
           } ],
@@ -241,13 +235,13 @@
           "relationships" : [ {
             "description" : "Maps rows to",
             "destinationId" : "15",
-            "id" : "22",
+            "id" : "19",
             "sourceId" : "14",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes animal registrations",
-            "destinationId" : "26",
-            "id" : "46",
+            "destinationId" : "22",
+            "id" : "39",
             "sourceId" : "14",
             "tags" : "Relationship",
             "technology" : "JPA / JDBC"
@@ -264,48 +258,6 @@
           },
           "tags" : "Element,Component",
           "technology" : "Jakarta Persistence"
-        }, {
-          "description" : "Stores AnimalRegistered events in the same transaction as the animal, so registrations are not lost when RabbitMQ is unavailable.",
-          "documentation" : { },
-          "id" : "16",
-          "name" : "Registration Outbox",
-          "properties" : {
-            "structurizr.dsl.identifier" : "registrationOutbox"
-          },
-          "relationships" : [ {
-            "description" : "Stores pending events in",
-            "destinationId" : "26",
-            "id" : "48",
-            "sourceId" : "16",
-            "tags" : "Relationship",
-            "technology" : "JPA / JDBC"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Data JPA, H2"
-        }, {
-          "description" : "Retries pending AnimalRegistered events and removes them from the outbox only after they have been sent to RabbitMQ.",
-          "documentation" : { },
-          "id" : "17",
-          "name" : "Outbox Publisher",
-          "properties" : {
-            "structurizr.dsl.identifier" : "outboxPublisher"
-          },
-          "relationships" : [ {
-            "description" : "Reads pending events from",
-            "destinationId" : "16",
-            "id" : "23",
-            "sourceId" : "17",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Publishes AnimalRegistered events when available",
-            "destinationId" : "29",
-            "id" : "51",
-            "sourceId" : "17",
-            "tags" : "Relationship",
-            "technology" : "AMQP"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring Scheduler, Spring AMQP"
         } ],
         "description" : "Registers arriving animals with date, weight, registration number and origin, and exposes them as a RESTful web service.",
         "documentation" : { },
@@ -316,67 +268,78 @@
         },
         "relationships" : [ {
           "description" : "Reads and writes animal registrations",
-          "destinationId" : "26",
-          "id" : "47",
-          "linkedRelationshipId" : "46",
+          "destinationId" : "22",
+          "id" : "40",
+          "linkedRelationshipId" : "39",
           "sourceId" : "10",
           "technology" : "JPA / JDBC"
         }, {
-          "description" : "Publishes AnimalRegistered events when available",
-          "destinationId" : "29",
-          "id" : "52",
-          "linkedRelationshipId" : "51",
+          "description" : "Indirect: forwards registrations when the network is available",
+          "destinationId" : "26",
+          "id" : "43",
           "sourceId" : "10",
-          "technology" : "AMQP"
+          "tags" : "Relationship,Planned"
         } ],
         "tags" : "Element,Container",
         "technology" : "Java 21, Spring Boot, REST"
       }, {
         "description" : "Cuts animals into parts, weighs each part and places it in a tray holding only one type of part. Planned.",
         "documentation" : { },
-        "id" : "24",
+        "id" : "20",
         "name" : "Station 2 - Cutting",
         "properties" : {
           "structurizr.dsl.identifier" : "station2"
         },
         "relationships" : [ {
           "description" : "Writes registered parts and trays to",
-          "destinationId" : "27",
-          "id" : "49",
-          "sourceId" : "24",
+          "destinationId" : "23",
+          "id" : "41",
+          "sourceId" : "20",
           "tags" : "Relationship,Planned",
           "technology" : "Local persistence"
+        }, {
+          "description" : "Indirect: forwards parts and trays when the network is available",
+          "destinationId" : "26",
+          "id" : "44",
+          "sourceId" : "20",
+          "tags" : "Relationship,Planned"
         } ],
         "tags" : "Element,Container,Planned",
         "technology" : "Java 21, Spring Boot"
       }, {
         "description" : "Packs products from one or more trays and registers which trays were used. Planned.",
         "documentation" : { },
-        "id" : "25",
+        "id" : "21",
         "name" : "Station 3 - Packing",
         "properties" : {
           "structurizr.dsl.identifier" : "station3"
         },
         "relationships" : [ {
           "description" : "Writes packed products to",
-          "destinationId" : "28",
-          "id" : "50",
-          "sourceId" : "25",
+          "destinationId" : "24",
+          "id" : "42",
+          "sourceId" : "21",
           "tags" : "Relationship,Planned",
           "technology" : "Local persistence"
         }, {
+          "description" : "Indirect: forwards packed products when the network is available",
+          "destinationId" : "26",
+          "id" : "45",
+          "sourceId" : "21",
+          "tags" : "Relationship,Planned"
+        }, {
           "description" : "Indirect: hands over packed products",
           "destinationId" : "6",
-          "id" : "72",
-          "sourceId" : "25",
+          "id" : "59",
+          "sourceId" : "21",
           "tags" : "Relationship"
         } ],
         "tags" : "Element,Container,Planned",
         "technology" : "Java 21, Spring Boot"
       }, {
-        "description" : "Owns registered animals and the transactional outbox. Lets Station 1 accept registrations while RabbitMQ or the backend is unavailable.",
+        "description" : "Owns the registered animals. Station 1 has its own store, so a registration can be accepted without any other part of the system being available.",
         "documentation" : { },
-        "id" : "26",
+        "id" : "22",
         "name" : "Registration Database",
         "properties" : {
           "structurizr.dsl.identifier" : "store1"
@@ -386,85 +349,44 @@
       }, {
         "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
         "documentation" : { },
-        "id" : "27",
+        "id" : "23",
         "name" : "Local Store - Station 2",
         "properties" : {
           "structurizr.dsl.identifier" : "store2"
         },
-        "relationships" : [ {
-          "description" : "Forwards queued events when the network is available",
-          "destinationId" : "29",
-          "id" : "53",
-          "sourceId" : "27",
-          "tags" : "Relationship,Planned",
-          "technology" : "Asynchronous messaging"
-        } ],
         "tags" : "Element,Container,Planned,Database",
         "technology" : "Embedded database, e.g. H2 or SQLite"
       }, {
         "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
         "documentation" : { },
-        "id" : "28",
+        "id" : "24",
         "name" : "Local Store - Station 3",
         "properties" : {
           "structurizr.dsl.identifier" : "store3"
         },
-        "relationships" : [ {
-          "description" : "Forwards queued events when the network is available",
-          "destinationId" : "29",
-          "id" : "54",
-          "sourceId" : "28",
-          "tags" : "Relationship,Planned",
-          "technology" : "Asynchronous messaging"
-        } ],
         "tags" : "Element,Container,Planned,Database",
         "technology" : "Embedded database, e.g. H2 or SQLite"
       }, {
-        "description" : "Carries station events asynchronously. Holds a dead-letter queue, so an event the consumer rejects is parked for inspection instead of being redelivered forever. AnimalRegistered is implemented; events from Station 2 and Station 3 are planned.",
-        "documentation" : { },
-        "id" : "29",
-        "name" : "Message Broker",
-        "properties" : {
-          "structurizr.dsl.identifier" : "broker"
-        },
-        "relationships" : [ {
-          "description" : "Delivers AnimalRegistered events to",
-          "destinationId" : "38",
-          "id" : "55",
-          "sourceId" : "29",
-          "tags" : "Relationship",
-          "technology" : "AMQP"
-        }, {
-          "description" : "Delivers AnimalRegistered events to",
-          "destinationId" : "31",
-          "id" : "56",
-          "linkedRelationshipId" : "55",
-          "sourceId" : "29",
-          "technology" : "AMQP"
-        } ],
-        "tags" : "Element,Container",
-        "technology" : "RabbitMQ, topic exchange and dead-letter queue"
-      }, {
         "description" : "Client application used to call the traceability service. Uses the client stub generated from traceability.proto.",
         "documentation" : { },
-        "id" : "30",
+        "id" : "25",
         "name" : "Client",
         "properties" : {
           "structurizr.dsl.identifier" : "client"
         },
         "relationships" : [ {
           "description" : "Requests traceability information",
-          "destinationId" : "33",
-          "id" : "77",
-          "sourceId" : "30",
+          "destinationId" : "28",
+          "id" : "64",
+          "sourceId" : "25",
           "tags" : "Relationship",
           "technology" : "gRPC / Protocol Buffers"
         }, {
           "description" : "Requests traceability information",
-          "destinationId" : "31",
-          "id" : "78",
-          "linkedRelationshipId" : "77",
-          "sourceId" : "30",
+          "destinationId" : "26",
+          "id" : "65",
+          "linkedRelationshipId" : "64",
+          "sourceId" : "25",
           "technology" : "gRPC / Protocol Buffers"
         } ],
         "tags" : "Element,Container",
@@ -473,16 +395,16 @@
         "components" : [ {
           "description" : "Starts the gRPC server on the configured port and registers both the service and reflection, so Postman and BloomRPC can discover the contract.",
           "documentation" : { },
-          "id" : "32",
+          "id" : "27",
           "name" : "gRPC Server Runner",
           "properties" : {
             "structurizr.dsl.identifier" : "grpcServerRunner"
           },
           "relationships" : [ {
             "description" : "Registers as a gRPC service and starts",
-            "destinationId" : "33",
-            "id" : "39",
-            "sourceId" : "32",
+            "destinationId" : "28",
+            "id" : "33",
+            "sourceId" : "27",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
@@ -490,33 +412,33 @@
         }, {
           "description" : "Implements the server stub generated from traceability.proto. Validates input and maps domain errors to status codes: NOT_FOUND, INVALID_ARGUMENT and INTERNAL.",
           "documentation" : { },
-          "id" : "33",
+          "id" : "28",
           "name" : "gRPC API",
           "properties" : {
             "structurizr.dsl.identifier" : "grpcApi"
           },
           "relationships" : [ {
             "description" : "Calls",
-            "destinationId" : "34",
-            "id" : "40",
-            "sourceId" : "33",
+            "destinationId" : "29",
+            "id" : "34",
+            "sourceId" : "28",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "gRPC, Protocol Buffers, generated server stub"
         }, {
-          "description" : "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Knows nothing about JPA or gRPC.",
+          "description" : "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Keeps track of the traceability cases it has handled: how many, and the subject, date and outcome of the most recent one. Knows nothing about JPA or gRPC.",
           "documentation" : { },
-          "id" : "34",
+          "id" : "29",
           "name" : "Traceability Service",
           "properties" : {
             "structurizr.dsl.identifier" : "traceabilityService"
           },
           "relationships" : [ {
             "description" : "Reads traceability data via",
-            "destinationId" : "35",
-            "id" : "41",
-            "sourceId" : "34",
+            "destinationId" : "30",
+            "id" : "35",
+            "sourceId" : "29",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
@@ -524,22 +446,22 @@
         }, {
           "description" : "AnimalRepository, AnimalPartRepository, TrayRepository and ProductRepository. Derived queries push the tracing down into the database.",
           "documentation" : { },
-          "id" : "35",
+          "id" : "30",
           "name" : "Repositories",
           "properties" : {
             "structurizr.dsl.identifier" : "persistence"
           },
           "relationships" : [ {
             "description" : "Maps rows to",
-            "destinationId" : "36",
-            "id" : "44",
-            "sourceId" : "35",
+            "destinationId" : "31",
+            "id" : "37",
+            "sourceId" : "30",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes data",
-            "destinationId" : "45",
-            "id" : "59",
-            "sourceId" : "35",
+            "destinationId" : "38",
+            "id" : "46",
+            "sourceId" : "30",
             "tags" : "Relationship",
             "technology" : "JPA / JDBC"
           } ],
@@ -548,7 +470,7 @@
         }, {
           "description" : "Animal, AnimalPart, Tray and Product, including the references that make tracing possible.",
           "documentation" : { },
-          "id" : "36",
+          "id" : "31",
           "name" : "Domain Entities",
           "properties" : {
             "structurizr.dsl.identifier" : "entities"
@@ -558,65 +480,34 @@
         }, {
           "description" : "Creates demo data on startup. Disabled by default via app.seed-demo-data.",
           "documentation" : { },
-          "id" : "37",
+          "id" : "32",
           "name" : "Demo Data Seeder",
           "properties" : {
             "structurizr.dsl.identifier" : "demoDataSeeder"
           },
           "relationships" : [ {
             "description" : "Writes demo data via",
-            "destinationId" : "35",
-            "id" : "42",
-            "sourceId" : "37",
+            "destinationId" : "30",
+            "id" : "36",
+            "sourceId" : "32",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Spring CommandLineRunner"
-        }, {
-          "description" : "Consumes AnimalRegistered events idempotently and maps the shared registration number to the server's Animal identity.",
-          "documentation" : { },
-          "id" : "38",
-          "name" : "Animal Registered Consumer",
-          "properties" : {
-            "structurizr.dsl.identifier" : "animalEventConsumer"
-          },
-          "relationships" : [ {
-            "description" : "Upserts registered animals via",
-            "destinationId" : "35",
-            "id" : "43",
-            "sourceId" : "38",
-            "tags" : "Relationship"
-          }, {
-            "description" : "Rejects invalid events to the dead-letter queue",
-            "destinationId" : "29",
-            "id" : "57",
-            "sourceId" : "38",
-            "tags" : "Relationship",
-            "technology" : "AMQP"
-          } ],
-          "tags" : "Element,Component",
-          "technology" : "Spring AMQP"
         } ],
-        "description" : "Consumes animal registrations and provides traceability lookups between animals and products.",
+        "description" : "Provides traceability lookups between animals and products.",
         "documentation" : { },
-        "id" : "31",
+        "id" : "26",
         "name" : "Traceability Server",
         "properties" : {
           "structurizr.dsl.identifier" : "traceabilityServer"
         },
         "relationships" : [ {
-          "description" : "Rejects invalid events to the dead-letter queue",
-          "destinationId" : "29",
-          "id" : "58",
-          "linkedRelationshipId" : "57",
-          "sourceId" : "31",
-          "technology" : "AMQP"
-        }, {
           "description" : "Reads and writes data",
-          "destinationId" : "45",
-          "id" : "60",
-          "linkedRelationshipId" : "59",
-          "sourceId" : "31",
+          "destinationId" : "38",
+          "id" : "47",
+          "linkedRelationshipId" : "46",
+          "sourceId" : "26",
           "technology" : "JPA / JDBC"
         } ],
         "tags" : "Element,Container",
@@ -624,7 +515,7 @@
       }, {
         "description" : "Stores animals, animal parts, trays and products.",
         "documentation" : { },
-        "id" : "45",
+        "id" : "38",
         "name" : "Slaughterhouse Database",
         "properties" : {
           "structurizr.dsl.identifier" : "database"
@@ -642,8 +533,8 @@
       "relationships" : [ {
         "description" : "Indirect: hands over packed products",
         "destinationId" : "6",
-        "id" : "73",
-        "linkedRelationshipId" : "72",
+        "id" : "60",
+        "linkedRelationshipId" : "59",
         "sourceId" : "9"
       } ],
       "tags" : "Element,Software System"
@@ -652,6 +543,7 @@
   "name" : "Slaughterhouse",
   "properties" : {
     "structurizr.inspection.error" : "26",
+    "structurizr.dsl" : "d29ya3NwYWNlICJTbGF1Z2h0ZXJob3VzZSIgIkM0IG1vZGVsIGZvciB0aGUgRFNZIGNvdXJzZSBhc3NpZ25tZW50OiBhIHNsYXVnaHRlcmhvdXNlIHdpdGggZnVsbCB0cmFjZWFiaWxpdHkgZnJvbSBhbmltYWwgdG8gcHJvZHVjdCBhbmQgYmFjay4iIHsNCg0KICAgIG1vZGVsIHsNCiAgICAgICAgIWltcGxpZWRSZWxhdGlvbnNoaXBzIHRydWUNCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yID0gcGVyc29uICJTdGF0aW9uIDEgT3BlcmF0b3IiIHsNCiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJSZWNlaXZlcyBhbmltYWxzIGF0IHRoZSBhcnJpdmFsIGVuZCBhbmQgcmVjb3JkcyB3aGF0IGNhbWUgaW4uIg0KICAgICAgICB9DQoNCiAgICAgICAgc3RhdGlvbjJPcGVyYXRvciA9IHBlcnNvbiAiU3RhdGlvbiAyIE9wZXJhdG9yIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ3V0cyBhbmltYWxzIGludG8gcGFydHMgYW5kIGZpbGxzIHRyYXlzLiINCiAgICAgICAgfQ0KDQogICAgICAgIHN0YXRpb24zT3BlcmF0b3IgPSBwZXJzb24gIlN0YXRpb24gMyBPcGVyYXRvciIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBhY2tzIHByb2R1Y3RzIGZvciBkaXN0cmlidXRpb24uIg0KICAgICAgICB9DQoNCiAgICAgICAgcXVhbGl0eU9mZmljZXIgPSBwZXJzb24gIlF1YWxpdHkgLyBSZWNhbGwgT2ZmaWNlciIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIkludmVzdGlnYXRlcyBwcm9ibGVtcyB3aXRoIGEgc2xhdWdodGVyZWQgYW5pbWFsIGFuZCBkZWNpZGVzIHdoaWNoIHByb2R1Y3RzIG11c3QgYmUgcmVjYWxsZWQuIg0KICAgICAgICB9DQoNCiAgICAgICAgc3VwcGxpZXIgPSBzb2Z0d2FyZVN5c3RlbSAiQW5pbWFsIFN1cHBsaWVyIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXh0ZXJuYWwgcGFydHkgdGhhdCBkZWxpdmVycyBsaXZpbmcgYW5pbWFscy4gRXhjaGFuZ2VzIGhhcHBlbiBwaHlzaWNhbGx5IGFuZCBhc3luY2hyb25vdXNseSwgbmV2ZXIgdGhyb3VnaCBhIHN5bmNocm9ub3VzIGNhbGwuIg0KICAgICAgICAgICAgdGFncyAiRXh0ZXJuYWwgU3lzdGVtIg0KICAgICAgICB9DQoNCiAgICAgICAgbG9naXN0aWNzID0gc29mdHdhcmVTeXN0ZW0gIlRyYW5zcG9ydCAvIExvZ2lzdGljcyIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIkV4dGVybmFsIHBhcnR5IHRoYXQgY29sbGVjdHMgcGFja2VkIHByb2R1Y3RzIGFuZCBoYW5kbGVzIGRpc3RyaWJ1dGlvbi4iDQogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCBTeXN0ZW0iDQogICAgICAgIH0NCg0KICAgICAgICBjdXN0b21lciA9IHNvZnR3YXJlU3lzdGVtICJDdXN0b21lciAvIFN1cGVybWFya2V0IiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXh0ZXJuYWwgcGFydHkgdGhhdCBvcmRlcnMgYW5kIHJlY2VpdmVzIHByb2R1Y3RzLiINCiAgICAgICAgICAgIHRhZ3MgIkV4dGVybmFsIFN5c3RlbSINCiAgICAgICAgfQ0KDQogICAgICAgIHJlY2FsbFN5c3RlbSA9IHNvZnR3YXJlU3lzdGVtICJFeHRlcm5hbCBSZWNhbGwgU3lzdGVtIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiU3lzdGVtIG91dHNpZGUgdGhlIHNsYXVnaHRlcmhvdXNlIHRoYXQgYXNrcyB3aGljaCBwcm9kdWN0cyBtYXkgY29udGFpbiBwYXJ0cyBmcm9tIGEgZ2l2ZW4gYW5pbWFsLiINCiAgICAgICAgICAgIHRhZ3MgIkV4dGVybmFsIFN5c3RlbSINCiAgICAgICAgfQ0KDQogICAgICAgIHNsYXVnaHRlcmhvdXNlID0gc29mdHdhcmVTeXN0ZW0gIlNsYXVnaHRlcmhvdXNlIFN5c3RlbSIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIlJlZ2lzdGVycyBhbmQgdHJhY2VzIGFuaW1hbHMsIHBhcnRzLCB0cmF5cyBhbmQgcHJvZHVjdHMsIGFuZCBzdXBwb3J0cyBwcm9kdWN0IHJlY2FsbC4iDQoNCiAgICAgICAgICAgIHN0YXRpb24xID0gY29udGFpbmVyICJTdGF0aW9uIDEgLSBSZWdpc3RyYXRpb24iIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUmVnaXN0ZXJzIGFycml2aW5nIGFuaW1hbHMgd2l0aCBkYXRlLCB3ZWlnaHQsIHJlZ2lzdHJhdGlvbiBudW1iZXIgYW5kIG9yaWdpbiwgYW5kIGV4cG9zZXMgdGhlbSBhcyBhIFJFU1RmdWwgd2ViIHNlcnZpY2UuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290LCBSRVNUIg0KDQogICAgICAgICAgICAgICAgYW5pbWFsQXBpID0gY29tcG9uZW50ICJBbmltYWwgUkVTVCBBUEkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkhhbmRsZXMgUE9TVCAvYW5pbWFscyBhbmQgdGhlIHRocmVlIHJlcXVpcmVkIGxvb2t1cHM6IG9uZSBhbmltYWwsIGFsbCBhbmltYWxzIGFycml2aW5nIG9uIGEgZGF0ZSwgYW5kIGFsbCBhbmltYWxzIGZyb20gYW4gb3JpZ2luLiBXaXRob3V0IGEgZmlsdGVyIGl0IHJldHVybnMgZXZlcnkgcmVnaXN0ZXJlZCBhbmltYWw7IHRoZSB0d28gZmlsdGVycyBjYW5ub3QgYmUgY29tYmluZWQuIFZhbGlkYXRlcyB0aGUgcmVxdWVzdCBib2R5IGJlZm9yZSBpdCByZWFjaGVzIHRoZSBzZXJ2aWNlLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIE1WQywgQmVhbiBWYWxpZGF0aW9uIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHJlc3RFeGNlcHRpb25IYW5kbGVyID0gY29tcG9uZW50ICJSRVNUIEV4Y2VwdGlvbiBIYW5kbGVyIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJUdXJucyBkb21haW4gZXhjZXB0aW9ucyBpbnRvIEhUVFAgc3RhdHVzIGNvZGVzOiA0MDQgd2hlbiB0aGUgYW5pbWFsIGlzIHVua25vd24sIDQwOSB3aGVuIHRoZSByZWdpc3RyYXRpb24gbnVtYmVyIGlzIGFscmVhZHkgaW4gdXNlLCBhbmQgNDAwIHdoZW4gdGhlIHJlcXVlc3QgYm9keSBmYWlscyB2YWxpZGF0aW9uLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEBSZXN0Q29udHJvbGxlckFkdmljZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25TZXJ2aWNlID0gY29tcG9uZW50ICJBbmltYWwgUmVnaXN0cmF0aW9uIFNlcnZpY2UiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlJlZ2lzdHJhdGlvbiBydWxlcy4gUmVqZWN0cyBhIHJlZ2lzdHJhdGlvbiBudW1iZXIgdGhhdCBpcyBhbHJlYWR5IGluIHVzZSwgYW5kIGRlZmF1bHRzIHRoZSBhcnJpdmFsIHRpbWUgd2hlbiB0aGUgY2FsbGVyIGxlYXZlcyBpdCBvdXQuIEtub3dzIG5vdGhpbmcgYWJvdXQgSFRUUC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAU2VydmljZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25SZXBvc2l0b3J5ID0gY29tcG9uZW50ICJBbmltYWwgUmVwb3NpdG9yeSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiRGVyaXZlZCBxdWVyaWVzIGZvciBsb29rdXAgYnkgcmVnaXN0cmF0aW9uIG51bWJlciwgYnkgYXJyaXZhbCBkYXRlIGFzIGEgaGFsZi1vcGVuIGludGVydmFsLCBhbmQgYnkgb3JpZ2luLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIERhdGEgSlBBIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHJlZ2lzdHJhdGlvbkVudGl0eSA9IGNvbXBvbmVudCAiQW5pbWFsIEVudGl0eSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiVGhlIHJlZ2lzdHJhdGlvbiBzZXJ2aWNlJ3Mgb3duIHZpZXcgb2YgYW4gYW5pbWFsOiByZWdpc3RyYXRpb24gbnVtYmVyLCBhcnJpdmFsIGRhdGUsIHdlaWdodCBhbmQgb3JpZ2luLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmFrYXJ0YSBQZXJzaXN0ZW5jZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBhbmltYWxBcGkgLT4gcmVnaXN0cmF0aW9uU2VydmljZSAiQ2FsbHMiDQogICAgICAgICAgICAgICAgcmVzdEV4Y2VwdGlvbkhhbmRsZXIgLT4gYW5pbWFsQXBpICJDb252ZXJ0cyBleGNlcHRpb25zIHRocm93biBieSINCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25TZXJ2aWNlIC0+IHJlZ2lzdHJhdGlvblJlcG9zaXRvcnkgIlJlYWRzIGFuZCB3cml0ZXMgYW5pbWFscyB2aWEiDQogICAgICAgICAgICAgICAgcmVnaXN0cmF0aW9uUmVwb3NpdG9yeSAtPiByZWdpc3RyYXRpb25FbnRpdHkgIk1hcHMgcm93cyB0byINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RhdGlvbjIgPSBjb250YWluZXIgIlN0YXRpb24gMiAtIEN1dHRpbmciIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ3V0cyBhbmltYWxzIGludG8gcGFydHMsIHdlaWdocyBlYWNoIHBhcnQgYW5kIHBsYWNlcyBpdCBpbiBhIHRyYXkgaG9sZGluZyBvbmx5IG9uZSB0eXBlIG9mIHBhcnQuIFBsYW5uZWQuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290Ig0KICAgICAgICAgICAgICAgIHRhZ3MgIlBsYW5uZWQiDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHN0YXRpb24zID0gY29udGFpbmVyICJTdGF0aW9uIDMgLSBQYWNraW5nIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBhY2tzIHByb2R1Y3RzIGZyb20gb25lIG9yIG1vcmUgdHJheXMgYW5kIHJlZ2lzdGVycyB3aGljaCB0cmF5cyB3ZXJlIHVzZWQuIFBsYW5uZWQuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290Ig0KICAgICAgICAgICAgICAgIHRhZ3MgIlBsYW5uZWQiDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHN0b3JlMSA9IGNvbnRhaW5lciAiUmVnaXN0cmF0aW9uIERhdGFiYXNlIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIk93bnMgdGhlIHJlZ2lzdGVyZWQgYW5pbWFscy4gU3RhdGlvbiAxIGhhcyBpdHMgb3duIHN0b3JlLCBzbyBhIHJlZ2lzdHJhdGlvbiBjYW4gYmUgYWNjZXB0ZWQgd2l0aG91dCBhbnkgb3RoZXIgcGFydCBvZiB0aGUgc3lzdGVtIGJlaW5nIGF2YWlsYWJsZS4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiTG9jYWwgcGVyc2lzdGVudCBIMiBkYXRhYmFzZSINCiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RvcmUyID0gY29udGFpbmVyICJMb2NhbCBTdG9yZSAtIFN0YXRpb24gMiIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJMb2NhbCBkYXRhIHN0b3JlIGFuZCBvdXRib3VuZCBxdWV1ZS4gTGV0cyB0aGUgc3RhdGlvbiBrZWVwIHdvcmtpbmcgZHVyaW5nIGEgcGFydGlhbCBmYWlsdXJlLCB3aGVuIHRoZSBuZXR3b3JrIG9yIHRoZSBiYWNrZW5kIGlzIHVuYXZhaWxhYmxlLiBQbGFubmVkLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJFbWJlZGRlZCBkYXRhYmFzZSwgZS5nLiBIMiBvciBTUUxpdGUiDQogICAgICAgICAgICAgICAgdGFncyAiUGxhbm5lZCxEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RvcmUzID0gY29udGFpbmVyICJMb2NhbCBTdG9yZSAtIFN0YXRpb24gMyIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJMb2NhbCBkYXRhIHN0b3JlIGFuZCBvdXRib3VuZCBxdWV1ZS4gTGV0cyB0aGUgc3RhdGlvbiBrZWVwIHdvcmtpbmcgZHVyaW5nIGEgcGFydGlhbCBmYWlsdXJlLCB3aGVuIHRoZSBuZXR3b3JrIG9yIHRoZSBiYWNrZW5kIGlzIHVuYXZhaWxhYmxlLiBQbGFubmVkLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJFbWJlZGRlZCBkYXRhYmFzZSwgZS5nLiBIMiBvciBTUUxpdGUiDQogICAgICAgICAgICAgICAgdGFncyAiUGxhbm5lZCxEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgY2xpZW50ID0gY29udGFpbmVyICJDbGllbnQiIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ2xpZW50IGFwcGxpY2F0aW9uIHVzZWQgdG8gY2FsbCB0aGUgdHJhY2VhYmlsaXR5IHNlcnZpY2UuIFVzZXMgdGhlIGNsaWVudCBzdHViIGdlbmVyYXRlZCBmcm9tIHRyYWNlYWJpbGl0eS5wcm90by4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSAyMSwgZ1JQQywgZ2VuZXJhdGVkIGNsaWVudCBzdHViIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICB0cmFjZWFiaWxpdHlTZXJ2ZXIgPSBjb250YWluZXIgIlRyYWNlYWJpbGl0eSBTZXJ2ZXIiIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUHJvdmlkZXMgdHJhY2VhYmlsaXR5IGxvb2t1cHMgYmV0d2VlbiBhbmltYWxzIGFuZCBwcm9kdWN0cy4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSAyMSwgU3ByaW5nIEJvb3QsIGdSUEMiDQoNCiAgICAgICAgICAgICAgICBncnBjU2VydmVyUnVubmVyID0gY29tcG9uZW50ICJnUlBDIFNlcnZlciBSdW5uZXIiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlN0YXJ0cyB0aGUgZ1JQQyBzZXJ2ZXIgb24gdGhlIGNvbmZpZ3VyZWQgcG9ydCBhbmQgcmVnaXN0ZXJzIGJvdGggdGhlIHNlcnZpY2UgYW5kIHJlZmxlY3Rpb24sIHNvIFBvc3RtYW4gYW5kIEJsb29tUlBDIGNhbiBkaXNjb3ZlciB0aGUgY29udHJhY3QuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgQ29tbWFuZExpbmVSdW5uZXIsIGdSUEMiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZ3JwY0FwaSA9IGNvbXBvbmVudCAiZ1JQQyBBUEkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkltcGxlbWVudHMgdGhlIHNlcnZlciBzdHViIGdlbmVyYXRlZCBmcm9tIHRyYWNlYWJpbGl0eS5wcm90by4gVmFsaWRhdGVzIGlucHV0IGFuZCBtYXBzIGRvbWFpbiBlcnJvcnMgdG8gc3RhdHVzIGNvZGVzOiBOT1RfRk9VTkQsIElOVkFMSURfQVJHVU1FTlQgYW5kIElOVEVSTkFMLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiZ1JQQywgUHJvdG9jb2wgQnVmZmVycywgZ2VuZXJhdGVkIHNlcnZlciBzdHViIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHRyYWNlYWJpbGl0eVNlcnZpY2UgPSBjb21wb25lbnQgIlRyYWNlYWJpbGl0eSBTZXJ2aWNlIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJCdXNpbmVzcyBsb2dpYyBmb3IgdHJhY2luZyBwcm9kdWN0IHRvIGFuaW1hbHMgYW5kIGFuaW1hbCB0byBwcm9kdWN0cy4gQm90aCBkaXJlY3Rpb25zIGdvIHRocm91Z2ggdGhlIHRyYXlzLiBLZWVwcyB0cmFjayBvZiB0aGUgdHJhY2VhYmlsaXR5IGNhc2VzIGl0IGhhcyBoYW5kbGVkOiBob3cgbWFueSwgYW5kIHRoZSBzdWJqZWN0LCBkYXRlIGFuZCBvdXRjb21lIG9mIHRoZSBtb3N0IHJlY2VudCBvbmUuIEtub3dzIG5vdGhpbmcgYWJvdXQgSlBBIG9yIGdSUEMuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBlcnNpc3RlbmNlID0gY29tcG9uZW50ICJSZXBvc2l0b3JpZXMiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkFuaW1hbFJlcG9zaXRvcnksIEFuaW1hbFBhcnRSZXBvc2l0b3J5LCBUcmF5UmVwb3NpdG9yeSBhbmQgUHJvZHVjdFJlcG9zaXRvcnkuIERlcml2ZWQgcXVlcmllcyBwdXNoIHRoZSB0cmFjaW5nIGRvd24gaW50byB0aGUgZGF0YWJhc2UuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRGF0YSBKUEEiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZW50aXRpZXMgPSBjb21wb25lbnQgIkRvbWFpbiBFbnRpdGllcyIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQW5pbWFsLCBBbmltYWxQYXJ0LCBUcmF5IGFuZCBQcm9kdWN0LCBpbmNsdWRpbmcgdGhlIHJlZmVyZW5jZXMgdGhhdCBtYWtlIHRyYWNpbmcgcG9zc2libGUuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYWthcnRhIFBlcnNpc3RlbmNlIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIGRlbW9EYXRhU2VlZGVyID0gY29tcG9uZW50ICJEZW1vIERhdGEgU2VlZGVyIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJDcmVhdGVzIGRlbW8gZGF0YSBvbiBzdGFydHVwLiBEaXNhYmxlZCBieSBkZWZhdWx0IHZpYSBhcHAuc2VlZC1kZW1vLWRhdGEuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgQ29tbWFuZExpbmVSdW5uZXIiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZ3JwY1NlcnZlclJ1bm5lciAtPiBncnBjQXBpICJSZWdpc3RlcnMgYXMgYSBnUlBDIHNlcnZpY2UgYW5kIHN0YXJ0cyINCiAgICAgICAgICAgICAgICBncnBjQXBpIC0+IHRyYWNlYWJpbGl0eVNlcnZpY2UgIkNhbGxzIg0KICAgICAgICAgICAgICAgIHRyYWNlYWJpbGl0eVNlcnZpY2UgLT4gcGVyc2lzdGVuY2UgIlJlYWRzIHRyYWNlYWJpbGl0eSBkYXRhIHZpYSINCiAgICAgICAgICAgICAgICBkZW1vRGF0YVNlZWRlciAtPiBwZXJzaXN0ZW5jZSAiV3JpdGVzIGRlbW8gZGF0YSB2aWEiDQogICAgICAgICAgICAgICAgcGVyc2lzdGVuY2UgLT4gZW50aXRpZXMgIk1hcHMgcm93cyB0byINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZGF0YWJhc2UgPSBjb250YWluZXIgIlNsYXVnaHRlcmhvdXNlIERhdGFiYXNlIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlN0b3JlcyBhbmltYWxzLCBhbmltYWwgcGFydHMsIHRyYXlzIGFuZCBwcm9kdWN0cy4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCINCiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgcmVnaXN0cmF0aW9uUmVwb3NpdG9yeSAtPiBzdG9yZTEgIlJlYWRzIGFuZCB3cml0ZXMgYW5pbWFsIHJlZ2lzdHJhdGlvbnMiICJKUEEgLyBKREJDIg0KDQogICAgICAgICAgICBzdGF0aW9uMiAtPiBzdG9yZTIgIldyaXRlcyByZWdpc3RlcmVkIHBhcnRzIGFuZCB0cmF5cyB0byIgIkxvY2FsIHBlcnNpc3RlbmNlIiAiUGxhbm5lZCINCiAgICAgICAgICAgIHN0YXRpb24zIC0+IHN0b3JlMyAiV3JpdGVzIHBhY2tlZCBwcm9kdWN0cyB0byIgIkxvY2FsIHBlcnNpc3RlbmNlIiAiUGxhbm5lZCINCg0KICAgICAgICAgICAgc3RhdGlvbjEgLT4gdHJhY2VhYmlsaXR5U2VydmVyICJJbmRpcmVjdDogZm9yd2FyZHMgcmVnaXN0cmF0aW9ucyB3aGVuIHRoZSBuZXR3b3JrIGlzIGF2YWlsYWJsZSIgIiIgIlBsYW5uZWQiDQogICAgICAgICAgICBzdGF0aW9uMiAtPiB0cmFjZWFiaWxpdHlTZXJ2ZXIgIkluZGlyZWN0OiBmb3J3YXJkcyBwYXJ0cyBhbmQgdHJheXMgd2hlbiB0aGUgbmV0d29yayBpcyBhdmFpbGFibGUiICIiICJQbGFubmVkIg0KICAgICAgICAgICAgc3RhdGlvbjMgLT4gdHJhY2VhYmlsaXR5U2VydmVyICJJbmRpcmVjdDogZm9yd2FyZHMgcGFja2VkIHByb2R1Y3RzIHdoZW4gdGhlIG5ldHdvcmsgaXMgYXZhaWxhYmxlIiAiIiAiUGxhbm5lZCINCg0KICAgICAgICAgICAgcGVyc2lzdGVuY2UgLT4gZGF0YWJhc2UgIlJlYWRzIGFuZCB3cml0ZXMgZGF0YSIgIkpQQSAvIEpEQkMiDQogICAgICAgIH0NCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yIC0+IHNsYXVnaHRlcmhvdXNlICJSZWdpc3RlcnMgYW5kIHdlaWdocyBhcnJpdmluZyBhbmltYWxzIHVzaW5nIg0KICAgICAgICByZWNhbGxTeXN0ZW0gLT4gc2xhdWdodGVyaG91c2UgIkRpcmVjdDogcmVxdWVzdHMgYWZmZWN0ZWQgcHJvZHVjdHMgZm9yIGFuIGFuaW1hbCINCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yIC0+IGFuaW1hbEFwaSAiUmVnaXN0ZXJzIGFuZCB3ZWlnaHMgYXJyaXZpbmcgYW5pbWFscyB1c2luZyIgIlJFU1QgLyBKU09OIg0KICAgICAgICBzdGF0aW9uMk9wZXJhdG9yIC0+IHN0YXRpb24yICJSZWdpc3RlcnMgZWFjaCBwYXJ0IHdpdGggaXRzIHdlaWdodCwgaXRzIGFuaW1hbCBhbmQgdGhlIHRyYXkgaXQgZ29lcyBpbnRvLCB1c2luZyINCiAgICAgICAgc3RhdGlvbjNPcGVyYXRvciAtPiBzdGF0aW9uMyAiUmVnaXN0ZXJzIHBhY2tlZCBwcm9kdWN0cyBhbmQgdGhlIHRyYXlzIHRoZXkgd2VyZSBwYWNrZWQgZnJvbSwgdXNpbmciDQoNCiAgICAgICAgcXVhbGl0eU9mZmljZXIgLT4gcmVjYWxsU3lzdGVtICJSZXF1ZXN0cyBhIHJlY2FsbCBsb29rdXAgdXNpbmciDQoNCiAgICAgICAgc3VwcGxpZXIgLT4gc3RhdGlvbjEgIkluZGlyZWN0OiBkZWxpdmVycyBhbmltYWxzIg0KICAgICAgICBzdGF0aW9uMyAtPiBsb2dpc3RpY3MgIkluZGlyZWN0OiBoYW5kcyBvdmVyIHBhY2tlZCBwcm9kdWN0cyINCiAgICAgICAgbG9naXN0aWNzIC0+IGN1c3RvbWVyICJJbmRpcmVjdDogZGlzdHJpYnV0ZXMgcHJvZHVjdHMiDQoNCiAgICAgICAgcmVjYWxsU3lzdGVtIC0+IGdycGNBcGkgIkRpcmVjdDogcmVxdWVzdHMgYWZmZWN0ZWQgcHJvZHVjdHMgZm9yIGFuIGFuaW1hbCIgImdSUEMgLyBQcm90b2NvbCBCdWZmZXJzIg0KICAgICAgICBjbGllbnQgLT4gZ3JwY0FwaSAiUmVxdWVzdHMgdHJhY2VhYmlsaXR5IGluZm9ybWF0aW9uIiAiZ1JQQyAvIFByb3RvY29sIEJ1ZmZlcnMiDQogICAgfQ0KDQogICAgdmlld3Mgew0KDQogICAgICAgIHN5c3RlbUNvbnRleHQgc2xhdWdodGVyaG91c2UgIkMxIiAiQzEgLSBTeXN0ZW0gQ29udGV4dCBWaWV3LiBGb2N1cyBpcyBvbiB0aGUgdHlwZXMgb2YgY29tbXVuaWNhdGlvbiB3aXRoIHRoZSBvdXRzaWRlIHdvcmxkIHJhdGhlciB0aGFuIG9uIHRlY2hub2xvZ3kuIiB7DQogICAgICAgICAgICBpbmNsdWRlICoNCiAgICAgICAgICAgIGluY2x1ZGUgcXVhbGl0eU9mZmljZXIgY3VzdG9tZXINCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGINCiAgICAgICAgfQ0KDQogICAgICAgIGNvbnRhaW5lciBzbGF1Z2h0ZXJob3VzZSAiQzIiICJDMiAtIENvbnRhaW5lciBWaWV3LiBTaG93cyB0aGUgcnVubmluZyBwYXJ0cyBhbmQgaG93IGVhY2ggc3RhdGlvbiBrZWVwcyB3b3JraW5nIHdoZW4gdGhlIG5ldHdvcmsgaXMgZG93bi4iIHsNCiAgICAgICAgICAgIGluY2x1ZGUgKg0KICAgICAgICAgICAgaW5jbHVkZSBxdWFsaXR5T2ZmaWNlciBjdXN0b21lcg0KICAgICAgICAgICAgYXV0b2xheW91dCB0Yg0KICAgICAgICB9DQoNCiAgICAgICAgY29tcG9uZW50IHRyYWNlYWJpbGl0eVNlcnZlciAiQzMtVHJhY2VhYmlsaXR5IiAiQzMgLSBDb21wb25lbnQgVmlldyBvZiB0aGUgVHJhY2VhYmlsaXR5IFNlcnZlci4gTWlycm9ycyB0aGUgYWN0dWFsIGNvZGUgaW4gdGhlIHNlcnZlciBtb2R1bGUuIiB7DQogICAgICAgICAgICBpbmNsdWRlICoNCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGINCiAgICAgICAgfQ0KDQogICAgICAgIGNvbXBvbmVudCBzdGF0aW9uMSAiQzMtUmVnaXN0cmF0aW9uIiAiQzMgLSBDb21wb25lbnQgVmlldyBvZiBTdGF0aW9uIDEgUmVnaXN0cmF0aW9uLiBNaXJyb3JzIHRoZSBhY3R1YWwgY29kZSBpbiB0aGUgcmVnaXN0cmF0aW9uLXNlcnZpY2UgbW9kdWxlLiIgew0KICAgICAgICAgICAgaW5jbHVkZSAqDQogICAgICAgICAgICBhdXRvbGF5b3V0IHRiDQogICAgICAgIH0NCg0KICAgICAgICBzdHlsZXMgew0KICAgICAgICAgICAgZWxlbWVudCAiUGVyc29uIiB7DQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMDg0MjdiDQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZg0KICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsNCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMxMTY4YmQNCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkNvbnRhaW5lciIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQzOGRkNQ0KICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYNCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZWxlbWVudCAiQ29tcG9uZW50IiB7DQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjODViYmYwDQogICAgICAgICAgICAgICAgY29sb3IgIzAwMDAwMA0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBlbGVtZW50ICJEYXRhYmFzZSIgew0KICAgICAgICAgICAgICAgIHNoYXBlIGN5bGluZGVyDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkV4dGVybmFsIFN5c3RlbSIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzhjOGM4Yw0KICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYNCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZWxlbWVudCAiUGxhbm5lZCIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2IzYjNiMw0KICAgICAgICAgICAgICAgIGNvbG9yICMwMDAwMDANCiAgICAgICAgICAgICAgICBib3JkZXIgZGFzaGVkDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAiUGxhbm5lZCIgew0KICAgICAgICAgICAgICAgIGRhc2hlZCB0cnVlDQogICAgICAgICAgICAgICAgY29sb3IgIzgwODA4MA0KICAgICAgICAgICAgfQ0KICAgICAgICB9DQogICAgfQ0KDQogICAgY29uZmlndXJhdGlvbiB7DQogICAgICAgIHNjb3BlIHNvZnR3YXJlc3lzdGVtDQogICAgfQ0KfQ==",
     "structurizr.inspection.info" : "0",
     "structurizr.inspection.ignore" : "0",
     "structurizr.inspection.warning" : "0"
@@ -665,10 +557,22 @@
         "rankSeparation" : 100,
         "vertices" : true
       },
-      "containerId" : "31",
+      "containerId" : "26",
       "description" : "C3 - Component View of the Traceability Server. Mirrors the actual code in the server module.",
       "elements" : [ {
         "id" : "8",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "25",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "27",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "28",
         "x" : 0,
         "y" : 0
       }, {
@@ -680,35 +584,15 @@
         "x" : 0,
         "y" : 0
       }, {
+        "id" : "31",
+        "x" : 0,
+        "y" : 0
+      }, {
         "id" : "32",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "33",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "34",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "35",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "36",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "37",
-        "x" : 0,
-        "y" : 0
-      }, {
         "id" : "38",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "45",
         "x" : 0,
         "y" : 0
       } ],
@@ -717,27 +601,21 @@
       "name" : "Component View: Slaughterhouse System - Traceability Server",
       "order" : 3,
       "relationships" : [ {
-        "id" : "39"
+        "id" : "33"
       }, {
-        "id" : "40"
+        "id" : "34"
       }, {
-        "id" : "41"
+        "id" : "35"
       }, {
-        "id" : "42"
+        "id" : "36"
       }, {
-        "id" : "43"
+        "id" : "37"
       }, {
-        "id" : "44"
+        "id" : "46"
       }, {
-        "id" : "55"
+        "id" : "62"
       }, {
-        "id" : "57"
-      }, {
-        "id" : "59"
-      }, {
-        "id" : "75"
-      }, {
-        "id" : "77"
+        "id" : "64"
       } ]
     }, {
       "automaticLayout" : {
@@ -774,19 +652,7 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "16",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "17",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "26",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "29",
+        "id" : "22",
         "x" : 0,
         "y" : 0
       } ],
@@ -795,25 +661,17 @@
       "name" : "Component View: Slaughterhouse System - Station 1 - Registration",
       "order" : 4,
       "relationships" : [ {
+        "id" : "16"
+      }, {
+        "id" : "17"
+      }, {
         "id" : "18"
       }, {
         "id" : "19"
       }, {
-        "id" : "20"
+        "id" : "39"
       }, {
-        "id" : "21"
-      }, {
-        "id" : "22"
-      }, {
-        "id" : "23"
-      }, {
-        "id" : "46"
-      }, {
-        "id" : "48"
-      }, {
-        "id" : "51"
-      }, {
-        "id" : "63"
+        "id" : "50"
       } ]
     } ],
     "configuration" : {
@@ -902,6 +760,22 @@
         "x" : 0,
         "y" : 0
       }, {
+        "id" : "20",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "21",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "22",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "23",
+        "x" : 0,
+        "y" : 0
+      }, {
         "id" : "24",
         "x" : 0,
         "y" : 0
@@ -914,27 +788,7 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "27",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "28",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "29",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "30",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "31",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "45",
+        "id" : "38",
         "x" : 0,
         "y" : 0
       } ],
@@ -943,41 +797,37 @@
       "name" : "Container View: Slaughterhouse System",
       "order" : 2,
       "relationships" : [ {
+        "id" : "40"
+      }, {
+        "id" : "41"
+      }, {
+        "id" : "42"
+      }, {
+        "id" : "43"
+      }, {
+        "id" : "44"
+      }, {
+        "id" : "45"
+      }, {
         "id" : "47"
       }, {
-        "id" : "49"
-      }, {
-        "id" : "50"
+        "id" : "51"
       }, {
         "id" : "52"
-      }, {
-        "id" : "53"
       }, {
         "id" : "54"
       }, {
         "id" : "56"
       }, {
-        "id" : "58"
+        "id" : "57"
       }, {
-        "id" : "60"
+        "id" : "59"
       }, {
-        "id" : "64"
+        "id" : "61"
+      }, {
+        "id" : "63"
       }, {
         "id" : "65"
-      }, {
-        "id" : "67"
-      }, {
-        "id" : "69"
-      }, {
-        "id" : "70"
-      }, {
-        "id" : "72"
-      }, {
-        "id" : "74"
-      }, {
-        "id" : "76"
-      }, {
-        "id" : "78"
       } ],
       "softwareSystemId" : "9"
     } ],
@@ -1032,21 +882,21 @@
       "name" : "System Context View: Slaughterhouse System",
       "order" : 1,
       "relationships" : [ {
+        "id" : "48"
+      }, {
+        "id" : "49"
+      }, {
+        "id" : "53"
+      }, {
+        "id" : "55"
+      }, {
+        "id" : "56"
+      }, {
+        "id" : "58"
+      }, {
+        "id" : "60"
+      }, {
         "id" : "61"
-      }, {
-        "id" : "62"
-      }, {
-        "id" : "66"
-      }, {
-        "id" : "68"
-      }, {
-        "id" : "69"
-      }, {
-        "id" : "71"
-      }, {
-        "id" : "73"
-      }, {
-        "id" : "74"
       } ],
       "softwareSystemId" : "9"
     } ]

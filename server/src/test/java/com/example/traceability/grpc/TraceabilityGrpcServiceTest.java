@@ -72,14 +72,14 @@ class TraceabilityGrpcServiceTest
 
   // Happy case scenario: servicens liste skal ende i responsens repeated-felt.
   @Test
-  void getAnimalsForProductReturnsTheAnimalIdsFromTheService()
+  void getAnimalsForProductReturnsTheRegistrationNumbersFromTheService()
   {
     when(traceabilityService.getAnimalsForProduct("PROD-1")).thenReturn(List.of(1, 2));
 
     var response = stub.getAnimalsForProduct(
         GetAnimalsForProductRequest.newBuilder().setProductId("PROD-1").build());
 
-    assertThat(response.getAnimalIdsList()).containsExactly(1, 2);
+    assertThat(response.getRegistrationNumbersList()).containsExactly(1, 2);
   }
 
   // Samme kontrol den anden vej.
@@ -89,7 +89,7 @@ class TraceabilityGrpcServiceTest
     when(traceabilityService.getProductsForAnimal(1)).thenReturn(List.of("PROD-1", "PROD-2"));
 
     var response = stub.getProductsForAnimal(
-        GetProductsForAnimalRequest.newBuilder().setAnimalId(1).build());
+        GetProductsForAnimalRequest.newBuilder().setRegistrationNumber(1).build());
 
     assertThat(response.getProductIdsList()).containsExactly("PROD-1", "PROD-2");
   }
@@ -119,7 +119,7 @@ class TraceabilityGrpcServiceTest
         .thenThrow(new NoSuchElementException("No animal with id 99"));
 
     assertThatThrownBy(() -> stub.getProductsForAnimal(
-        GetProductsForAnimalRequest.newBuilder().setAnimalId(99).build()))
+        GetProductsForAnimalRequest.newBuilder().setRegistrationNumber(99).build()))
         .isInstanceOf(StatusRuntimeException.class)
         .extracting(e -> ((StatusRuntimeException) e).getStatus().getCode())
         .isEqualTo(Status.Code.NOT_FOUND);
@@ -141,10 +141,10 @@ class TraceabilityGrpcServiceTest
 
   // I proto3 er et manglende int-felt lig 0, så 0 betyder reelt "intet id angivet".
   @Test
-  void nonPositiveAnimalIdIsRejectedAsInvalidArgument()
+  void nonPositiveRegistrationNumberIsRejectedAsInvalidArgument()
   {
     assertThatThrownBy(() -> stub.getProductsForAnimal(
-        GetProductsForAnimalRequest.newBuilder().setAnimalId(0).build()))
+        GetProductsForAnimalRequest.newBuilder().setRegistrationNumber(0).build()))
         .isInstanceOf(StatusRuntimeException.class)
         .extracting(e -> ((StatusRuntimeException) e).getStatus().getCode())
         .isEqualTo(Status.Code.INVALID_ARGUMENT);

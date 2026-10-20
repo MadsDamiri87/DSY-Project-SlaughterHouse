@@ -1,5 +1,6 @@
 package com.example.traceability.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -9,7 +10,8 @@ import java.time.LocalDateTime;
 public class Animal
 {
   @Id
-  private int animalId;
+  @Column(name = "animal_id")
+  private int registrationNumber;
 
   private String species;
   private String origin;
@@ -22,20 +24,20 @@ public class Animal
   {}
 
   // evt til dummy-data:
-  public Animal(int animalId, double weight)
+  public Animal(int registrationNumber, double weight)
   {
-    this.animalId = animalId;
+    this.registrationNumber = registrationNumber;
     this.weight = weight;
   }
 
-  public int getAnimalId()
+  public int getRegistrationNumber()
   {
-    return animalId;
+    return registrationNumber;
   }
 
-  public void setAnimalId(int animalId)
+  public void setRegistrationNumber(int registrationNumber)
   {
-    this.animalId = animalId;
+    this.registrationNumber = registrationNumber;
   }
 
   public double getWeight()

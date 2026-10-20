@@ -35,9 +35,10 @@ public class TraceabilityGrpcService extends TraceabilityServiceGrpc.Traceabilit
 
     try
     {
-      var animalIds = traceabilityService.getAnimalsForProduct(request.getProductId());
+      var registrationNumbers = traceabilityService.getAnimalsForProduct(request.getProductId());
 
-      var response = GetAnimalsForProductResponse.newBuilder().addAllAnimalIds(animalIds).build();
+      var response =
+          GetAnimalsForProductResponse.newBuilder().addAllRegistrationNumbers(registrationNumbers).build();
 
       responseObserver.onNext(response);
       responseObserver.onCompleted();
@@ -55,17 +56,17 @@ public class TraceabilityGrpcService extends TraceabilityServiceGrpc.Traceabilit
   @Override public void getProductsForAnimal(GetProductsForAnimalRequest request,
                                              StreamObserver<GetProductsForAnimalResponse> responseObserver)
   {
-    if (request.getAnimalId() <= 0)
+    if (request.getRegistrationNumber() <= 0)
     {
       responseObserver.onError(Status.INVALID_ARGUMENT
-          .withDescription("animalId must be a positive number")
+          .withDescription("registrationNumber must be a positive number")
           .asRuntimeException());
       return;
     }
 
     try
     {
-      var productIds = traceabilityService.getProductsForAnimal(request.getAnimalId());
+      var productIds = traceabilityService.getProductsForAnimal(request.getRegistrationNumber());
 
       var response = GetProductsForAnimalResponse.newBuilder().addAllProductIds(productIds).build();
 

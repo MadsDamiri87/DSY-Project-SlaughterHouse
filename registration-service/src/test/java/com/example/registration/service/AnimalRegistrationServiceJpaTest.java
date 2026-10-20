@@ -1,7 +1,7 @@
 package com.example.registration.service;
 
 import com.example.registration.entity.Animal;
-import com.example.shared.dto.AnimalDTO;
+import com.example.registration.dto.AnimalDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

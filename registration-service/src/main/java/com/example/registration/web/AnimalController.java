@@ -1,7 +1,7 @@
 package com.example.registration.web;
 
 import com.example.registration.service.AnimalRegistrationService;
-import com.example.shared.dto.AnimalDTO;
+import com.example.registration.dto.AnimalDTO;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +53,10 @@ public class AnimalController
       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
       @RequestParam(required = false) String origin)
   {
+    if (date != null && origin != null)
+    {
+      throw new IllegalArgumentException("date and origin cannot be combined in one request");
+    }
     if (date != null)
     {
       return registrationService.findByArrivalDate(date);

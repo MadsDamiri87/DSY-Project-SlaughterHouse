@@ -1,10 +1,8 @@
 package com.example.registration.service;
 
 import com.example.registration.entity.Animal;
-import com.example.registration.entity.AnimalRegistrationOutbox;
 import com.example.registration.repository.AnimalRepository;
-import com.example.registration.repository.AnimalRegistrationOutboxRepository;
-import com.example.shared.dto.AnimalDTO;
+import com.example.registration.dto.AnimalDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -34,7 +32,6 @@ import static org.mockito.Mockito.when;
 class AnimalRegistrationServiceTest
 {
   @Mock private AnimalRepository animalRepository;
-  @Mock private AnimalRegistrationOutboxRepository outboxRepository;
 
   @InjectMocks private AnimalRegistrationService service;
 
@@ -53,10 +50,9 @@ class AnimalRegistrationServiceTest
     assertThat(result.weight()).isEqualTo(95.0);
     assertThat(result.origin()).isEqualTo("Nørregaard");
 
-    ArgumentCaptor<AnimalRegistrationOutbox> eventCaptor =
-        ArgumentCaptor.forClass(AnimalRegistrationOutbox.class);
-    verify(outboxRepository).save(eventCaptor.capture());
-    assertThat(eventCaptor.getValue().toEvent().registrationNumber()).isEqualTo(1);
+    ArgumentCaptor<Animal> savedAnimal = ArgumentCaptor.forClass(Animal.class);
+    verify(animalRepository).save(savedAnimal.capture());
+    assertThat(savedAnimal.getValue().getRegistrationNumber()).isEqualTo(1);
   }
 
   /*
@@ -87,7 +83,6 @@ class AnimalRegistrationServiceTest
         .isInstanceOf(DuplicateRegistrationException.class);
 
     verify(animalRepository, never()).save(any());
-    verify(outboxRepository, never()).save(any());
   }
 
   // Et ukendt dyr er en fejl, ikke et tomt svar — så web-laget kan svare 404.

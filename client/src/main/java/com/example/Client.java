@@ -15,7 +15,7 @@ public class Client
   {
     String target = System.getProperty("target", "localhost:9090");
     String productId = args.length > 0 ? args[0] : "PROD-LOIN-PACK";
-    int animalId = args.length > 1 ? Integer.parseInt(args[1]) : 1;
+    int registrationNumber = args.length > 1 ? Integer.parseInt(args[1]) : 1;
 
     ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
 
@@ -28,7 +28,7 @@ public class Client
       {
         var animals = stub.getAnimalsForProduct(
             GetAnimalsForProductRequest.newBuilder().setProductId(productId).build());
-        System.out.println("Animals in product " + productId + ": " + animals.getAnimalIdsList());
+        System.out.println("Animals in product " + productId + ": " + animals.getRegistrationNumbersList());
       }
       catch (StatusRuntimeException e)
       {
@@ -38,8 +38,8 @@ public class Client
       try
       {
         var products = stub.getProductsForAnimal(
-            GetProductsForAnimalRequest.newBuilder().setAnimalId(animalId).build());
-        System.out.println("Products from animal " + animalId + ": " + products.getProductIdsList());
+            GetProductsForAnimalRequest.newBuilder().setRegistrationNumber(registrationNumber).build());
+        System.out.println("Products from animal " + registrationNumber + ": " + products.getProductIdsList());
       }
       catch (StatusRuntimeException e)
       {

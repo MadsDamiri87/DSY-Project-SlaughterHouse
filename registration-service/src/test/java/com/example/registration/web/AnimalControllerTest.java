@@ -3,7 +3,7 @@ package com.example.registration.web;
 import com.example.registration.service.AnimalNotFoundException;
 import com.example.registration.service.AnimalRegistrationService;
 import com.example.registration.service.DuplicateRegistrationException;
-import com.example.shared.dto.AnimalDTO;
+import com.example.registration.dto.AnimalDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,5 +150,17 @@ class AnimalControllerTest
     mockMvc.perform(get("/animals").param("origin", "Nørregaard"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.length()").value(2));
+  }
+
+  /*
+   * De to filtre kan ikke kombineres. Uden dette tjek ville origin blive
+   * ignoreret i stilhed, og kalderen ville få et svar der ser rigtigt ud
+   * men ikke er det han bad om. Bedre at sige fra med 400.
+   */
+  @Test
+  void combiningDateAndOriginIsRejectedAsBadRequest() throws Exception
+  {
+    mockMvc.perform(get("/animals").param("date", "2026-10-05").param("origin", "Nørregaard"))
+        .andExpect(status().isBadRequest());
   }
 }
