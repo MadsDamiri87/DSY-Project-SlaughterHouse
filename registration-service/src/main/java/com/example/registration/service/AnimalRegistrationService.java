@@ -1,8 +1,13 @@
 package com.example.registration.service;
 
 import com.example.registration.entity.Animal;
+import com.example.registration.outbox.OutboxEntry;
+import com.example.registration.outbox.OutboxEventType;
+import com.example.registration.outbox.OutboxRepository;
 import com.example.registration.repository.AnimalRepository;
 import com.example.registration.dto.AnimalDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +19,16 @@ import java.util.List;
 public class AnimalRegistrationService
 {
   private final AnimalRepository animalRepository;
+  private final OutboxRepository outboxRepository;
+  private final ObjectMapper objectMapper;
 
-  public AnimalRegistrationService(AnimalRepository animalRepository)
+  public AnimalRegistrationService(AnimalRepository animalRepository,
+                                   OutboxRepository outboxRepository,
+                                   ObjectMapper objectMapper)
   {
     this.animalRepository = animalRepository;
+    this.outboxRepository = outboxRepository;
+    this.objectMapper = objectMapper;
   }
 
   @Transactional
@@ -34,7 +45,11 @@ public class AnimalRegistrationService
     Animal saved = animalRepository.save(
         new Animal(animal.registrationNumber(), arrival, animal.weight(), animal.origin()));
 
-    return toDto(saved);
+    AnimalDTO registered = toDto(saved);
+    outboxRepository.save(
+        OutboxEntry.of(OutboxEventType.ANIMAL_REGISTERED, toJson(registered)));
+
+    return registered;
   }
 
   @Transactional(readOnly = true)
@@ -69,6 +84,19 @@ public class AnimalRegistrationService
   public List<AnimalDTO> findAll()
   {
     return animalRepository.findAll().stream().map(this::toDto).toList();
+  }
+
+  private String toJson(AnimalDTO animal)
+  {
+    try
+    {
+      return objectMapper.writeValueAsString(animal);
+    }
+    catch (JsonProcessingException exception)
+    {
+      throw new IllegalStateException(
+          "Could not serialise animal " + animal.registrationNumber(), exception);
+    }
   }
 
   private AnimalDTO toDto(Animal animal)

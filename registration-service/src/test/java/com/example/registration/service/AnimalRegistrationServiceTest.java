@@ -1,13 +1,20 @@
 package com.example.registration.service;
 
 import com.example.registration.entity.Animal;
+import com.example.registration.outbox.OutboxEntry;
+import com.example.registration.outbox.OutboxEventType;
+import com.example.registration.outbox.OutboxStatus;
+import com.example.registration.outbox.OutboxRepository;
 import com.example.registration.repository.AnimalRepository;
 import com.example.registration.dto.AnimalDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
@@ -32,6 +39,13 @@ import static org.mockito.Mockito.when;
 class AnimalRegistrationServiceTest
 {
   @Mock private AnimalRepository animalRepository;
+  @Mock private OutboxRepository outboxRepository;
+
+  /*
+   * En rigtig ObjectMapper og ikke en mock: vi vil se at payloaden faktisk kan
+   * serialiseres. JavaTimeModule er noedvendigt, fordi AnimalDTO har en LocalDateTime.
+   */
+  @Spy private ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
   @InjectMocks private AnimalRegistrationService service;
 
@@ -53,6 +67,42 @@ class AnimalRegistrationServiceTest
     ArgumentCaptor<Animal> savedAnimal = ArgumentCaptor.forClass(Animal.class);
     verify(animalRepository).save(savedAnimal.capture());
     assertThat(savedAnimal.getValue().getRegistrationNumber()).isEqualTo(1);
+  }
+
+  /*
+   * Dyret og haendelsen skal gemmes i samme kald. Uden outbox-posten ville
+   * registreringen aldrig naa backenden, og ingen ville opdage det.
+   */
+  @Test
+  void registerAlsoWritesAnOutboxEntry()
+  {
+    when(animalRepository.existsById(3)).thenReturn(false);
+    when(animalRepository.save(any(Animal.class))).thenAnswer(call -> call.getArgument(0));
+
+    service.register(new AnimalDTO(3, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Noerregaard"));
+
+    ArgumentCaptor<OutboxEntry> entry = ArgumentCaptor.forClass(OutboxEntry.class);
+    verify(outboxRepository).save(entry.capture());
+
+    assertThat(entry.getValue().getType()).isEqualTo(OutboxEventType.ANIMAL_REGISTERED);
+    assertThat(entry.getValue().getStatus()).isEqualTo(OutboxStatus.PENDING);
+    assertThat(entry.getValue().getPayload()).contains("\"registrationNumber\":3");
+  }
+
+  /*
+   * Afvises registreringsnummeret, maa der hverken komme et dyr eller en haendelse.
+   * Ellers ville backenden faa besked om et dyr der aldrig blev oprettet.
+   */
+  @Test
+  void aRejectedRegistrationWritesNothingAtAll()
+  {
+    when(animalRepository.existsById(1)).thenReturn(true);
+
+    assertThatThrownBy(() -> service.register(new AnimalDTO(1, null, 95.0, "Noerregaard")))
+        .isInstanceOf(DuplicateRegistrationException.class);
+
+    verify(animalRepository, never()).save(any());
+    verify(outboxRepository, never()).save(any());
   }
 
   /*

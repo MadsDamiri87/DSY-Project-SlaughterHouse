@@ -155,7 +155,7 @@ class AnimalControllerTest
   /*
    * De to filtre kan ikke kombineres. Uden dette tjek ville origin blive
    * ignoreret i stilhed, og kalderen ville få et svar der ser rigtigt ud
-   * men ikke er det han bad om. Bedre at sige fra med 400.
+   * men ikke er det der blev bedt om. Bedre at sige fra med 400.
    */
   @Test
   void combiningDateAndOriginIsRejectedAsBadRequest() throws Exception

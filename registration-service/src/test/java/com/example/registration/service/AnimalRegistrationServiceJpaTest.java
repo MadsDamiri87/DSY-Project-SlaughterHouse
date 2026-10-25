@@ -5,6 +5,7 @@ import com.example.registration.dto.AnimalDTO;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
@@ -27,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * @Import tilføjer servicen, som @DataJpaTest ellers filtrerer fra.
  */
 @DataJpaTest(showSql = false)
-@Import(AnimalRegistrationService.class)
+@Import({AnimalRegistrationService.class, JacksonAutoConfiguration.class})
 class AnimalRegistrationServiceJpaTest
 {
   @Autowired private TestEntityManager em;
