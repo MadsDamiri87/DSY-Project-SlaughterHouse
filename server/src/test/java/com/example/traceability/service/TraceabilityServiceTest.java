@@ -28,8 +28,8 @@ import static org.mockito.Mockito.when;
  * Enhedstest af selve sporings-logikken.
  *
  * Her er der ingen database og ingen gRPC. Repositories er Mockito-mocks, så vi selv
- * bestemmer hvad de "finder". Det gør testene lynhurtige og lader os teste logikken
- * isoleret: når en test fejler, ved vi at fejlen ligger i servicen - ikke i SQL.
+ * bestemmer hvad de "finder". Det gør testene hurtige og isoleret:  * Hvis en test fejler,
+ * ved vi fejlen ligger i servicen - ikke i SQL.
  */
 @ExtendWith(MockitoExtension.class)
 class TraceabilityServiceTest
