@@ -13,7 +13,9 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -49,7 +51,7 @@ class AnimalControllerTest
   @Test
   void registeringAnAnimalReturnsCreatedWithALocationHeader() throws Exception
   {
-    AnimalDTO animal = new AnimalDTO(1, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Nørregaard");
+    AnimalDTO animal = new AnimalDTO(1, at(2026, 10, 5, 8, 30), 95.0, "Nørregaard");
     when(registrationService.register(any())).thenReturn(animal);
 
     mockMvc.perform(post("/animals")
@@ -106,7 +108,7 @@ class AnimalControllerTest
   void aSpecificAnimalCanBeRead() throws Exception
   {
     when(registrationService.findByRegistrationNumber(1))
-        .thenReturn(new AnimalDTO(1, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Nørregaard"));
+        .thenReturn(new AnimalDTO(1, at(2026, 10, 5, 8, 30), 95.0, "Nørregaard"));
 
     mockMvc.perform(get("/animals/1"))
         .andExpect(status().isOk())
@@ -131,7 +133,7 @@ class AnimalControllerTest
   void animalsCanBeReadByArrivalDate() throws Exception
   {
     when(registrationService.findByArrivalDate(LocalDate.of(2026, 10, 5)))
-        .thenReturn(List.of(new AnimalDTO(1, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Nørregaard")));
+        .thenReturn(List.of(new AnimalDTO(1, at(2026, 10, 5, 8, 30), 95.0, "Nørregaard")));
 
     mockMvc.perform(get("/animals").param("date", "2026-10-05"))
         .andExpect(status().isOk())
@@ -144,8 +146,8 @@ class AnimalControllerTest
   void animalsCanBeReadByOrigin() throws Exception
   {
     when(registrationService.findByOrigin("Nørregaard")).thenReturn(List.of(
-        new AnimalDTO(1, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Nørregaard"),
-        new AnimalDTO(2, LocalDateTime.of(2026, 10, 5, 23, 59), 102.5, "Nørregaard")));
+        new AnimalDTO(1, at(2026, 10, 5, 8, 30), 95.0, "Nørregaard"),
+        new AnimalDTO(2, at(2026, 10, 5, 23, 59), 102.5, "Nørregaard")));
 
     mockMvc.perform(get("/animals").param("origin", "Nørregaard"))
         .andExpect(status().isOk())
@@ -162,5 +164,11 @@ class AnimalControllerTest
   {
     mockMvc.perform(get("/animals").param("date", "2026-10-05").param("origin", "Nørregaard"))
         .andExpect(status().isBadRequest());
+  }
+
+  private static Instant at(int year, int month, int day, int hour, int minute)
+  {
+    return LocalDateTime.of(year, month, day, hour, minute)
+        .atZone(ZoneId.of("Europe/Copenhagen")).toInstant();
   }
 }

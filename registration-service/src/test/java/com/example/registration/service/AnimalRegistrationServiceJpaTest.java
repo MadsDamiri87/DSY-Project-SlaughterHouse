@@ -9,9 +9,12 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @DataJpaTest(showSql = false)
 @Import({AnimalRegistrationService.class, JacksonAutoConfiguration.class})
+@TestPropertySource(properties = "app.slaughterhouse.timezone=Europe/Copenhagen")
 class AnimalRegistrationServiceJpaTest
 {
   @Autowired private TestEntityManager em;
@@ -45,10 +49,10 @@ class AnimalRegistrationServiceJpaTest
   @BeforeEach
   void seedAnimals()
   {
-    em.persist(new Animal(1, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Nørregaard"));
-    em.persist(new Animal(2, LocalDateTime.of(2026, 10, 5, 23, 59), 102.5, "Nørregaard"));
-    em.persist(new Animal(3, LocalDateTime.of(2026, 10, 6, 0, 0), 88.0, "Søndergaard"));
-    em.persist(new Animal(4, LocalDateTime.of(2026, 10, 6, 9, 15), 91.0, "Vestergaard"));
+    em.persist(new Animal(1, at(2026, 10, 5, 8, 30), 95.0, "Nørregaard"));
+    em.persist(new Animal(2, at(2026, 10, 5, 23, 59), 102.5, "Nørregaard"));
+    em.persist(new Animal(3, at(2026, 10, 6, 0, 0), 88.0, "Søndergaard"));
+    em.persist(new Animal(4, at(2026, 10, 6, 9, 15), 91.0, "Vestergaard"));
 
     em.flush();
     em.clear();
@@ -97,7 +101,7 @@ class AnimalRegistrationServiceJpaTest
   @Test
   void aRegisteredAnimalIsStoredAndCanBeReadBack()
   {
-    service.register(new AnimalDTO(5, LocalDateTime.of(2026, 10, 7, 7, 0), 99.0, "Østergaard"));
+    service.register(new AnimalDTO(5, at(2026, 10, 7, 7, 0), 99.0, "Østergaard"));
     em.flush();
     em.clear();
 
@@ -109,7 +113,13 @@ class AnimalRegistrationServiceJpaTest
   void registeringAnExistingNumberIsRejected()
   {
     assertThatThrownBy(
-        () -> service.register(new AnimalDTO(1, LocalDateTime.now(), 50.0, "Andengaard")))
+        () -> service.register(new AnimalDTO(1, Instant.now(), 50.0, "Andengaard")))
         .isInstanceOf(DuplicateRegistrationException.class);
+  }
+
+  private static Instant at(int year, int month, int day, int hour, int minute)
+  {
+    return LocalDateTime.of(year, month, day, hour, minute)
+        .atZone(ZoneId.of("Europe/Copenhagen")).toInstant();
   }
 }

@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "registered_animal")
@@ -15,7 +15,7 @@ public class Animal
   @Column(name = "registration_number")
   private int registrationNumber;
 
-  private LocalDateTime arrivalDateTime;
+  private Instant arrivalDateTime;
 
   private double weight;
 
@@ -24,7 +24,7 @@ public class Animal
   public Animal()
   {}
 
-  public Animal(int registrationNumber, LocalDateTime arrivalDateTime, double weight, String origin)
+  public Animal(int registrationNumber, Instant arrivalDateTime, double weight, String origin)
   {
     this.registrationNumber = registrationNumber;
     this.arrivalDateTime = arrivalDateTime;
@@ -42,12 +42,12 @@ public class Animal
     this.registrationNumber = registrationNumber;
   }
 
-  public LocalDateTime getArrivalDateTime()
+  public Instant getArrivalDateTime()
   {
     return arrivalDateTime;
   }
 
-  public void setArrivalDateTime(LocalDateTime arrivalDateTime)
+  public void setArrivalDateTime(Instant arrivalDateTime)
   {
     this.arrivalDateTime = arrivalDateTime;
   }

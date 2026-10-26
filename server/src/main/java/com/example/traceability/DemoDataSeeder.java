@@ -14,7 +14,7 @@ import com.example.traceability.repository.AnimalRepository;
 import com.example.traceability.repository.ProductRepository;
 import com.example.traceability.repository.TrayRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Component
@@ -40,7 +40,7 @@ public class DemoDataSeeder implements CommandLineRunner
   @Transactional
   public void run(String... args)
   {
-    if (animalRepository.count() > 0)
+    if (!productRepository.findAll().isEmpty())
     {
       System.out.println("Demo data already present, skipping seed");
       return;
@@ -49,22 +49,23 @@ public class DemoDataSeeder implements CommandLineRunner
     Animal pig1 = animal(1, "Pig", 95.0, "Nørregaard");
     Animal pig2 = animal(2, "Pig", 102.5, "Nørregaard");
     Animal pig3 = animal(3, "Pig", 88.0, "Søndergaard");
-    animalRepository.saveAll(List.of(pig1, pig2, pig3));
+    List.of(pig1, pig2, pig3).forEach(animalRepository::save);
 
     Tray loinTray = tray("TRAY-LOIN-1", "LOIN", 50.0);
     Tray bellyTray = tray("TRAY-BELLY-1", "BELLY", 40.0);
     Tray ribTray = tray("TRAY-RIB-1", "RIB", 30.0);
-    trayRepository.saveAll(List.of(loinTray, bellyTray, ribTray));
+    List.of(loinTray, bellyTray, ribTray).forEach(trayRepository::save);
 
-    animalPartRepository.saveAll(List.of(
+    List.of(
         part("PART-1", "LOIN", 6.2, pig1, loinTray),
         part("PART-2", "LOIN", 6.8, pig2, loinTray),
         part("PART-3", "BELLY", 4.5, pig1, bellyTray),
-        part("PART-4", "RIB", 3.1, pig3, ribTray)));
+        part("PART-4", "RIB", 3.1, pig3, ribTray))
+        .forEach(animalPartRepository::save);
 
     Product loinPack = product("PROD-LOIN-PACK", "LOIN_PACK", 13.0, List.of(loinTray));
     Product halfAnimal = product("PROD-HALF-ANIMAL", "HALF_ANIMAL", 17.5, List.of(loinTray, bellyTray));
-    productRepository.saveAll(List.of(loinPack, halfAnimal));
+    List.of(loinPack, halfAnimal).forEach(productRepository::save);
 
     System.out.println("Demo data seeded");
   }
@@ -74,7 +75,7 @@ public class DemoDataSeeder implements CommandLineRunner
     Animal animal = new Animal(id, weight);
     animal.setSpecies(species);
     animal.setOrigin(origin);
-    animal.setSlaughterDateTime(LocalDateTime.now());
+    animal.setSlaughterDateTime(Instant.now());
     return animal;
   }
 
@@ -104,7 +105,7 @@ public class DemoDataSeeder implements CommandLineRunner
     product.setProductId(id);
     product.setProductType(type);
     product.setTotalWeight(totalWeight);
-    product.setPackingDateTime(LocalDateTime.now());
+    product.setPackingDateTime(Instant.now());
     product.setTrays(new java.util.ArrayList<>(trays));
     return product;
   }

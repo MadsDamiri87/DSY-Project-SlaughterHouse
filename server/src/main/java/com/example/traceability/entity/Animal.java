@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 public class Animal
@@ -17,8 +17,8 @@ public class Animal
   private String origin;
 
   private double weight;
-  private LocalDateTime arrivalDateTime = LocalDateTime.now();
-  private LocalDateTime slaughterDateTime;
+  private Instant arrivalDateTime = Instant.now();
+  private Instant slaughterDateTime;
 
   public Animal()
   {}
@@ -50,22 +50,22 @@ public class Animal
     this.weight = weight;
   }
 
-  public LocalDateTime getArrivalDateTime()
+  public Instant getArrivalDateTime()
   {
     return arrivalDateTime;
   }
 
-  public void setArrivalDateTime(LocalDateTime arrivalDateTime)
+  public void setArrivalDateTime(Instant arrivalDateTime)
   {
     this.arrivalDateTime = arrivalDateTime;
   }
 
-  public LocalDateTime getSlaughterDateTime()
+  public Instant getSlaughterDateTime()
   {
     return slaughterDateTime;
   }
 
-  public void setSlaughterDateTime(LocalDateTime slaughterDateTime)
+  public void setSlaughterDateTime(Instant slaughterDateTime)
   {
     this.slaughterDateTime = slaughterDateTime;
   }

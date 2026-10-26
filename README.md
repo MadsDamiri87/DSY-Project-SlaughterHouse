@@ -192,7 +192,16 @@ Opslagene bruger afledte queries, fx `findByTrayIn(...)` og `findByOriginIgnoreC
 
 ## Test
 
-Projektet har 45 tests, delt op efter lag: forretningslogikken isoleret med mocks, servicerne mod en database i hukommelsen, og yderlagene hver for sig — gRPC in-process og REST med MockMvc. Begge applikationer har desuden en `contextLoads`-test, der beviser at de overhovedet starter.
+Projektet har 47 tests, delt op efter lag: forretningslogikken isoleret med mocks, servicerne mod en rigtig database, og yderlagene hver for sig — gRPC in-process og REST med MockMvc. Begge applikationer har desuden en `contextLoads`-test, der beviser at de overhovedet starter.
+
+Traceability-testene kører mod PostgreSQL og ikke mod en database i hukommelsen, så de afledte queries bliver oversat til samme SQL-dialekt som i produktionen. Det kræver en lokal PostgreSQL, og at databasen er oprettet én gang:
+
+```sql
+CREATE ROLE slaughterhouse_test WITH LOGIN PASSWORD 'slaughterhouse_test';
+CREATE DATABASE slaughterhouse_test OWNER slaughterhouse_test;
+```
+
+Brugeren er bevidst en engangsbruger uden adgang til andet end testdatabasen, så dens kodeord kan stå i `src/test/resources/application.properties`. Skemaet oprettes og droppes af Hibernate ved hver kørsel.
 
 Testene er kommenteret på dansk, da de også fungerer som mine egne noter til hvad der testes og hvorfor.
 

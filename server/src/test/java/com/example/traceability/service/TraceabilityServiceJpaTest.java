@@ -7,11 +7,12 @@ import com.example.traceability.entity.Tray;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,11 +27,15 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Enhedstesten ved siden af mocker repositories væk — her bliver de afledte queries
  * (findByTrayIn, findDistinctByTraysIn) oversat til SQL og kørt.
  *
- * @DataJpaTest starter kun JPA-delen af Spring (ingen gRPC-server) mod en database
- * i hukommelsen, og ruller hver test tilbage bagefter, så testene er uafhængige.
+ * @DataJpaTest starter kun JPA-delen af Spring (ingen gRPC-server) og ruller hver
+ * test tilbage bagefter, så testene er uafhængige af hinanden.
+ * @AutoConfigureTestDatabase(replace = NONE) er nødvendig, fordi @DataJpaTest ellers
+ * bytter min datasource ud med en i hukommelsen. Her skal den køre mod PostgreSQL,
+ * så testene bruger samme database som produktionen.
  * @Import tilføjer TraceabilityService, som @DataJpaTest ellers filtrerer fra.
  */
 @DataJpaTest(showSql = false)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import(TraceabilityService.class)
 class TraceabilityServiceJpaTest
 {
@@ -39,12 +44,10 @@ class TraceabilityServiceJpaTest
 
   /*
    * Bygger et lille slagteri op før hver test:
-   *
-   *   gris 1 --> lænd  ---*---> gris 2 --> lænd  ----+--> TRAY-LOIN-1 --> PROD-LOIN-PACK og PROD-HALF-ANIMAL
-   *   gris 1 --> bryst ----+--> TRAY-BELLY-1 -> PROD-HALF-ANIMAL
-   *   gris 3 --> ribben ---+--> TRAY-RIB-1 ---> (intet produkt)
-   *
-   * Gris 3 er med med vilje: den giver os et dyr der findes, men aldrig er blevet pakket.
+   *   gris 1 -> lænd, gris 2 -> lænd -> TRAY-LOIN-1 -> PROD-LOIN-PACK og PROD-HALF-ANIMAL
+   *   gris 1 -> bryst -> TRAY-BELLY-1 -> PROD-HALF-ANIMAL
+   *   gris 3 -> ribben -> TRAY-RIB-1 -> (intet produkt)
+   * Gris 3: giver os et dyr der findes, men aldrig er blevet pakket.
    */
   @BeforeEach
   void seedSlaughterhouse()
@@ -143,7 +146,7 @@ class TraceabilityServiceJpaTest
   {
     Animal animal = new Animal(id, 100.0);
     animal.setSpecies("Pig");
-    animal.setSlaughterDateTime(LocalDateTime.now());
+    animal.setSlaughterDateTime(Instant.now());
     return animal;
   }
 
@@ -171,7 +174,7 @@ class TraceabilityServiceJpaTest
     Product product = new Product();
     product.setProductId(id);
     product.setProductType(type);
-    product.setPackingDateTime(LocalDateTime.now());
+    product.setPackingDateTime(Instant.now());
     product.setTrays(new ArrayList<>(trays));
     return product;
   }

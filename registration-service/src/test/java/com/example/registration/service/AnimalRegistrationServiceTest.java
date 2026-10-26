@@ -9,16 +9,18 @@ import com.example.registration.repository.AnimalRepository;
 import com.example.registration.dto.AnimalDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,11 +45,18 @@ class AnimalRegistrationServiceTest
 
   /*
    * En rigtig ObjectMapper og ikke en mock: vi vil se at payloaden faktisk kan
-   * serialiseres. JavaTimeModule er noedvendigt, fordi AnimalDTO har en LocalDateTime.
+   * serialiseres. JavaTimeModule er noedvendigt, fordi AnimalDTO har en Instant.
    */
   @Spy private ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 
-  @InjectMocks private AnimalRegistrationService service;
+  private AnimalRegistrationService service;
+
+  @BeforeEach
+  void createService()
+  {
+    service = new AnimalRegistrationService(animalRepository, outboxRepository, objectMapper,
+        "Europe/Copenhagen");
+  }
 
   // Registrering af et nyt dyr skal gemme det og give de samme data tilbage.
   @Test
@@ -56,7 +65,7 @@ class AnimalRegistrationServiceTest
     when(animalRepository.existsById(1)).thenReturn(false);
     when(animalRepository.save(any(Animal.class))).thenAnswer(call -> call.getArgument(0));
 
-    LocalDateTime arrival = LocalDateTime.of(2026, 10, 5, 8, 30);
+    Instant arrival = at(2026, 10, 5, 8, 30);
     AnimalDTO result = service.register(new AnimalDTO(1, arrival, 95.0, "Nørregaard"));
 
     assertThat(result.registrationNumber()).isEqualTo(1);
@@ -79,7 +88,7 @@ class AnimalRegistrationServiceTest
     when(animalRepository.existsById(3)).thenReturn(false);
     when(animalRepository.save(any(Animal.class))).thenAnswer(call -> call.getArgument(0));
 
-    service.register(new AnimalDTO(3, LocalDateTime.of(2026, 10, 5, 8, 30), 95.0, "Noerregaard"));
+    service.register(new AnimalDTO(3, at(2026, 10, 5, 8, 30), 95.0, "Noerregaard"));
 
     ArgumentCaptor<OutboxEntry> entry = ArgumentCaptor.forClass(OutboxEntry.class);
     verify(outboxRepository).save(entry.capture());
@@ -158,12 +167,18 @@ class AnimalRegistrationServiceTest
 
     service.findByArrivalDate(LocalDate.of(2026, 10, 5));
 
-    ArgumentCaptor<LocalDateTime> from = ArgumentCaptor.forClass(LocalDateTime.class);
-    ArgumentCaptor<LocalDateTime> to = ArgumentCaptor.forClass(LocalDateTime.class);
+    ArgumentCaptor<Instant> from = ArgumentCaptor.forClass(Instant.class);
+    ArgumentCaptor<Instant> to = ArgumentCaptor.forClass(Instant.class);
     verify(animalRepository)
         .findByArrivalDateTimeGreaterThanEqualAndArrivalDateTimeLessThan(from.capture(), to.capture());
 
-    assertThat(from.getValue()).isEqualTo(LocalDateTime.of(2026, 10, 5, 0, 0));
-    assertThat(to.getValue()).isEqualTo(LocalDateTime.of(2026, 10, 6, 0, 0));
+    assertThat(from.getValue()).isEqualTo(at(2026, 10, 5, 0, 0));
+    assertThat(to.getValue()).isEqualTo(at(2026, 10, 6, 0, 0));
+  }
+
+  private static Instant at(int year, int month, int day, int hour, int minute)
+  {
+    return LocalDateTime.of(year, month, day, hour, minute)
+        .atZone(ZoneId.of("Europe/Copenhagen")).toInstant();
   }
 }

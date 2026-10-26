@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 public class AnimalPart
@@ -15,7 +15,7 @@ public class AnimalPart
   private String type;
   private double weight;
 
-  private LocalDateTime registrationDateTime;
+  private Instant registrationDateTime;
 
   @ManyToOne private Animal animal;
 
@@ -69,5 +69,10 @@ public class AnimalPart
   public void setTray(Tray tray)
   {
     this.tray = tray;
+  }
+
+  public void setRegistrationDateTime(Instant registrationDateTime)
+  {
+    this.registrationDateTime = registrationDateTime;
   }
 }

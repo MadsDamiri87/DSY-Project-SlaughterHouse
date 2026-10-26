@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface AnimalPartRepository extends JpaRepository<AnimalPart, String>
+public interface AnimalPartRepository extends BaseRepository<AnimalPart, String>
 {
   List<AnimalPart> findByAnimal(Animal animal);
 

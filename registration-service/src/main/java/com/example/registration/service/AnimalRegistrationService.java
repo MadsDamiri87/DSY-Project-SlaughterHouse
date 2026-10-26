@@ -8,24 +8,29 @@ import com.example.registration.repository.AnimalRepository;
 import com.example.registration.dto.AnimalDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
 public class AnimalRegistrationService
 {
+  private final ZoneId slaughterhouseZone;
   private final AnimalRepository animalRepository;
   private final OutboxRepository outboxRepository;
   private final ObjectMapper objectMapper;
 
   public AnimalRegistrationService(AnimalRepository animalRepository,
                                    OutboxRepository outboxRepository,
-                                   ObjectMapper objectMapper)
+                                   ObjectMapper objectMapper,
+                                   @Value("${app.slaughterhouse.timezone}") String timezone)
   {
+    this.slaughterhouseZone = ZoneId.of(timezone);
     this.animalRepository = animalRepository;
     this.outboxRepository = outboxRepository;
     this.objectMapper = objectMapper;
@@ -39,8 +44,8 @@ public class AnimalRegistrationService
       throw new DuplicateRegistrationException(animal.registrationNumber());
     }
 
-    LocalDateTime arrival =
-        animal.arrivalDateTime() != null ? animal.arrivalDateTime() : LocalDateTime.now();
+    Instant arrival =
+        animal.arrivalDateTime() != null ? animal.arrivalDateTime() : Instant.now();
 
     Animal saved = animalRepository.save(
         new Animal(animal.registrationNumber(), arrival, animal.weight(), animal.origin()));
@@ -64,8 +69,9 @@ public class AnimalRegistrationService
   public List<AnimalDTO> findByArrivalDate(LocalDate arrivalDate)
   {
     return animalRepository
-        .findByArrivalDateTimeGreaterThanEqualAndArrivalDateTimeLessThan(arrivalDate.atStartOfDay(),
-            arrivalDate.plusDays(1).atStartOfDay())
+        .findByArrivalDateTimeGreaterThanEqualAndArrivalDateTimeLessThan(
+            arrivalDate.atStartOfDay(slaughterhouseZone).toInstant(),
+            arrivalDate.plusDays(1).atStartOfDay(slaughterhouseZone).toInstant())
         .stream()
         .map(this::toDto)
         .toList();

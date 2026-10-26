@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class Product
   @Id private String productId;
 
   private String productType;
-  private LocalDateTime packingDateTime;
+  private Instant packingDateTime;
 
   private double totalWeight;
   private String sourcePart;
@@ -42,12 +42,12 @@ public class Product
     this.productType = productType;
   }
 
-  public LocalDateTime getPackingDateTime()
+  public Instant getPackingDateTime()
   {
     return packingDateTime;
   }
 
-  public void setPackingDateTime(LocalDateTime packingDateTime)
+  public void setPackingDateTime(Instant packingDateTime)
   {
     this.packingDateTime = packingDateTime;
   }

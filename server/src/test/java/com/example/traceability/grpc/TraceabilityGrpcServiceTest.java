@@ -25,7 +25,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Test af gRPC-laget: oversætter det korrekt mellem domænet og protokollen?
+ * Test af gRPC-laget: korrekt oversættelse mellem domænet og protokollen?
  *
  * Starter en rigtig gRPC-server, men "in-process" — den kører i samme JVM uden
  * netværk eller portnummer. Vi tester altså rigtige gRPC-kald (serialisering, statuskoder),
