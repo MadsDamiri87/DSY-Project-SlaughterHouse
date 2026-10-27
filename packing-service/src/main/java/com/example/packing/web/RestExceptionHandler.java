@@ -1,4 +1,4 @@
-package com.example.packing.controller;
+package com.example.packing.web;
 
 import com.example.packing.service.DuplicateProductException;
 import com.example.packing.service.ProductNotFoundException;
@@ -34,4 +34,5 @@ public class RestExceptionHandler
 
     return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, details);
   }
+
 }

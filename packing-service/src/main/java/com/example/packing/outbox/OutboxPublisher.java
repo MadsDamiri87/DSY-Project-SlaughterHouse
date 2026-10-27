@@ -1,6 +1,7 @@
 package com.example.packing.outbox;
 
-import com.example.packing.repository.OutboxRepository;
+import com.example.packing.sync.BackendRejectedException;
+import com.example.packing.sync.BackendUnavailableException;
 import com.example.packing.sync.TraceabilityClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@ConditionalOnProperty(name = "app.outbox.publisher.enabled", matchIfMissing = true) public class OutboxPublisher
+@ConditionalOnProperty(name = "app.outbox.publisher.enabled", matchIfMissing = true)
+public class OutboxPublisher
 {
 
   private static final Logger log = LoggerFactory.getLogger(OutboxPublisher.class);
@@ -24,11 +26,12 @@ import org.springframework.transaction.annotation.Transactional;
     this.traceabilityClient = traceabilityClient;
   }
 
-  @Scheduled(fixedDelayString = "5000")
+  @Scheduled(fixedDelayString = "${app.outbox.publisher.fixed-delay-ms:5000}")
   @Transactional
   public void publishPending()
   {
-    for (OutboxEntry entry : outboxRepository.findTop100ByStatusOrderByOccurredAtAsc(OutboxStatus.PENDING))
+    for (OutboxEntry entry : outboxRepository
+        .findTop100ByStatusOrderByOccurredAtAsc(OutboxStatus.PENDING))
     {
       try
       {
@@ -38,11 +41,15 @@ import org.springframework.transaction.annotation.Transactional;
       catch (BackendUnavailableException exception)
       {
         log.warn("Backend unavailable, event {} is still waiting", entry.getEventId());
+        break;
+      }
+      catch (BackendRejectedException exception)
+      {
+        log.error("Backend permanently rejected event {}: {}",
+            entry.getEventId(), exception.getMessage());
         entry.markFailed();
-
       }
     }
-
   }
 
 }

@@ -1,4 +1,4 @@
-package com.example.packing.controller;
+package com.example.packing.web;
 
 import com.example.packing.dto.ProductDTO;
 import com.example.packing.service.PackingService;

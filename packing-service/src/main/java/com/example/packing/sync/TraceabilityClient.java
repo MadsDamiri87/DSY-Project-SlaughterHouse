@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
-@Component public class TraceabilityClient
+@Component
+public class TraceabilityClient
 {
   private final RestClient restClient;
   private final ObjectMapper objectMapper;
@@ -26,7 +28,7 @@ import org.springframework.web.client.RestClient;
   {
     switch (entry.getType())
     {
-      case PRODUCT_PACKED -> post("/animals", read(entry, ProductDTO.class));
+      case PRODUCT_PACKED -> post("/products", read(entry, ProductDTO.class));
       default -> throw new BackendRejectedException("Unsupported event type " + entry.getType());
 
     }
@@ -45,9 +47,9 @@ import org.springframework.web.client.RestClient;
                       "Backend responded " + response.getStatusCode() + " for " + path);
                 }).toBodilessEntity();
     }
-    catch (RessourceAccesException exception)
+    catch (ResourceAccessException exception)
     {
-      throw new BackendUnavailableExceptioon("Backend could not be reached at " + path, exception);
+      throw new BackendUnavailableException("Backend could not be reached at " + path, exception);
     }
   }
 

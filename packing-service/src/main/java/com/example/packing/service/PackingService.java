@@ -3,7 +3,7 @@ package com.example.packing.service;
 import com.example.packing.entity.Product;
 import com.example.packing.outbox.OutboxEntry;
 import com.example.packing.outbox.OutboxEventType;
-import com.example.packing.repository.OutboxRepository;
+import com.example.packing.outbox.OutboxRepository;
 import com.example.packing.repository.ProductRepository;
 import com.example.packing.dto.ProductDTO;
 import org.springframework.stereotype.Service;
