@@ -14,6 +14,7 @@
         <module>server</module>
         <module>client</module>
         <module>registration-service</module>
+        <module>cutting-service</module>
         <module>packing-service</module>
     </modules>
 

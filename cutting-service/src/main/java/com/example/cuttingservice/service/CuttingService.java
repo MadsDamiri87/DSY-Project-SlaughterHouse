@@ -109,6 +109,13 @@ public class CuttingService
     return animalPartRepository.findAll().stream().map(this::toDto).toList();
   }
 
+  @Transactional(readOnly = true)
+  public List<TrayDTO> findAllTrays()
+  {
+    return trayRepository.findAll().stream().map(this::toDto).toList();
+  }
+
+
   private String toJson(Object payload)
   {
     try

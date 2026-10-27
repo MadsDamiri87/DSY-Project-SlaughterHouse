@@ -1,5 +1,7 @@
 package com.example.cuttingservice.outbox;
 
+import com.example.cuttingservice.sync.BackendRejectedException;
+import com.example.cuttingservice.sync.BackendUnavailableException;
 import com.example.cuttingservice.sync.TraceabilityClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,11 +34,21 @@ public class OutboxPublisher
     {
       try
       {
-        traceabilityClient.
+        traceabilityClient.send(entry);
+        outboxRepository.delete(entry);
+      }
+      catch (BackendUnavailableException exception)
+      {
+        log.warn("Backend unavailable, event {} is still waiting", entry.getEventId());
+        break;
+      }
+      catch (BackendRejectedException exception)
+      {
+        log.error("Backejnd permanently rejected event {}: {}", entry.getEventId(),
+                  exception.getMessage());
+        entry.markFailed();
       }
     }
   }
-
-
 
 }
