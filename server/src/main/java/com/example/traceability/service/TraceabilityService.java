@@ -10,7 +10,7 @@ import com.example.traceability.repository.AnimalPartRepository;
 import com.example.traceability.repository.AnimalRepository;
 import com.example.traceability.repository.ProductRepository;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -114,6 +114,6 @@ public class TraceabilityService
   private void registerCase(String subject, CaseStatus status)
   {
     casesRegistered.incrementAndGet();
-    currentCase = new TraceabilityCase(subject, LocalDateTime.now(), status);
+    currentCase = new TraceabilityCase(subject, Instant.now(), status);
   }
 }

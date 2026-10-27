@@ -14,7 +14,7 @@ public record ProductDTO(
 
     @NotBlank String productType,
 
-    @NotNull Instant packingDateTime,
+    Instant packingDateTime,
 
     @NotNull @Positive Double totalWeight,
 

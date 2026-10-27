@@ -1,7 +1,6 @@
 package com.example.cuttingservice.web;
 
 import com.example.cuttingservice.dto.AnimalPartDTO;
-import com.example.cuttingservice.dto.PartPlacementDTO;
 import com.example.cuttingservice.dto.TrayDTO;
 import com.example.cuttingservice.service.CuttingService;
 import jakarta.validation.Valid;
@@ -9,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -53,10 +53,10 @@ public class TrayController
     return cuttingService.findAllTrays();
   }
 
-  @PostMapping("/{trayId}/animal-parts")
+  @PutMapping("/{trayId}/animal-parts/{partId}")
   public AnimalPartDTO placePartInTray(@PathVariable String trayId,
-                                       @Valid @RequestBody PartPlacementDTO placement)
+                                       @PathVariable String partId)
   {
-    return cuttingService.placeInTray(placement.partId(), trayId);
+    return cuttingService.placeInTray(partId, trayId);
   }
 }

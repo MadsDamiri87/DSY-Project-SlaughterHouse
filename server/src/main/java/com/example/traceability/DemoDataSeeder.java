@@ -4,6 +4,8 @@ import com.example.traceability.entity.Animal;
 import com.example.traceability.entity.AnimalPart;
 import com.example.traceability.entity.Product;
 import com.example.traceability.entity.Tray;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.annotation.Order;
@@ -22,6 +24,8 @@ import java.util.List;
 @ConditionalOnProperty(name = "app.seed-demo-data", havingValue = "true")
 public class DemoDataSeeder implements CommandLineRunner
 {
+  private static final Logger log = LoggerFactory.getLogger(DemoDataSeeder.class);
+
   private final AnimalRepository animalRepository;
   private final TrayRepository trayRepository;
   private final AnimalPartRepository animalPartRepository;
@@ -42,7 +46,7 @@ public class DemoDataSeeder implements CommandLineRunner
   {
     if (!productRepository.findAll().isEmpty())
     {
-      System.out.println("Demo data already present, skipping seed");
+      log.info("Demo data already present, skipping seed");
       return;
     }
 
@@ -67,7 +71,7 @@ public class DemoDataSeeder implements CommandLineRunner
     Product halfAnimal = product("PROD-HALF-ANIMAL", "HALF_ANIMAL", 17.5, List.of(loinTray, bellyTray));
     List.of(loinPack, halfAnimal).forEach(productRepository::save);
 
-    System.out.println("Demo data seeded");
+    log.info("Demo data seeded");
   }
 
   private Animal animal(int id, String species, double weight, String origin)
@@ -75,6 +79,7 @@ public class DemoDataSeeder implements CommandLineRunner
     Animal animal = new Animal(id, weight);
     animal.setSpecies(species);
     animal.setOrigin(origin);
+    animal.setArrivalDateTime(Instant.now());
     animal.setSlaughterDateTime(Instant.now());
     return animal;
   }

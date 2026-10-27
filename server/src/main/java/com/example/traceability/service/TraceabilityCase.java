@@ -1,7 +1,7 @@
 package com.example.traceability.service;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
-public record TraceabilityCase(String subject, LocalDateTime requestDate, CaseStatus status)
+public record TraceabilityCase(String subject, Instant requestDate, CaseStatus status)
 {
 }

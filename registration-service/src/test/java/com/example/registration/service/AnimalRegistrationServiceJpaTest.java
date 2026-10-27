@@ -32,7 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 @DataJpaTest(showSql = false)
 @Import({AnimalRegistrationService.class, JacksonAutoConfiguration.class})
-@TestPropertySource(properties = "app.slaughterhouse.timezone=Europe/Copenhagen")
+@TestPropertySource(properties = "app.slaughterhouse.timezone=UTC")
 class AnimalRegistrationServiceJpaTest
 {
   @Autowired private TestEntityManager em;
@@ -120,6 +120,6 @@ class AnimalRegistrationServiceJpaTest
   private static Instant at(int year, int month, int day, int hour, int minute)
   {
     return LocalDateTime.of(year, month, day, hour, minute)
-        .atZone(ZoneId.of("Europe/Copenhagen")).toInstant();
+        .atZone(ZoneId.of("UTC")).toInstant();
   }
 }

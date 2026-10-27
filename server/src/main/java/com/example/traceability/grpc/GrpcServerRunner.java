@@ -3,6 +3,8 @@ package com.example.traceability.grpc;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.protobuf.services.ProtoReflectionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.CommandLineRunner;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "grpc.server.enabled", matchIfMissing = true)
 public class GrpcServerRunner implements CommandLineRunner
 {
+  private static final Logger log = LoggerFactory.getLogger(GrpcServerRunner.class);
+
   private final TraceabilityGrpcService grpcService;
   private final int port;
 
@@ -35,7 +39,7 @@ public class GrpcServerRunner implements CommandLineRunner
 
     Runtime.getRuntime().addShutdownHook(new Thread(server::shutdown));
 
-    System.out.println("gRPC server started on port " + port);
+    log.info("gRPC server started on port {}", port);
 
     server.awaitTermination();
   }

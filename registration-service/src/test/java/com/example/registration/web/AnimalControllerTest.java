@@ -169,6 +169,6 @@ class AnimalControllerTest
   private static Instant at(int year, int month, int day, int hour, int minute)
   {
     return LocalDateTime.of(year, month, day, hour, minute)
-        .atZone(ZoneId.of("Europe/Copenhagen")).toInstant();
+        .atZone(ZoneId.of("UTC")).toInstant();
   }
 }

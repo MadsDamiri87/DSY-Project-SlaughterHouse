@@ -71,6 +71,11 @@ public class AnimalPart
     this.tray = tray;
   }
 
+  public Instant getRegistrationDateTime()
+  {
+    return registrationDateTime;
+  }
+
   public void setRegistrationDateTime(Instant registrationDateTime)
   {
     this.registrationDateTime = registrationDateTime;

@@ -44,7 +44,7 @@ public class OutboxPublisher
       }
       catch (BackendRejectedException exception)
       {
-        log.error("Backejnd permanently rejected event {}: {}", entry.getEventId(),
+        log.error("Backend permanently rejected event {}: {}", entry.getEventId(),
                   exception.getMessage());
         entry.markFailed();
       }

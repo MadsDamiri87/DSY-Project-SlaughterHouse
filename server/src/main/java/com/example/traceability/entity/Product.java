@@ -18,7 +18,6 @@ public class Product
   private Instant packingDateTime;
 
   private double totalWeight;
-  private String sourcePart;
 
   @ManyToMany private List<Tray> trays = new ArrayList<>();
 
@@ -60,16 +59,6 @@ public class Product
   public void setTrays(List<Tray> trays)
   {
     this.trays = trays;
-  }
-
-  public String getSourcePart()
-  {
-    return sourcePart;
-  }
-
-  public void setSourcePart(String sourcePart)
-  {
-    this.sourcePart = sourcePart;
   }
 
   public double getTotalWeight()

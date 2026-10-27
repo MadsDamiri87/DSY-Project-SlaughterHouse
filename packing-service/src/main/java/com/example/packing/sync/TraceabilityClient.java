@@ -41,7 +41,7 @@ public class TraceabilityClient
       restClient.post().uri(path).contentType(MediaType.APPLICATION_JSON).body(body).retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
                   throw new BackendRejectedException(
-                      "Backend responded at " + response.getStatusCode() + " for " + path);
+                      "Backend responded " + response.getStatusCode() + " for " + path);
                 }).onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
                   throw new BackendUnavailableException(
                       "Backend responded " + response.getStatusCode() + " for " + path);

@@ -55,7 +55,7 @@ class AnimalRegistrationServiceTest
   void createService()
   {
     service = new AnimalRegistrationService(animalRepository, outboxRepository, objectMapper,
-        "Europe/Copenhagen");
+        "UTC");
   }
 
   // Registrering af et nyt dyr skal gemme det og give de samme data tilbage.
@@ -179,6 +179,6 @@ class AnimalRegistrationServiceTest
   private static Instant at(int year, int month, int day, int hour, int minute)
   {
     return LocalDateTime.of(year, month, day, hour, minute)
-        .atZone(ZoneId.of("Europe/Copenhagen")).toInstant();
+        .atZone(ZoneId.of("UTC")).toInstant();
   }
 }

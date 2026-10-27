@@ -17,13 +17,12 @@ public class Animal
   private String origin;
 
   private double weight;
-  private Instant arrivalDateTime = Instant.now();
+  private Instant arrivalDateTime;
   private Instant slaughterDateTime;
 
   public Animal()
   {}
 
-  // evt til dummy-data:
   public Animal(int registrationNumber, double weight)
   {
     this.registrationNumber = registrationNumber;

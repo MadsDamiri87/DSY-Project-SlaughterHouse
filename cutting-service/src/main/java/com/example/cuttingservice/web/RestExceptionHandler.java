@@ -1,5 +1,8 @@
 package com.example.cuttingservice.web;
 
+import com.example.cuttingservice.entity.PartAlreadyPlacedException;
+import com.example.cuttingservice.entity.PartTypeMismatchException;
+import com.example.cuttingservice.entity.TrayCapacityExceededException;
 import com.example.cuttingservice.service.AnimalPartNotFoundException;
 import com.example.cuttingservice.service.DuplicateAnimalPartException;
 import com.example.cuttingservice.service.DuplicateTrayException;
@@ -23,6 +26,13 @@ public class RestExceptionHandler
 
   @ExceptionHandler({DuplicateAnimalPartException.class, DuplicateTrayException.class})
   public ProblemDetail handleDuplicate(RuntimeException exception)
+  {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
+  }
+
+  @ExceptionHandler({PartTypeMismatchException.class, TrayCapacityExceededException.class,
+                     PartAlreadyPlacedException.class})
+  public ProblemDetail handleTrayRule(RuntimeException exception)
   {
     return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
   }
