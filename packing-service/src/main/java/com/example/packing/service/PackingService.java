@@ -75,7 +75,7 @@ public class PackingService
     }
     catch (JsonProcessingException exception)
     {
-      throw new IllegalStateException("Could not serialise product " + product.productId(), exception);
+      throw new IllegalStateException("Could not serialise product: " + product.productId(), exception);
     }
   }
 

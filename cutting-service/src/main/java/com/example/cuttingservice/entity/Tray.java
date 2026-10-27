@@ -17,12 +17,12 @@ public class Tray
   {
   }
 
-  public Tray(String trayId, String partType, double maxWeight, double currentWeight)
+  public Tray(String trayId, String partType, double maxWeight)
   {
     this.trayId        = trayId;
     this.partType      = partType;
     this.maxWeight     = maxWeight;
-    this.currentWeight = currentWeight;
+    this.currentWeight = 0.0;
   }
 
   public void addPart(AnimalPart part)
@@ -39,4 +39,23 @@ public class Tray
 
   }
 
+  public String getTrayId()
+  {
+    return trayId;
+  }
+
+  public String getPartType()
+  {
+    return partType;
+  }
+
+  public double getMaxWeight()
+  {
+    return maxWeight;
+  }
+
+  public double getCurrentWeight()
+  {
+    return currentWeight;
+  }
 }

@@ -5,13 +5,16 @@ import jakarta.validation.constraints.Positive;
 
 public record TrayDTO(
 
+    @NotBlank
     String trayId,
 
-    @NotBlank String partType,
+    @NotBlank
+    String partType,
 
-    @NotBlank @Positive double maxWeight,
+    @Positive
+    double maxWeight,
 
-    @NotBlank @Positive double currentWeight
+    double currentWeight
 
 )
 {

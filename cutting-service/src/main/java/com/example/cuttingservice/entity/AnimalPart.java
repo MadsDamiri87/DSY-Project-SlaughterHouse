@@ -50,7 +50,7 @@ public class AnimalPart
     return weight;
   }
 
-  public int getAnimaRegistrationNumber()
+  public int getAnimalRegistrationNumber()
   {
     return animalRegistrationNumber;
   }
