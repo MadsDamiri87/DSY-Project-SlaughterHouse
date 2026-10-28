@@ -14,7 +14,7 @@ public record AnimalPartDTO(
 
     @NotNull @Positive Double weight,
 
-    @NotNull Integer animalRegistrationNumber,
+    @NotNull @Positive Integer animalRegistrationNumber,
 
     String trayId,
 

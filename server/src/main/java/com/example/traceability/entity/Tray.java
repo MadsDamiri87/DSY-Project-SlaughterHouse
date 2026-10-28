@@ -55,24 +55,13 @@ public class Tray
     return currentWeight;
   }
 
+  public void setCurrentWeight(double currentWeight)
+  {
+    this.currentWeight = currentWeight;
+  }
+
   public List<AnimalPart> getParts()
   {
     return parts;
-  }
-
-  public void addPart(AnimalPart part)
-  {
-    parts.add(part);
-    part.setTray(this);
-    currentWeight += part.getWeight();
-  }
-
-  public void removePart(AnimalPart part)
-  {
-    if (parts.remove(part))
-    {
-      part.setTray(null);
-      currentWeight -= part.getWeight();
-    }
   }
 }

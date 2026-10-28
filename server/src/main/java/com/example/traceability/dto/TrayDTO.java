@@ -10,6 +10,8 @@ public record TrayDTO(
 
     @NotBlank String partType,
 
-    @NotNull @Positive Double maxWeight)
+    @NotNull @Positive Double maxWeight,
+
+    Double currentWeight)
 {
 }

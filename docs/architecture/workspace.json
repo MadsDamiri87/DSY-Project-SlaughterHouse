@@ -5,7 +5,7 @@
   "description" : "C4 model for the DSY course assignment: a slaughterhouse with full traceability from animal to product and back.",
   "documentation" : { },
   "id" : 1,
-  "lastModifiedDate" : "2026-10-20T18:07:41Z",
+  "lastModifiedDate" : "2026-10-27T21:44:50Z",
   "model" : {
     "people" : [ {
       "description" : "Receives animals at the arrival end and records what came in.",
@@ -17,21 +17,21 @@
       "relationships" : [ {
         "description" : "Registers and weighs arriving animals using",
         "destinationId" : "9",
-        "id" : "48",
+        "id" : "105",
         "sourceId" : "1",
         "tags" : "Relationship"
       }, {
         "description" : "Registers and weighs arriving animals using",
         "destinationId" : "11",
-        "id" : "50",
+        "id" : "107",
         "sourceId" : "1",
         "tags" : "Relationship",
         "technology" : "REST / JSON"
       }, {
         "description" : "Registers and weighs arriving animals using",
         "destinationId" : "10",
-        "id" : "51",
-        "linkedRelationshipId" : "50",
+        "id" : "108",
+        "linkedRelationshipId" : "107",
         "sourceId" : "1",
         "technology" : "REST / JSON"
       } ],
@@ -44,17 +44,26 @@
         "structurizr.dsl.identifier" : "station2Operator"
       },
       "relationships" : [ {
-        "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
-        "destinationId" : "20",
-        "id" : "52",
+        "description" : "Registers each part with its weight and its animal, and places it in a tray, using",
+        "destinationId" : "27",
+        "id" : "109",
         "sourceId" : "2",
-        "tags" : "Relationship"
+        "tags" : "Relationship",
+        "technology" : "REST / JSON"
       }, {
-        "description" : "Registers each part with its weight, its animal and the tray it goes into, using",
+        "description" : "Registers each part with its weight and its animal, and places it in a tray, using",
+        "destinationId" : "26",
+        "id" : "110",
+        "linkedRelationshipId" : "109",
+        "sourceId" : "2",
+        "technology" : "REST / JSON"
+      }, {
+        "description" : "Registers each part with its weight and its animal, and places it in a tray, using",
         "destinationId" : "9",
-        "id" : "53",
-        "linkedRelationshipId" : "52",
-        "sourceId" : "2"
+        "id" : "111",
+        "linkedRelationshipId" : "109",
+        "sourceId" : "2",
+        "technology" : "REST / JSON"
       } ],
       "tags" : "Element,Person"
     }, {
@@ -66,16 +75,25 @@
       },
       "relationships" : [ {
         "description" : "Registers packed products and the trays they were packed from, using",
-        "destinationId" : "21",
-        "id" : "54",
+        "destinationId" : "44",
+        "id" : "112",
         "sourceId" : "3",
-        "tags" : "Relationship"
+        "tags" : "Relationship",
+        "technology" : "REST / JSON"
+      }, {
+        "description" : "Registers packed products and the trays they were packed from, using",
+        "destinationId" : "43",
+        "id" : "113",
+        "linkedRelationshipId" : "112",
+        "sourceId" : "3",
+        "technology" : "REST / JSON"
       }, {
         "description" : "Registers packed products and the trays they were packed from, using",
         "destinationId" : "9",
-        "id" : "55",
-        "linkedRelationshipId" : "54",
-        "sourceId" : "3"
+        "id" : "114",
+        "linkedRelationshipId" : "112",
+        "sourceId" : "3",
+        "technology" : "REST / JSON"
       } ],
       "tags" : "Element,Person"
     }, {
@@ -88,7 +106,7 @@
       "relationships" : [ {
         "description" : "Requests a recall lookup using",
         "destinationId" : "8",
-        "id" : "56",
+        "id" : "115",
         "sourceId" : "4",
         "tags" : "Relationship"
       } ],
@@ -103,16 +121,16 @@
         "structurizr.dsl.identifier" : "supplier"
       },
       "relationships" : [ {
-        "description" : "Indirect: delivers animals",
+        "description" : "Physical delivery of animals",
         "destinationId" : "10",
-        "id" : "57",
+        "id" : "116",
         "sourceId" : "5",
         "tags" : "Relationship"
       }, {
-        "description" : "Indirect: delivers animals",
+        "description" : "Physical delivery of animals",
         "destinationId" : "9",
-        "id" : "58",
-        "linkedRelationshipId" : "57",
+        "id" : "117",
+        "linkedRelationshipId" : "116",
         "sourceId" : "5"
       } ],
       "tags" : "Element,Software System,External System"
@@ -125,9 +143,9 @@
         "structurizr.dsl.identifier" : "logistics"
       },
       "relationships" : [ {
-        "description" : "Indirect: distributes products",
+        "description" : "Physical distribution of products",
         "destinationId" : "7",
-        "id" : "61",
+        "id" : "120",
         "sourceId" : "6",
         "tags" : "Relationship"
       } ],
@@ -152,21 +170,21 @@
       "relationships" : [ {
         "description" : "Direct: requests affected products for an animal",
         "destinationId" : "9",
-        "id" : "49",
+        "id" : "106",
         "sourceId" : "8",
         "tags" : "Relationship"
       }, {
         "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "28",
-        "id" : "62",
+        "destinationId" : "68",
+        "id" : "121",
         "sourceId" : "8",
         "tags" : "Relationship",
         "technology" : "gRPC / Protocol Buffers"
       }, {
         "description" : "Direct: requests affected products for an animal",
-        "destinationId" : "26",
-        "id" : "63",
-        "linkedRelationshipId" : "62",
+        "destinationId" : "63",
+        "id" : "122",
+        "linkedRelationshipId" : "121",
         "sourceId" : "8",
         "technology" : "gRPC / Protocol Buffers"
       } ],
@@ -184,14 +202,14 @@
           "relationships" : [ {
             "description" : "Calls",
             "destinationId" : "13",
-            "id" : "16",
+            "id" : "19",
             "sourceId" : "11",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Spring MVC, Bean Validation"
         }, {
-          "description" : "Turns domain exceptions into HTTP status codes: 404 when the animal is unknown, 409 when the registration number is already in use, and 400 when the request body fails validation.",
+          "description" : "Turns domain exceptions into HTTP status codes: 404 when the animal is unknown, 409 when the registration number is already in use, and 400 when the request body fails validation or combines both filters.",
           "documentation" : { },
           "id" : "12",
           "name" : "REST Exception Handler",
@@ -201,14 +219,14 @@
           "relationships" : [ {
             "description" : "Converts exceptions thrown by",
             "destinationId" : "11",
-            "id" : "17",
+            "id" : "20",
             "sourceId" : "12",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Spring @RestControllerAdvice"
         }, {
-          "description" : "Registration rules. Rejects a registration number that is already in use, and defaults the arrival time when the caller leaves it out. Knows nothing about HTTP.",
+          "description" : "Registration rules. Rejects a registration number that is already in use, and defaults the arrival time when the caller leaves it out. Writes the animal and the outbox event in one transaction. Knows nothing about HTTP.",
           "documentation" : { },
           "id" : "13",
           "name" : "Animal Registration Service",
@@ -218,14 +236,20 @@
           "relationships" : [ {
             "description" : "Reads and writes animals via",
             "destinationId" : "14",
-            "id" : "18",
+            "id" : "21",
+            "sourceId" : "13",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Writes the event in the same transaction via",
+            "destinationId" : "16",
+            "id" : "22",
             "sourceId" : "13",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Spring @Service"
         }, {
-          "description" : "Derived queries for lookup by registration number, by arrival date as a half-open interval, and by origin.",
+          "description" : "Derived queries for lookup by registration number, by arrival date as a half-open interval in the configured slaughterhouse time zone, and by origin.",
           "documentation" : { },
           "id" : "14",
           "name" : "Animal Repository",
@@ -235,13 +259,13 @@
           "relationships" : [ {
             "description" : "Maps rows to",
             "destinationId" : "15",
-            "id" : "19",
+            "id" : "23",
             "sourceId" : "14",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes animal registrations",
-            "destinationId" : "22",
-            "id" : "39",
+            "destinationId" : "59",
+            "id" : "82",
             "sourceId" : "14",
             "tags" : "Relationship",
             "technology" : "JPA / JDBC"
@@ -249,7 +273,7 @@
           "tags" : "Element,Component",
           "technology" : "Spring Data JPA"
         }, {
-          "description" : "The registration service's own view of an animal: registration number, arrival date, weight and origin.",
+          "description" : "The registration service's own view of an animal: registration number, arrival time, weight and origin. Created on registration; the REST API currently exposes no update operation.",
           "documentation" : { },
           "id" : "15",
           "name" : "Animal Entity",
@@ -258,8 +282,74 @@
           },
           "tags" : "Element,Component",
           "technology" : "Jakarta Persistence"
+        }, {
+          "description" : "Pending events waiting to be forwarded, each with an event id, a type, a JSON payload and a status of PENDING or FAILED. Written in the same transaction as the animal, so a registration can never be stored without its event.",
+          "documentation" : { },
+          "id" : "16",
+          "name" : "Outbox",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationOutbox"
+          },
+          "relationships" : [ {
+            "description" : "Stores pending events in",
+            "destinationId" : "59",
+            "id" : "84",
+            "sourceId" : "16",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence, Spring Data JPA"
+        }, {
+          "description" : "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. Timestamp ties have no explicit ordering; no global station order.",
+          "documentation" : { },
+          "id" : "17",
+          "name" : "Outbox Publisher",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationPublisher"
+          },
+          "relationships" : [ {
+            "description" : "Reads pending events from",
+            "destinationId" : "16",
+            "id" : "24",
+            "sourceId" : "17",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Sends each event through",
+            "destinationId" : "18",
+            "id" : "25",
+            "sourceId" : "17",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Scheduled"
+        }, {
+          "description" : "Posts the event payload to the backend. Translates 5xx and connection failures into 'try again later', and 4xx into 'this event will never be valid'.",
+          "documentation" : { },
+          "id" : "18",
+          "name" : "Traceability Client",
+          "properties" : {
+            "structurizr.dsl.identifier" : "registrationClient"
+          },
+          "relationships" : [ {
+            "description" : "Delivers queued animal events using synchronous HTTP",
+            "destinationId" : "64",
+            "id" : "91",
+            "sourceId" : "18",
+            "tags" : "Relationship",
+            "technology" : "REST / JSON"
+          }, {
+            "description" : "Delivers queued animal events using synchronous HTTP",
+            "destinationId" : "63",
+            "id" : "92",
+            "linkedRelationshipId" : "91",
+            "sourceId" : "18",
+            "technology" : "REST / JSON"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring RestClient"
         } ],
-        "description" : "Registers arriving animals with date, weight, registration number and origin, and exposes them as a RESTful web service.",
+        "description" : "Registers arriving animals with arrival time, weight, registration number and origin, and exposes them as a RESTful web service. Runs on port 8081.",
         "documentation" : { },
         "id" : "10",
         "name" : "Station 1 - Registration",
@@ -268,78 +358,424 @@
         },
         "relationships" : [ {
           "description" : "Reads and writes animal registrations",
-          "destinationId" : "22",
-          "id" : "40",
-          "linkedRelationshipId" : "39",
+          "destinationId" : "59",
+          "id" : "83",
+          "linkedRelationshipId" : "82",
           "sourceId" : "10",
           "technology" : "JPA / JDBC"
         }, {
-          "description" : "Indirect: forwards registrations when the network is available",
-          "destinationId" : "26",
-          "id" : "43",
+          "description" : "Delivers queued animal events using synchronous HTTP",
+          "destinationId" : "64",
+          "id" : "93",
+          "linkedRelationshipId" : "91",
           "sourceId" : "10",
-          "tags" : "Relationship,Planned"
+          "technology" : "REST / JSON"
+        }, {
+          "description" : "Delivers queued animal events using synchronous HTTP",
+          "destinationId" : "63",
+          "id" : "94",
+          "linkedRelationshipId" : "91",
+          "sourceId" : "10",
+          "technology" : "REST / JSON"
         } ],
         "tags" : "Element,Container",
         "technology" : "Java 21, Spring Boot, REST"
       }, {
-        "description" : "Cuts animals into parts, weighs each part and places it in a tray holding only one type of part. Planned.",
+        "components" : [ {
+          "description" : "Handles POST /animal-parts, POST /trays and PUT /trays/{trayId}/animal-parts/{partId}, plus lookups of a single part or tray and of all of them. The placement is a PUT because the station resends after a failure and the same placement must not count twice.",
+          "documentation" : { },
+          "id" : "27",
+          "name" : "Part and Tray REST API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingApi"
+          },
+          "relationships" : [ {
+            "description" : "Calls",
+            "destinationId" : "29",
+            "id" : "35",
+            "sourceId" : "27",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC, Bean Validation"
+        }, {
+          "description" : "Turns domain exceptions into HTTP status codes: 404 for an unknown part or tray, 409 for a duplicate id and for every broken tray rule, and 400 for an invalid request body.",
+          "documentation" : { },
+          "id" : "28",
+          "name" : "REST Exception Handler",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingExceptionHandler"
+          },
+          "relationships" : [ {
+            "description" : "Converts exceptions thrown by",
+            "destinationId" : "27",
+            "id" : "36",
+            "sourceId" : "28",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @RestControllerAdvice"
+        }, {
+          "description" : "Registers parts, creates trays and places parts in trays. Writes the part or tray and the outbox event in one transaction. Delegates the tray rules to the entity rather than checking them itself.",
+          "documentation" : { },
+          "id" : "29",
+          "name" : "Cutting Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingService"
+          },
+          "relationships" : [ {
+            "description" : "Reads and writes parts and trays via",
+            "destinationId" : "30",
+            "id" : "37",
+            "sourceId" : "29",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Writes the event in the same transaction via",
+            "destinationId" : "32",
+            "id" : "38",
+            "sourceId" : "29",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Asks the tray to accept a part, and lets it refuse",
+            "destinationId" : "31",
+            "id" : "40",
+            "sourceId" : "29",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Service"
+        }, {
+          "description" : "AnimalPartRepository and TrayRepository, including a derived query for trays by part type.",
+          "documentation" : { },
+          "id" : "30",
+          "name" : "Repositories",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingRepositories"
+          },
+          "relationships" : [ {
+            "description" : "Maps rows to",
+            "destinationId" : "31",
+            "id" : "39",
+            "sourceId" : "30",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Reads and writes parts and trays",
+            "destinationId" : "60",
+            "id" : "85",
+            "sourceId" : "30",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Data JPA"
+        }, {
+          "description" : "The tray owns its own rules: it accepts only parts of its own type, it refuses a part that would take it past its maximum weight, placing the same part twice changes nothing, and a part already in another tray cannot be moved. The service uses addPart to enforce these rules.",
+          "documentation" : { },
+          "id" : "31",
+          "name" : "Part and Tray Entities",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingEntities"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence"
+        }, {
+          "description" : "Pending events for registered parts, created trays and placements, written in the same transaction as the data they describe.",
+          "documentation" : { },
+          "id" : "32",
+          "name" : "Outbox",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingOutbox"
+          },
+          "relationships" : [ {
+            "description" : "Stores pending events in",
+            "destinationId" : "60",
+            "id" : "87",
+            "sourceId" : "32",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence, Spring Data JPA"
+        }, {
+          "description" : "Every five seconds by default, sends pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations.",
+          "documentation" : { },
+          "id" : "33",
+          "name" : "Outbox Publisher",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingPublisher"
+          },
+          "relationships" : [ {
+            "description" : "Reads pending events from",
+            "destinationId" : "32",
+            "id" : "41",
+            "sourceId" : "33",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Sends each event through",
+            "destinationId" : "34",
+            "id" : "42",
+            "sourceId" : "33",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Scheduled"
+        }, {
+          "description" : "Posts parts and trays to the backend, choosing the endpoint from the event type.",
+          "documentation" : { },
+          "id" : "34",
+          "name" : "Traceability Client",
+          "properties" : {
+            "structurizr.dsl.identifier" : "cuttingClient"
+          },
+          "relationships" : [ {
+            "description" : "Delivers queued part and tray events using synchronous HTTP",
+            "destinationId" : "64",
+            "id" : "95",
+            "sourceId" : "34",
+            "tags" : "Relationship",
+            "technology" : "REST / JSON"
+          }, {
+            "description" : "Delivers queued part and tray events using synchronous HTTP",
+            "destinationId" : "63",
+            "id" : "96",
+            "linkedRelationshipId" : "95",
+            "sourceId" : "34",
+            "technology" : "REST / JSON"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring RestClient"
+        } ],
+        "description" : "Cuts animals into parts, weighs each part and places it in a tray that holds only one type of part and has a maximum weight. Runs on port 8082.",
         "documentation" : { },
-        "id" : "20",
+        "id" : "26",
         "name" : "Station 2 - Cutting",
         "properties" : {
           "structurizr.dsl.identifier" : "station2"
         },
         "relationships" : [ {
-          "description" : "Writes registered parts and trays to",
-          "destinationId" : "23",
-          "id" : "41",
-          "sourceId" : "20",
-          "tags" : "Relationship,Planned",
-          "technology" : "Local persistence"
+          "description" : "Reads and writes parts and trays",
+          "destinationId" : "60",
+          "id" : "86",
+          "linkedRelationshipId" : "85",
+          "sourceId" : "26",
+          "technology" : "JPA / JDBC"
         }, {
-          "description" : "Indirect: forwards parts and trays when the network is available",
-          "destinationId" : "26",
-          "id" : "44",
-          "sourceId" : "20",
-          "tags" : "Relationship,Planned"
+          "description" : "Delivers queued part and tray events using synchronous HTTP",
+          "destinationId" : "64",
+          "id" : "97",
+          "linkedRelationshipId" : "95",
+          "sourceId" : "26",
+          "technology" : "REST / JSON"
+        }, {
+          "description" : "Delivers queued part and tray events using synchronous HTTP",
+          "destinationId" : "63",
+          "id" : "98",
+          "linkedRelationshipId" : "95",
+          "sourceId" : "26",
+          "technology" : "REST / JSON"
         } ],
-        "tags" : "Element,Container,Planned",
-        "technology" : "Java 21, Spring Boot"
+        "tags" : "Element,Container",
+        "technology" : "Java 21, Spring Boot, REST"
       }, {
-        "description" : "Packs products from one or more trays and registers which trays were used. Planned.",
+        "components" : [ {
+          "description" : "Handles POST /products and lookups of a single product and of all products. Rejects a product that was packed from no trays at all.",
+          "documentation" : { },
+          "id" : "44",
+          "name" : "Product REST API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingApi"
+          },
+          "relationships" : [ {
+            "description" : "Calls",
+            "destinationId" : "46",
+            "id" : "52",
+            "sourceId" : "44",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC, Bean Validation"
+        }, {
+          "description" : "Turns domain exceptions into HTTP status codes: 404 for an unknown product, 409 for a duplicate product id, and 400 for an invalid request body.",
+          "documentation" : { },
+          "id" : "45",
+          "name" : "REST Exception Handler",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingExceptionHandler"
+          },
+          "relationships" : [ {
+            "description" : "Converts exceptions thrown by",
+            "destinationId" : "44",
+            "id" : "53",
+            "sourceId" : "45",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @RestControllerAdvice"
+        }, {
+          "description" : "Packing rules. Rejects a product id that is already in use, and defaults the packing time when the caller leaves it out. Writes the product and the outbox event in one transaction.",
+          "documentation" : { },
+          "id" : "46",
+          "name" : "Packing Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingService"
+          },
+          "relationships" : [ {
+            "description" : "Reads and writes products via",
+            "destinationId" : "47",
+            "id" : "54",
+            "sourceId" : "46",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Writes the event in the same transaction via",
+            "destinationId" : "49",
+            "id" : "55",
+            "sourceId" : "46",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Service"
+        }, {
+          "description" : "Reads and writes packed products.",
+          "documentation" : { },
+          "id" : "47",
+          "name" : "Product Repository",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingRepository"
+          },
+          "relationships" : [ {
+            "description" : "Maps rows to",
+            "destinationId" : "48",
+            "id" : "56",
+            "sourceId" : "47",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Reads and writes packed products",
+            "destinationId" : "61",
+            "id" : "88",
+            "sourceId" : "47",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring Data JPA"
+        }, {
+          "description" : "A packed product with the tray ids it was packed from, stored as plain values. The station deliberately holds no reference to Station 2's tray objects, so the two can run and fail independently.",
+          "documentation" : { },
+          "id" : "48",
+          "name" : "Product Entity",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingEntity"
+          },
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence"
+        }, {
+          "description" : "Pending events for packed products, written in the same transaction as the product.",
+          "documentation" : { },
+          "id" : "49",
+          "name" : "Outbox",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingOutbox"
+          },
+          "relationships" : [ {
+            "description" : "Stores pending events in",
+            "destinationId" : "61",
+            "id" : "90",
+            "sourceId" : "49",
+            "tags" : "Relationship",
+            "technology" : "JPA / JDBC"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Jakarta Persistence, Spring Data JPA"
+        }, {
+          "description" : "Every five seconds by default, sends pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations.",
+          "documentation" : { },
+          "id" : "50",
+          "name" : "Outbox Publisher",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingPublisher"
+          },
+          "relationships" : [ {
+            "description" : "Reads pending events from",
+            "destinationId" : "49",
+            "id" : "57",
+            "sourceId" : "50",
+            "tags" : "Relationship"
+          }, {
+            "description" : "Sends each event through",
+            "destinationId" : "51",
+            "id" : "58",
+            "sourceId" : "50",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Scheduled"
+        }, {
+          "description" : "Posts packed products to the backend.",
+          "documentation" : { },
+          "id" : "51",
+          "name" : "Traceability Client",
+          "properties" : {
+            "structurizr.dsl.identifier" : "packingClient"
+          },
+          "relationships" : [ {
+            "description" : "Delivers queued product events using synchronous HTTP",
+            "destinationId" : "64",
+            "id" : "99",
+            "sourceId" : "51",
+            "tags" : "Relationship",
+            "technology" : "REST / JSON"
+          }, {
+            "description" : "Delivers queued product events using synchronous HTTP",
+            "destinationId" : "63",
+            "id" : "100",
+            "linkedRelationshipId" : "99",
+            "sourceId" : "51",
+            "technology" : "REST / JSON"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring RestClient"
+        } ],
+        "description" : "Packs products from one or more trays and registers which trays each product was packed from. Runs on port 8083.",
         "documentation" : { },
-        "id" : "21",
+        "id" : "43",
         "name" : "Station 3 - Packing",
         "properties" : {
           "structurizr.dsl.identifier" : "station3"
         },
         "relationships" : [ {
-          "description" : "Writes packed products to",
-          "destinationId" : "24",
-          "id" : "42",
-          "sourceId" : "21",
-          "tags" : "Relationship,Planned",
-          "technology" : "Local persistence"
+          "description" : "Reads and writes packed products",
+          "destinationId" : "61",
+          "id" : "89",
+          "linkedRelationshipId" : "88",
+          "sourceId" : "43",
+          "technology" : "JPA / JDBC"
         }, {
-          "description" : "Indirect: forwards packed products when the network is available",
-          "destinationId" : "26",
-          "id" : "45",
-          "sourceId" : "21",
-          "tags" : "Relationship,Planned"
+          "description" : "Delivers queued product events using synchronous HTTP",
+          "destinationId" : "64",
+          "id" : "101",
+          "linkedRelationshipId" : "99",
+          "sourceId" : "43",
+          "technology" : "REST / JSON"
         }, {
-          "description" : "Indirect: hands over packed products",
+          "description" : "Delivers queued product events using synchronous HTTP",
+          "destinationId" : "63",
+          "id" : "102",
+          "linkedRelationshipId" : "99",
+          "sourceId" : "43",
+          "technology" : "REST / JSON"
+        }, {
+          "description" : "Physical handover of packed products",
           "destinationId" : "6",
-          "id" : "59",
-          "sourceId" : "21",
+          "id" : "118",
+          "sourceId" : "43",
           "tags" : "Relationship"
         } ],
-        "tags" : "Element,Container,Planned",
-        "technology" : "Java 21, Spring Boot"
+        "tags" : "Element,Container",
+        "technology" : "Java 21, Spring Boot, REST"
       }, {
-        "description" : "Owns the registered animals. Station 1 has its own store, so a registration can be accepted without any other part of the system being available.",
+        "description" : "Owns the registered animals and Station 1's outbox. The station has its own store, so a registration can be accepted without any other part of the system being available.",
         "documentation" : { },
-        "id" : "22",
+        "id" : "59",
         "name" : "Registration Database",
         "properties" : {
           "structurizr.dsl.identifier" : "store1"
@@ -347,64 +783,115 @@
         "tags" : "Element,Container,Database",
         "technology" : "Local persistent H2 database"
       }, {
-        "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
+        "description" : "Owns the parts and trays and Station 2's outbox. Lets the station keep cutting while the network or the backend is unavailable.",
         "documentation" : { },
-        "id" : "23",
-        "name" : "Local Store - Station 2",
+        "id" : "60",
+        "name" : "Cutting Database",
         "properties" : {
           "structurizr.dsl.identifier" : "store2"
         },
-        "tags" : "Element,Container,Planned,Database",
-        "technology" : "Embedded database, e.g. H2 or SQLite"
+        "tags" : "Element,Container,Database",
+        "technology" : "Local persistent H2 database"
       }, {
-        "description" : "Local data store and outbound queue. Lets the station keep working during a partial failure, when the network or the backend is unavailable. Planned.",
+        "description" : "Owns the packed products and Station 3's outbox. Lets the station keep packing while the network or the backend is unavailable.",
         "documentation" : { },
-        "id" : "24",
-        "name" : "Local Store - Station 3",
+        "id" : "61",
+        "name" : "Packing Database",
         "properties" : {
           "structurizr.dsl.identifier" : "store3"
         },
-        "tags" : "Element,Container,Planned,Database",
-        "technology" : "Embedded database, e.g. H2 or SQLite"
+        "tags" : "Element,Container,Database",
+        "technology" : "Local persistent H2 database"
       }, {
-        "description" : "Client application used to call the traceability service. Uses the client stub generated from traceability.proto.",
+        "description" : "Command line client used to call the traceability service. Uses the client stub generated from traceability.proto.",
         "documentation" : { },
-        "id" : "25",
-        "name" : "Client",
+        "id" : "62",
+        "name" : "Console Client",
         "properties" : {
           "structurizr.dsl.identifier" : "client"
         },
         "relationships" : [ {
           "description" : "Requests traceability information",
-          "destinationId" : "28",
-          "id" : "64",
-          "sourceId" : "25",
+          "destinationId" : "68",
+          "id" : "123",
+          "sourceId" : "62",
           "tags" : "Relationship",
           "technology" : "gRPC / Protocol Buffers"
         }, {
           "description" : "Requests traceability information",
-          "destinationId" : "26",
-          "id" : "65",
-          "linkedRelationshipId" : "64",
-          "sourceId" : "25",
+          "destinationId" : "63",
+          "id" : "124",
+          "linkedRelationshipId" : "123",
+          "sourceId" : "62",
           "technology" : "gRPC / Protocol Buffers"
         } ],
         "tags" : "Element,Container",
         "technology" : "Java 21, gRPC, generated client stub"
       }, {
         "components" : [ {
+          "description" : "Receives animals, parts, trays and products from the stations on POST /animals, /animal-parts, /trays and /products. Because the stations assign the ids, the same message twice gives the same result.",
+          "documentation" : { },
+          "id" : "64",
+          "name" : "Ingestion REST API",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ingestionApi"
+          },
+          "relationships" : [ {
+            "description" : "Calls",
+            "destinationId" : "66",
+            "id" : "73",
+            "sourceId" : "64",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring MVC, Bean Validation"
+        }, {
+          "description" : "Maps validation errors to 400. A NoSuchElementException maps to 503, but current ingestion creates placeholders for unknown animals and trays.",
+          "documentation" : { },
+          "id" : "65",
+          "name" : "Backend Exception Handler",
+          "properties" : {
+            "structurizr.dsl.identifier" : "backendExceptionHandler"
+          },
+          "relationships" : [ {
+            "description" : "Converts exceptions thrown by",
+            "destinationId" : "64",
+            "id" : "74",
+            "sourceId" : "65",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @RestControllerAdvice"
+        }, {
+          "description" : "Stores what it is told, as an upsert. Creates placeholder animals and trays when references arrive before their details. Later messages fill them in. Tray weight is copied from tray messages; part placement currently does not refresh it.",
+          "documentation" : { },
+          "id" : "66",
+          "name" : "Ingestion Service",
+          "properties" : {
+            "structurizr.dsl.identifier" : "ingestionService"
+          },
+          "relationships" : [ {
+            "description" : "Stores reported data via",
+            "destinationId" : "70",
+            "id" : "75",
+            "sourceId" : "66",
+            "tags" : "Relationship"
+          } ],
+          "tags" : "Element,Component",
+          "technology" : "Spring @Service"
+        }, {
           "description" : "Starts the gRPC server on the configured port and registers both the service and reflection, so Postman and BloomRPC can discover the contract.",
           "documentation" : { },
-          "id" : "27",
+          "id" : "67",
           "name" : "gRPC Server Runner",
           "properties" : {
             "structurizr.dsl.identifier" : "grpcServerRunner"
           },
           "relationships" : [ {
             "description" : "Registers as a gRPC service and starts",
-            "destinationId" : "28",
-            "id" : "33",
-            "sourceId" : "27",
+            "destinationId" : "68",
+            "id" : "76",
+            "sourceId" : "67",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
@@ -412,56 +899,56 @@
         }, {
           "description" : "Implements the server stub generated from traceability.proto. Validates input and maps domain errors to status codes: NOT_FOUND, INVALID_ARGUMENT and INTERNAL.",
           "documentation" : { },
-          "id" : "28",
+          "id" : "68",
           "name" : "gRPC API",
           "properties" : {
             "structurizr.dsl.identifier" : "grpcApi"
           },
           "relationships" : [ {
             "description" : "Calls",
-            "destinationId" : "29",
-            "id" : "34",
-            "sourceId" : "28",
+            "destinationId" : "69",
+            "id" : "77",
+            "sourceId" : "68",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "gRPC, Protocol Buffers, generated server stub"
         }, {
-          "description" : "Business logic for tracing product to animals and animal to products. Both directions go through the trays. Keeps track of the traceability cases it has handled: how many, and the subject, date and outcome of the most recent one. Knows nothing about JPA or gRPC.",
+          "description" : "Traces products to animals and animals to products through trays. Stores a case counter and the latest case in memory. Uses Spring Data repositories and read-only transactions; independent of gRPC.",
           "documentation" : { },
-          "id" : "29",
+          "id" : "69",
           "name" : "Traceability Service",
           "properties" : {
             "structurizr.dsl.identifier" : "traceabilityService"
           },
           "relationships" : [ {
             "description" : "Reads traceability data via",
-            "destinationId" : "30",
-            "id" : "35",
-            "sourceId" : "29",
+            "destinationId" : "70",
+            "id" : "78",
+            "sourceId" : "69",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Java"
         }, {
-          "description" : "AnimalRepository, AnimalPartRepository, TrayRepository and ProductRepository. Derived queries push the tracing down into the database.",
+          "description" : "AnimalRepository, AnimalPartRepository, TrayRepository and ProductRepository, all narrowed to save, findById and findAll by a shared base interface. Derived queries push the tracing down into the database.",
           "documentation" : { },
-          "id" : "30",
+          "id" : "70",
           "name" : "Repositories",
           "properties" : {
             "structurizr.dsl.identifier" : "persistence"
           },
           "relationships" : [ {
             "description" : "Maps rows to",
-            "destinationId" : "31",
-            "id" : "37",
-            "sourceId" : "30",
+            "destinationId" : "71",
+            "id" : "80",
+            "sourceId" : "70",
             "tags" : "Relationship"
           }, {
             "description" : "Reads and writes data",
-            "destinationId" : "38",
-            "id" : "46",
-            "sourceId" : "30",
+            "destinationId" : "81",
+            "id" : "103",
+            "sourceId" : "70",
             "tags" : "Relationship",
             "technology" : "JPA / JDBC"
           } ],
@@ -470,7 +957,7 @@
         }, {
           "description" : "Animal, AnimalPart, Tray and Product, including the references that make tracing possible.",
           "documentation" : { },
-          "id" : "31",
+          "id" : "71",
           "name" : "Domain Entities",
           "properties" : {
             "structurizr.dsl.identifier" : "entities"
@@ -480,42 +967,42 @@
         }, {
           "description" : "Creates demo data on startup. Disabled by default via app.seed-demo-data.",
           "documentation" : { },
-          "id" : "32",
+          "id" : "72",
           "name" : "Demo Data Seeder",
           "properties" : {
             "structurizr.dsl.identifier" : "demoDataSeeder"
           },
           "relationships" : [ {
             "description" : "Writes demo data via",
-            "destinationId" : "30",
-            "id" : "36",
-            "sourceId" : "32",
+            "destinationId" : "70",
+            "id" : "79",
+            "sourceId" : "72",
             "tags" : "Relationship"
           } ],
           "tags" : "Element,Component",
           "technology" : "Spring CommandLineRunner"
         } ],
-        "description" : "Provides traceability lookups between animals and products.",
+        "description" : "Receives what the stations report, stores the whole chain, and answers traceability lookups in both directions. REST on port 8080, gRPC on port 9090.",
         "documentation" : { },
-        "id" : "26",
+        "id" : "63",
         "name" : "Traceability Server",
         "properties" : {
           "structurizr.dsl.identifier" : "traceabilityServer"
         },
         "relationships" : [ {
           "description" : "Reads and writes data",
-          "destinationId" : "38",
-          "id" : "47",
-          "linkedRelationshipId" : "46",
-          "sourceId" : "26",
+          "destinationId" : "81",
+          "id" : "104",
+          "linkedRelationshipId" : "103",
+          "sourceId" : "63",
           "technology" : "JPA / JDBC"
         } ],
         "tags" : "Element,Container",
-        "technology" : "Java 21, Spring Boot, gRPC"
+        "technology" : "Java 21, Spring Boot, REST and gRPC"
       }, {
-        "description" : "Stores animals, animal parts, trays and products.",
+        "description" : "Stores animals, animal parts, trays and products: the whole chain the stations have reported.",
         "documentation" : { },
-        "id" : "38",
+        "id" : "81",
         "name" : "Slaughterhouse Database",
         "properties" : {
           "structurizr.dsl.identifier" : "database"
@@ -531,10 +1018,10 @@
         "structurizr.dsl.identifier" : "slaughterhouse"
       },
       "relationships" : [ {
-        "description" : "Indirect: hands over packed products",
+        "description" : "Physical handover of packed products",
         "destinationId" : "6",
-        "id" : "60",
-        "linkedRelationshipId" : "59",
+        "id" : "119",
+        "linkedRelationshipId" : "118",
         "sourceId" : "9"
       } ],
       "tags" : "Element,Software System"
@@ -542,8 +1029,8 @@
   },
   "name" : "Slaughterhouse",
   "properties" : {
-    "structurizr.inspection.error" : "26",
-    "structurizr.dsl" : "d29ya3NwYWNlICJTbGF1Z2h0ZXJob3VzZSIgIkM0IG1vZGVsIGZvciB0aGUgRFNZIGNvdXJzZSBhc3NpZ25tZW50OiBhIHNsYXVnaHRlcmhvdXNlIHdpdGggZnVsbCB0cmFjZWFiaWxpdHkgZnJvbSBhbmltYWwgdG8gcHJvZHVjdCBhbmQgYmFjay4iIHsNCg0KICAgIG1vZGVsIHsNCiAgICAgICAgIWltcGxpZWRSZWxhdGlvbnNoaXBzIHRydWUNCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yID0gcGVyc29uICJTdGF0aW9uIDEgT3BlcmF0b3IiIHsNCiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJSZWNlaXZlcyBhbmltYWxzIGF0IHRoZSBhcnJpdmFsIGVuZCBhbmQgcmVjb3JkcyB3aGF0IGNhbWUgaW4uIg0KICAgICAgICB9DQoNCiAgICAgICAgc3RhdGlvbjJPcGVyYXRvciA9IHBlcnNvbiAiU3RhdGlvbiAyIE9wZXJhdG9yIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ3V0cyBhbmltYWxzIGludG8gcGFydHMgYW5kIGZpbGxzIHRyYXlzLiINCiAgICAgICAgfQ0KDQogICAgICAgIHN0YXRpb24zT3BlcmF0b3IgPSBwZXJzb24gIlN0YXRpb24gMyBPcGVyYXRvciIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBhY2tzIHByb2R1Y3RzIGZvciBkaXN0cmlidXRpb24uIg0KICAgICAgICB9DQoNCiAgICAgICAgcXVhbGl0eU9mZmljZXIgPSBwZXJzb24gIlF1YWxpdHkgLyBSZWNhbGwgT2ZmaWNlciIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIkludmVzdGlnYXRlcyBwcm9ibGVtcyB3aXRoIGEgc2xhdWdodGVyZWQgYW5pbWFsIGFuZCBkZWNpZGVzIHdoaWNoIHByb2R1Y3RzIG11c3QgYmUgcmVjYWxsZWQuIg0KICAgICAgICB9DQoNCiAgICAgICAgc3VwcGxpZXIgPSBzb2Z0d2FyZVN5c3RlbSAiQW5pbWFsIFN1cHBsaWVyIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXh0ZXJuYWwgcGFydHkgdGhhdCBkZWxpdmVycyBsaXZpbmcgYW5pbWFscy4gRXhjaGFuZ2VzIGhhcHBlbiBwaHlzaWNhbGx5IGFuZCBhc3luY2hyb25vdXNseSwgbmV2ZXIgdGhyb3VnaCBhIHN5bmNocm9ub3VzIGNhbGwuIg0KICAgICAgICAgICAgdGFncyAiRXh0ZXJuYWwgU3lzdGVtIg0KICAgICAgICB9DQoNCiAgICAgICAgbG9naXN0aWNzID0gc29mdHdhcmVTeXN0ZW0gIlRyYW5zcG9ydCAvIExvZ2lzdGljcyIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIkV4dGVybmFsIHBhcnR5IHRoYXQgY29sbGVjdHMgcGFja2VkIHByb2R1Y3RzIGFuZCBoYW5kbGVzIGRpc3RyaWJ1dGlvbi4iDQogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCBTeXN0ZW0iDQogICAgICAgIH0NCg0KICAgICAgICBjdXN0b21lciA9IHNvZnR3YXJlU3lzdGVtICJDdXN0b21lciAvIFN1cGVybWFya2V0IiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXh0ZXJuYWwgcGFydHkgdGhhdCBvcmRlcnMgYW5kIHJlY2VpdmVzIHByb2R1Y3RzLiINCiAgICAgICAgICAgIHRhZ3MgIkV4dGVybmFsIFN5c3RlbSINCiAgICAgICAgfQ0KDQogICAgICAgIHJlY2FsbFN5c3RlbSA9IHNvZnR3YXJlU3lzdGVtICJFeHRlcm5hbCBSZWNhbGwgU3lzdGVtIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiU3lzdGVtIG91dHNpZGUgdGhlIHNsYXVnaHRlcmhvdXNlIHRoYXQgYXNrcyB3aGljaCBwcm9kdWN0cyBtYXkgY29udGFpbiBwYXJ0cyBmcm9tIGEgZ2l2ZW4gYW5pbWFsLiINCiAgICAgICAgICAgIHRhZ3MgIkV4dGVybmFsIFN5c3RlbSINCiAgICAgICAgfQ0KDQogICAgICAgIHNsYXVnaHRlcmhvdXNlID0gc29mdHdhcmVTeXN0ZW0gIlNsYXVnaHRlcmhvdXNlIFN5c3RlbSIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIlJlZ2lzdGVycyBhbmQgdHJhY2VzIGFuaW1hbHMsIHBhcnRzLCB0cmF5cyBhbmQgcHJvZHVjdHMsIGFuZCBzdXBwb3J0cyBwcm9kdWN0IHJlY2FsbC4iDQoNCiAgICAgICAgICAgIHN0YXRpb24xID0gY29udGFpbmVyICJTdGF0aW9uIDEgLSBSZWdpc3RyYXRpb24iIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUmVnaXN0ZXJzIGFycml2aW5nIGFuaW1hbHMgd2l0aCBkYXRlLCB3ZWlnaHQsIHJlZ2lzdHJhdGlvbiBudW1iZXIgYW5kIG9yaWdpbiwgYW5kIGV4cG9zZXMgdGhlbSBhcyBhIFJFU1RmdWwgd2ViIHNlcnZpY2UuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290LCBSRVNUIg0KDQogICAgICAgICAgICAgICAgYW5pbWFsQXBpID0gY29tcG9uZW50ICJBbmltYWwgUkVTVCBBUEkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkhhbmRsZXMgUE9TVCAvYW5pbWFscyBhbmQgdGhlIHRocmVlIHJlcXVpcmVkIGxvb2t1cHM6IG9uZSBhbmltYWwsIGFsbCBhbmltYWxzIGFycml2aW5nIG9uIGEgZGF0ZSwgYW5kIGFsbCBhbmltYWxzIGZyb20gYW4gb3JpZ2luLiBXaXRob3V0IGEgZmlsdGVyIGl0IHJldHVybnMgZXZlcnkgcmVnaXN0ZXJlZCBhbmltYWw7IHRoZSB0d28gZmlsdGVycyBjYW5ub3QgYmUgY29tYmluZWQuIFZhbGlkYXRlcyB0aGUgcmVxdWVzdCBib2R5IGJlZm9yZSBpdCByZWFjaGVzIHRoZSBzZXJ2aWNlLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIE1WQywgQmVhbiBWYWxpZGF0aW9uIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHJlc3RFeGNlcHRpb25IYW5kbGVyID0gY29tcG9uZW50ICJSRVNUIEV4Y2VwdGlvbiBIYW5kbGVyIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJUdXJucyBkb21haW4gZXhjZXB0aW9ucyBpbnRvIEhUVFAgc3RhdHVzIGNvZGVzOiA0MDQgd2hlbiB0aGUgYW5pbWFsIGlzIHVua25vd24sIDQwOSB3aGVuIHRoZSByZWdpc3RyYXRpb24gbnVtYmVyIGlzIGFscmVhZHkgaW4gdXNlLCBhbmQgNDAwIHdoZW4gdGhlIHJlcXVlc3QgYm9keSBmYWlscyB2YWxpZGF0aW9uLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEBSZXN0Q29udHJvbGxlckFkdmljZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25TZXJ2aWNlID0gY29tcG9uZW50ICJBbmltYWwgUmVnaXN0cmF0aW9uIFNlcnZpY2UiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlJlZ2lzdHJhdGlvbiBydWxlcy4gUmVqZWN0cyBhIHJlZ2lzdHJhdGlvbiBudW1iZXIgdGhhdCBpcyBhbHJlYWR5IGluIHVzZSwgYW5kIGRlZmF1bHRzIHRoZSBhcnJpdmFsIHRpbWUgd2hlbiB0aGUgY2FsbGVyIGxlYXZlcyBpdCBvdXQuIEtub3dzIG5vdGhpbmcgYWJvdXQgSFRUUC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAU2VydmljZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25SZXBvc2l0b3J5ID0gY29tcG9uZW50ICJBbmltYWwgUmVwb3NpdG9yeSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiRGVyaXZlZCBxdWVyaWVzIGZvciBsb29rdXAgYnkgcmVnaXN0cmF0aW9uIG51bWJlciwgYnkgYXJyaXZhbCBkYXRlIGFzIGEgaGFsZi1vcGVuIGludGVydmFsLCBhbmQgYnkgb3JpZ2luLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIERhdGEgSlBBIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHJlZ2lzdHJhdGlvbkVudGl0eSA9IGNvbXBvbmVudCAiQW5pbWFsIEVudGl0eSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiVGhlIHJlZ2lzdHJhdGlvbiBzZXJ2aWNlJ3Mgb3duIHZpZXcgb2YgYW4gYW5pbWFsOiByZWdpc3RyYXRpb24gbnVtYmVyLCBhcnJpdmFsIGRhdGUsIHdlaWdodCBhbmQgb3JpZ2luLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmFrYXJ0YSBQZXJzaXN0ZW5jZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBhbmltYWxBcGkgLT4gcmVnaXN0cmF0aW9uU2VydmljZSAiQ2FsbHMiDQogICAgICAgICAgICAgICAgcmVzdEV4Y2VwdGlvbkhhbmRsZXIgLT4gYW5pbWFsQXBpICJDb252ZXJ0cyBleGNlcHRpb25zIHRocm93biBieSINCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25TZXJ2aWNlIC0+IHJlZ2lzdHJhdGlvblJlcG9zaXRvcnkgIlJlYWRzIGFuZCB3cml0ZXMgYW5pbWFscyB2aWEiDQogICAgICAgICAgICAgICAgcmVnaXN0cmF0aW9uUmVwb3NpdG9yeSAtPiByZWdpc3RyYXRpb25FbnRpdHkgIk1hcHMgcm93cyB0byINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RhdGlvbjIgPSBjb250YWluZXIgIlN0YXRpb24gMiAtIEN1dHRpbmciIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ3V0cyBhbmltYWxzIGludG8gcGFydHMsIHdlaWdocyBlYWNoIHBhcnQgYW5kIHBsYWNlcyBpdCBpbiBhIHRyYXkgaG9sZGluZyBvbmx5IG9uZSB0eXBlIG9mIHBhcnQuIFBsYW5uZWQuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290Ig0KICAgICAgICAgICAgICAgIHRhZ3MgIlBsYW5uZWQiDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHN0YXRpb24zID0gY29udGFpbmVyICJTdGF0aW9uIDMgLSBQYWNraW5nIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBhY2tzIHByb2R1Y3RzIGZyb20gb25lIG9yIG1vcmUgdHJheXMgYW5kIHJlZ2lzdGVycyB3aGljaCB0cmF5cyB3ZXJlIHVzZWQuIFBsYW5uZWQuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290Ig0KICAgICAgICAgICAgICAgIHRhZ3MgIlBsYW5uZWQiDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHN0b3JlMSA9IGNvbnRhaW5lciAiUmVnaXN0cmF0aW9uIERhdGFiYXNlIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIk93bnMgdGhlIHJlZ2lzdGVyZWQgYW5pbWFscy4gU3RhdGlvbiAxIGhhcyBpdHMgb3duIHN0b3JlLCBzbyBhIHJlZ2lzdHJhdGlvbiBjYW4gYmUgYWNjZXB0ZWQgd2l0aG91dCBhbnkgb3RoZXIgcGFydCBvZiB0aGUgc3lzdGVtIGJlaW5nIGF2YWlsYWJsZS4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiTG9jYWwgcGVyc2lzdGVudCBIMiBkYXRhYmFzZSINCiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RvcmUyID0gY29udGFpbmVyICJMb2NhbCBTdG9yZSAtIFN0YXRpb24gMiIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJMb2NhbCBkYXRhIHN0b3JlIGFuZCBvdXRib3VuZCBxdWV1ZS4gTGV0cyB0aGUgc3RhdGlvbiBrZWVwIHdvcmtpbmcgZHVyaW5nIGEgcGFydGlhbCBmYWlsdXJlLCB3aGVuIHRoZSBuZXR3b3JrIG9yIHRoZSBiYWNrZW5kIGlzIHVuYXZhaWxhYmxlLiBQbGFubmVkLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJFbWJlZGRlZCBkYXRhYmFzZSwgZS5nLiBIMiBvciBTUUxpdGUiDQogICAgICAgICAgICAgICAgdGFncyAiUGxhbm5lZCxEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RvcmUzID0gY29udGFpbmVyICJMb2NhbCBTdG9yZSAtIFN0YXRpb24gMyIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJMb2NhbCBkYXRhIHN0b3JlIGFuZCBvdXRib3VuZCBxdWV1ZS4gTGV0cyB0aGUgc3RhdGlvbiBrZWVwIHdvcmtpbmcgZHVyaW5nIGEgcGFydGlhbCBmYWlsdXJlLCB3aGVuIHRoZSBuZXR3b3JrIG9yIHRoZSBiYWNrZW5kIGlzIHVuYXZhaWxhYmxlLiBQbGFubmVkLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJFbWJlZGRlZCBkYXRhYmFzZSwgZS5nLiBIMiBvciBTUUxpdGUiDQogICAgICAgICAgICAgICAgdGFncyAiUGxhbm5lZCxEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgY2xpZW50ID0gY29udGFpbmVyICJDbGllbnQiIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ2xpZW50IGFwcGxpY2F0aW9uIHVzZWQgdG8gY2FsbCB0aGUgdHJhY2VhYmlsaXR5IHNlcnZpY2UuIFVzZXMgdGhlIGNsaWVudCBzdHViIGdlbmVyYXRlZCBmcm9tIHRyYWNlYWJpbGl0eS5wcm90by4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSAyMSwgZ1JQQywgZ2VuZXJhdGVkIGNsaWVudCBzdHViIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICB0cmFjZWFiaWxpdHlTZXJ2ZXIgPSBjb250YWluZXIgIlRyYWNlYWJpbGl0eSBTZXJ2ZXIiIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUHJvdmlkZXMgdHJhY2VhYmlsaXR5IGxvb2t1cHMgYmV0d2VlbiBhbmltYWxzIGFuZCBwcm9kdWN0cy4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSAyMSwgU3ByaW5nIEJvb3QsIGdSUEMiDQoNCiAgICAgICAgICAgICAgICBncnBjU2VydmVyUnVubmVyID0gY29tcG9uZW50ICJnUlBDIFNlcnZlciBSdW5uZXIiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlN0YXJ0cyB0aGUgZ1JQQyBzZXJ2ZXIgb24gdGhlIGNvbmZpZ3VyZWQgcG9ydCBhbmQgcmVnaXN0ZXJzIGJvdGggdGhlIHNlcnZpY2UgYW5kIHJlZmxlY3Rpb24sIHNvIFBvc3RtYW4gYW5kIEJsb29tUlBDIGNhbiBkaXNjb3ZlciB0aGUgY29udHJhY3QuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgQ29tbWFuZExpbmVSdW5uZXIsIGdSUEMiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZ3JwY0FwaSA9IGNvbXBvbmVudCAiZ1JQQyBBUEkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkltcGxlbWVudHMgdGhlIHNlcnZlciBzdHViIGdlbmVyYXRlZCBmcm9tIHRyYWNlYWJpbGl0eS5wcm90by4gVmFsaWRhdGVzIGlucHV0IGFuZCBtYXBzIGRvbWFpbiBlcnJvcnMgdG8gc3RhdHVzIGNvZGVzOiBOT1RfRk9VTkQsIElOVkFMSURfQVJHVU1FTlQgYW5kIElOVEVSTkFMLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiZ1JQQywgUHJvdG9jb2wgQnVmZmVycywgZ2VuZXJhdGVkIHNlcnZlciBzdHViIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHRyYWNlYWJpbGl0eVNlcnZpY2UgPSBjb21wb25lbnQgIlRyYWNlYWJpbGl0eSBTZXJ2aWNlIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJCdXNpbmVzcyBsb2dpYyBmb3IgdHJhY2luZyBwcm9kdWN0IHRvIGFuaW1hbHMgYW5kIGFuaW1hbCB0byBwcm9kdWN0cy4gQm90aCBkaXJlY3Rpb25zIGdvIHRocm91Z2ggdGhlIHRyYXlzLiBLZWVwcyB0cmFjayBvZiB0aGUgdHJhY2VhYmlsaXR5IGNhc2VzIGl0IGhhcyBoYW5kbGVkOiBob3cgbWFueSwgYW5kIHRoZSBzdWJqZWN0LCBkYXRlIGFuZCBvdXRjb21lIG9mIHRoZSBtb3N0IHJlY2VudCBvbmUuIEtub3dzIG5vdGhpbmcgYWJvdXQgSlBBIG9yIGdSUEMuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBlcnNpc3RlbmNlID0gY29tcG9uZW50ICJSZXBvc2l0b3JpZXMiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkFuaW1hbFJlcG9zaXRvcnksIEFuaW1hbFBhcnRSZXBvc2l0b3J5LCBUcmF5UmVwb3NpdG9yeSBhbmQgUHJvZHVjdFJlcG9zaXRvcnkuIERlcml2ZWQgcXVlcmllcyBwdXNoIHRoZSB0cmFjaW5nIGRvd24gaW50byB0aGUgZGF0YWJhc2UuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgRGF0YSBKUEEiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZW50aXRpZXMgPSBjb21wb25lbnQgIkRvbWFpbiBFbnRpdGllcyIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQW5pbWFsLCBBbmltYWxQYXJ0LCBUcmF5IGFuZCBQcm9kdWN0LCBpbmNsdWRpbmcgdGhlIHJlZmVyZW5jZXMgdGhhdCBtYWtlIHRyYWNpbmcgcG9zc2libGUuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYWthcnRhIFBlcnNpc3RlbmNlIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIGRlbW9EYXRhU2VlZGVyID0gY29tcG9uZW50ICJEZW1vIERhdGEgU2VlZGVyIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJDcmVhdGVzIGRlbW8gZGF0YSBvbiBzdGFydHVwLiBEaXNhYmxlZCBieSBkZWZhdWx0IHZpYSBhcHAuc2VlZC1kZW1vLWRhdGEuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgQ29tbWFuZExpbmVSdW5uZXIiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZ3JwY1NlcnZlclJ1bm5lciAtPiBncnBjQXBpICJSZWdpc3RlcnMgYXMgYSBnUlBDIHNlcnZpY2UgYW5kIHN0YXJ0cyINCiAgICAgICAgICAgICAgICBncnBjQXBpIC0+IHRyYWNlYWJpbGl0eVNlcnZpY2UgIkNhbGxzIg0KICAgICAgICAgICAgICAgIHRyYWNlYWJpbGl0eVNlcnZpY2UgLT4gcGVyc2lzdGVuY2UgIlJlYWRzIHRyYWNlYWJpbGl0eSBkYXRhIHZpYSINCiAgICAgICAgICAgICAgICBkZW1vRGF0YVNlZWRlciAtPiBwZXJzaXN0ZW5jZSAiV3JpdGVzIGRlbW8gZGF0YSB2aWEiDQogICAgICAgICAgICAgICAgcGVyc2lzdGVuY2UgLT4gZW50aXRpZXMgIk1hcHMgcm93cyB0byINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZGF0YWJhc2UgPSBjb250YWluZXIgIlNsYXVnaHRlcmhvdXNlIERhdGFiYXNlIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlN0b3JlcyBhbmltYWxzLCBhbmltYWwgcGFydHMsIHRyYXlzIGFuZCBwcm9kdWN0cy4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiUG9zdGdyZVNRTCINCiAgICAgICAgICAgICAgICB0YWdzICJEYXRhYmFzZSINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgcmVnaXN0cmF0aW9uUmVwb3NpdG9yeSAtPiBzdG9yZTEgIlJlYWRzIGFuZCB3cml0ZXMgYW5pbWFsIHJlZ2lzdHJhdGlvbnMiICJKUEEgLyBKREJDIg0KDQogICAgICAgICAgICBzdGF0aW9uMiAtPiBzdG9yZTIgIldyaXRlcyByZWdpc3RlcmVkIHBhcnRzIGFuZCB0cmF5cyB0byIgIkxvY2FsIHBlcnNpc3RlbmNlIiAiUGxhbm5lZCINCiAgICAgICAgICAgIHN0YXRpb24zIC0+IHN0b3JlMyAiV3JpdGVzIHBhY2tlZCBwcm9kdWN0cyB0byIgIkxvY2FsIHBlcnNpc3RlbmNlIiAiUGxhbm5lZCINCg0KICAgICAgICAgICAgc3RhdGlvbjEgLT4gdHJhY2VhYmlsaXR5U2VydmVyICJJbmRpcmVjdDogZm9yd2FyZHMgcmVnaXN0cmF0aW9ucyB3aGVuIHRoZSBuZXR3b3JrIGlzIGF2YWlsYWJsZSIgIiIgIlBsYW5uZWQiDQogICAgICAgICAgICBzdGF0aW9uMiAtPiB0cmFjZWFiaWxpdHlTZXJ2ZXIgIkluZGlyZWN0OiBmb3J3YXJkcyBwYXJ0cyBhbmQgdHJheXMgd2hlbiB0aGUgbmV0d29yayBpcyBhdmFpbGFibGUiICIiICJQbGFubmVkIg0KICAgICAgICAgICAgc3RhdGlvbjMgLT4gdHJhY2VhYmlsaXR5U2VydmVyICJJbmRpcmVjdDogZm9yd2FyZHMgcGFja2VkIHByb2R1Y3RzIHdoZW4gdGhlIG5ldHdvcmsgaXMgYXZhaWxhYmxlIiAiIiAiUGxhbm5lZCINCg0KICAgICAgICAgICAgcGVyc2lzdGVuY2UgLT4gZGF0YWJhc2UgIlJlYWRzIGFuZCB3cml0ZXMgZGF0YSIgIkpQQSAvIEpEQkMiDQogICAgICAgIH0NCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yIC0+IHNsYXVnaHRlcmhvdXNlICJSZWdpc3RlcnMgYW5kIHdlaWdocyBhcnJpdmluZyBhbmltYWxzIHVzaW5nIg0KICAgICAgICByZWNhbGxTeXN0ZW0gLT4gc2xhdWdodGVyaG91c2UgIkRpcmVjdDogcmVxdWVzdHMgYWZmZWN0ZWQgcHJvZHVjdHMgZm9yIGFuIGFuaW1hbCINCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yIC0+IGFuaW1hbEFwaSAiUmVnaXN0ZXJzIGFuZCB3ZWlnaHMgYXJyaXZpbmcgYW5pbWFscyB1c2luZyIgIlJFU1QgLyBKU09OIg0KICAgICAgICBzdGF0aW9uMk9wZXJhdG9yIC0+IHN0YXRpb24yICJSZWdpc3RlcnMgZWFjaCBwYXJ0IHdpdGggaXRzIHdlaWdodCwgaXRzIGFuaW1hbCBhbmQgdGhlIHRyYXkgaXQgZ29lcyBpbnRvLCB1c2luZyINCiAgICAgICAgc3RhdGlvbjNPcGVyYXRvciAtPiBzdGF0aW9uMyAiUmVnaXN0ZXJzIHBhY2tlZCBwcm9kdWN0cyBhbmQgdGhlIHRyYXlzIHRoZXkgd2VyZSBwYWNrZWQgZnJvbSwgdXNpbmciDQoNCiAgICAgICAgcXVhbGl0eU9mZmljZXIgLT4gcmVjYWxsU3lzdGVtICJSZXF1ZXN0cyBhIHJlY2FsbCBsb29rdXAgdXNpbmciDQoNCiAgICAgICAgc3VwcGxpZXIgLT4gc3RhdGlvbjEgIkluZGlyZWN0OiBkZWxpdmVycyBhbmltYWxzIg0KICAgICAgICBzdGF0aW9uMyAtPiBsb2dpc3RpY3MgIkluZGlyZWN0OiBoYW5kcyBvdmVyIHBhY2tlZCBwcm9kdWN0cyINCiAgICAgICAgbG9naXN0aWNzIC0+IGN1c3RvbWVyICJJbmRpcmVjdDogZGlzdHJpYnV0ZXMgcHJvZHVjdHMiDQoNCiAgICAgICAgcmVjYWxsU3lzdGVtIC0+IGdycGNBcGkgIkRpcmVjdDogcmVxdWVzdHMgYWZmZWN0ZWQgcHJvZHVjdHMgZm9yIGFuIGFuaW1hbCIgImdSUEMgLyBQcm90b2NvbCBCdWZmZXJzIg0KICAgICAgICBjbGllbnQgLT4gZ3JwY0FwaSAiUmVxdWVzdHMgdHJhY2VhYmlsaXR5IGluZm9ybWF0aW9uIiAiZ1JQQyAvIFByb3RvY29sIEJ1ZmZlcnMiDQogICAgfQ0KDQogICAgdmlld3Mgew0KDQogICAgICAgIHN5c3RlbUNvbnRleHQgc2xhdWdodGVyaG91c2UgIkMxIiAiQzEgLSBTeXN0ZW0gQ29udGV4dCBWaWV3LiBGb2N1cyBpcyBvbiB0aGUgdHlwZXMgb2YgY29tbXVuaWNhdGlvbiB3aXRoIHRoZSBvdXRzaWRlIHdvcmxkIHJhdGhlciB0aGFuIG9uIHRlY2hub2xvZ3kuIiB7DQogICAgICAgICAgICBpbmNsdWRlICoNCiAgICAgICAgICAgIGluY2x1ZGUgcXVhbGl0eU9mZmljZXIgY3VzdG9tZXINCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGINCiAgICAgICAgfQ0KDQogICAgICAgIGNvbnRhaW5lciBzbGF1Z2h0ZXJob3VzZSAiQzIiICJDMiAtIENvbnRhaW5lciBWaWV3LiBTaG93cyB0aGUgcnVubmluZyBwYXJ0cyBhbmQgaG93IGVhY2ggc3RhdGlvbiBrZWVwcyB3b3JraW5nIHdoZW4gdGhlIG5ldHdvcmsgaXMgZG93bi4iIHsNCiAgICAgICAgICAgIGluY2x1ZGUgKg0KICAgICAgICAgICAgaW5jbHVkZSBxdWFsaXR5T2ZmaWNlciBjdXN0b21lcg0KICAgICAgICAgICAgYXV0b2xheW91dCB0Yg0KICAgICAgICB9DQoNCiAgICAgICAgY29tcG9uZW50IHRyYWNlYWJpbGl0eVNlcnZlciAiQzMtVHJhY2VhYmlsaXR5IiAiQzMgLSBDb21wb25lbnQgVmlldyBvZiB0aGUgVHJhY2VhYmlsaXR5IFNlcnZlci4gTWlycm9ycyB0aGUgYWN0dWFsIGNvZGUgaW4gdGhlIHNlcnZlciBtb2R1bGUuIiB7DQogICAgICAgICAgICBpbmNsdWRlICoNCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGINCiAgICAgICAgfQ0KDQogICAgICAgIGNvbXBvbmVudCBzdGF0aW9uMSAiQzMtUmVnaXN0cmF0aW9uIiAiQzMgLSBDb21wb25lbnQgVmlldyBvZiBTdGF0aW9uIDEgUmVnaXN0cmF0aW9uLiBNaXJyb3JzIHRoZSBhY3R1YWwgY29kZSBpbiB0aGUgcmVnaXN0cmF0aW9uLXNlcnZpY2UgbW9kdWxlLiIgew0KICAgICAgICAgICAgaW5jbHVkZSAqDQogICAgICAgICAgICBhdXRvbGF5b3V0IHRiDQogICAgICAgIH0NCg0KICAgICAgICBzdHlsZXMgew0KICAgICAgICAgICAgZWxlbWVudCAiUGVyc29uIiB7DQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMDg0MjdiDQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZg0KICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsNCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMxMTY4YmQNCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkNvbnRhaW5lciIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQzOGRkNQ0KICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYNCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZWxlbWVudCAiQ29tcG9uZW50IiB7DQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjODViYmYwDQogICAgICAgICAgICAgICAgY29sb3IgIzAwMDAwMA0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBlbGVtZW50ICJEYXRhYmFzZSIgew0KICAgICAgICAgICAgICAgIHNoYXBlIGN5bGluZGVyDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkV4dGVybmFsIFN5c3RlbSIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzhjOGM4Yw0KICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYNCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZWxlbWVudCAiUGxhbm5lZCIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgI2IzYjNiMw0KICAgICAgICAgICAgICAgIGNvbG9yICMwMDAwMDANCiAgICAgICAgICAgICAgICBib3JkZXIgZGFzaGVkDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHJlbGF0aW9uc2hpcCAiUGxhbm5lZCIgew0KICAgICAgICAgICAgICAgIGRhc2hlZCB0cnVlDQogICAgICAgICAgICAgICAgY29sb3IgIzgwODA4MA0KICAgICAgICAgICAgfQ0KICAgICAgICB9DQogICAgfQ0KDQogICAgY29uZmlndXJhdGlvbiB7DQogICAgICAgIHNjb3BlIHNvZnR3YXJlc3lzdGVtDQogICAgfQ0KfQ==",
+    "structurizr.inspection.error" : "40",
+    "structurizr.dsl" : "d29ya3NwYWNlICJTbGF1Z2h0ZXJob3VzZSIgIkM0IG1vZGVsIGZvciB0aGUgRFNZIGNvdXJzZSBhc3NpZ25tZW50OiBhIHNsYXVnaHRlcmhvdXNlIHdpdGggZnVsbCB0cmFjZWFiaWxpdHkgZnJvbSBhbmltYWwgdG8gcHJvZHVjdCBhbmQgYmFjay4iIHsNCg0KICAgIG1vZGVsIHsNCiAgICAgICAgIWltcGxpZWRSZWxhdGlvbnNoaXBzIHRydWUNCg0KICAgICAgICBzdGF0aW9uMU9wZXJhdG9yID0gcGVyc29uICJTdGF0aW9uIDEgT3BlcmF0b3IiIHsNCiAgICAgICAgICAgIGRlc2NyaXB0aW9uICJSZWNlaXZlcyBhbmltYWxzIGF0IHRoZSBhcnJpdmFsIGVuZCBhbmQgcmVjb3JkcyB3aGF0IGNhbWUgaW4uIg0KICAgICAgICB9DQoNCiAgICAgICAgc3RhdGlvbjJPcGVyYXRvciA9IHBlcnNvbiAiU3RhdGlvbiAyIE9wZXJhdG9yIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ3V0cyBhbmltYWxzIGludG8gcGFydHMgYW5kIGZpbGxzIHRyYXlzLiINCiAgICAgICAgfQ0KDQogICAgICAgIHN0YXRpb24zT3BlcmF0b3IgPSBwZXJzb24gIlN0YXRpb24gMyBPcGVyYXRvciIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBhY2tzIHByb2R1Y3RzIGZvciBkaXN0cmlidXRpb24uIg0KICAgICAgICB9DQoNCiAgICAgICAgcXVhbGl0eU9mZmljZXIgPSBwZXJzb24gIlF1YWxpdHkgLyBSZWNhbGwgT2ZmaWNlciIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIkludmVzdGlnYXRlcyBwcm9ibGVtcyB3aXRoIGEgc2xhdWdodGVyZWQgYW5pbWFsIGFuZCBkZWNpZGVzIHdoaWNoIHByb2R1Y3RzIG11c3QgYmUgcmVjYWxsZWQuIg0KICAgICAgICB9DQoNCiAgICAgICAgc3VwcGxpZXIgPSBzb2Z0d2FyZVN5c3RlbSAiQW5pbWFsIFN1cHBsaWVyIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXh0ZXJuYWwgcGFydHkgdGhhdCBkZWxpdmVycyBsaXZpbmcgYW5pbWFscy4gRXhjaGFuZ2VzIGhhcHBlbiBwaHlzaWNhbGx5IGFuZCBhc3luY2hyb25vdXNseSwgbmV2ZXIgdGhyb3VnaCBhIHN5bmNocm9ub3VzIGNhbGwuIg0KICAgICAgICAgICAgdGFncyAiRXh0ZXJuYWwgU3lzdGVtIg0KICAgICAgICB9DQoNCiAgICAgICAgbG9naXN0aWNzID0gc29mdHdhcmVTeXN0ZW0gIlRyYW5zcG9ydCAvIExvZ2lzdGljcyIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIkV4dGVybmFsIHBhcnR5IHRoYXQgY29sbGVjdHMgcGFja2VkIHByb2R1Y3RzIGFuZCBoYW5kbGVzIGRpc3RyaWJ1dGlvbi4iDQogICAgICAgICAgICB0YWdzICJFeHRlcm5hbCBTeXN0ZW0iDQogICAgICAgIH0NCg0KICAgICAgICBjdXN0b21lciA9IHNvZnR3YXJlU3lzdGVtICJDdXN0b21lciAvIFN1cGVybWFya2V0IiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXh0ZXJuYWwgcGFydHkgdGhhdCBvcmRlcnMgYW5kIHJlY2VpdmVzIHByb2R1Y3RzLiINCiAgICAgICAgICAgIHRhZ3MgIkV4dGVybmFsIFN5c3RlbSINCiAgICAgICAgfQ0KDQogICAgICAgIHJlY2FsbFN5c3RlbSA9IHNvZnR3YXJlU3lzdGVtICJFeHRlcm5hbCBSZWNhbGwgU3lzdGVtIiB7DQogICAgICAgICAgICBkZXNjcmlwdGlvbiAiU3lzdGVtIG91dHNpZGUgdGhlIHNsYXVnaHRlcmhvdXNlIHRoYXQgYXNrcyB3aGljaCBwcm9kdWN0cyBtYXkgY29udGFpbiBwYXJ0cyBmcm9tIGEgZ2l2ZW4gYW5pbWFsLiINCiAgICAgICAgICAgIHRhZ3MgIkV4dGVybmFsIFN5c3RlbSINCiAgICAgICAgfQ0KDQogICAgICAgIHNsYXVnaHRlcmhvdXNlID0gc29mdHdhcmVTeXN0ZW0gIlNsYXVnaHRlcmhvdXNlIFN5c3RlbSIgew0KICAgICAgICAgICAgZGVzY3JpcHRpb24gIlJlZ2lzdGVycyBhbmQgdHJhY2VzIGFuaW1hbHMsIHBhcnRzLCB0cmF5cyBhbmQgcHJvZHVjdHMsIGFuZCBzdXBwb3J0cyBwcm9kdWN0IHJlY2FsbC4iDQoNCiAgICAgICAgICAgIHN0YXRpb24xID0gY29udGFpbmVyICJTdGF0aW9uIDEgLSBSZWdpc3RyYXRpb24iIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUmVnaXN0ZXJzIGFycml2aW5nIGFuaW1hbHMgd2l0aCBhcnJpdmFsIHRpbWUsIHdlaWdodCwgcmVnaXN0cmF0aW9uIG51bWJlciBhbmQgb3JpZ2luLCBhbmQgZXhwb3NlcyB0aGVtIGFzIGEgUkVTVGZ1bCB3ZWIgc2VydmljZS4gUnVucyBvbiBwb3J0IDgwODEuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290LCBSRVNUIg0KDQogICAgICAgICAgICAgICAgYW5pbWFsQXBpID0gY29tcG9uZW50ICJBbmltYWwgUkVTVCBBUEkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkhhbmRsZXMgUE9TVCAvYW5pbWFscyBhbmQgdGhlIHRocmVlIHJlcXVpcmVkIGxvb2t1cHM6IG9uZSBhbmltYWwsIGFsbCBhbmltYWxzIGFycml2aW5nIG9uIGEgZGF0ZSwgYW5kIGFsbCBhbmltYWxzIGZyb20gYW4gb3JpZ2luLiBXaXRob3V0IGEgZmlsdGVyIGl0IHJldHVybnMgZXZlcnkgcmVnaXN0ZXJlZCBhbmltYWw7IHRoZSB0d28gZmlsdGVycyBjYW5ub3QgYmUgY29tYmluZWQuIFZhbGlkYXRlcyB0aGUgcmVxdWVzdCBib2R5IGJlZm9yZSBpdCByZWFjaGVzIHRoZSBzZXJ2aWNlLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIE1WQywgQmVhbiBWYWxpZGF0aW9uIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHJlc3RFeGNlcHRpb25IYW5kbGVyID0gY29tcG9uZW50ICJSRVNUIEV4Y2VwdGlvbiBIYW5kbGVyIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJUdXJucyBkb21haW4gZXhjZXB0aW9ucyBpbnRvIEhUVFAgc3RhdHVzIGNvZGVzOiA0MDQgd2hlbiB0aGUgYW5pbWFsIGlzIHVua25vd24sIDQwOSB3aGVuIHRoZSByZWdpc3RyYXRpb24gbnVtYmVyIGlzIGFscmVhZHkgaW4gdXNlLCBhbmQgNDAwIHdoZW4gdGhlIHJlcXVlc3QgYm9keSBmYWlscyB2YWxpZGF0aW9uIG9yIGNvbWJpbmVzIGJvdGggZmlsdGVycy4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAUmVzdENvbnRyb2xsZXJBZHZpY2UiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgcmVnaXN0cmF0aW9uU2VydmljZSA9IGNvbXBvbmVudCAiQW5pbWFsIFJlZ2lzdHJhdGlvbiBTZXJ2aWNlIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJSZWdpc3RyYXRpb24gcnVsZXMuIFJlamVjdHMgYSByZWdpc3RyYXRpb24gbnVtYmVyIHRoYXQgaXMgYWxyZWFkeSBpbiB1c2UsIGFuZCBkZWZhdWx0cyB0aGUgYXJyaXZhbCB0aW1lIHdoZW4gdGhlIGNhbGxlciBsZWF2ZXMgaXQgb3V0LiBXcml0ZXMgdGhlIGFuaW1hbCBhbmQgdGhlIG91dGJveCBldmVudCBpbiBvbmUgdHJhbnNhY3Rpb24uIEtub3dzIG5vdGhpbmcgYWJvdXQgSFRUUC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAU2VydmljZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25SZXBvc2l0b3J5ID0gY29tcG9uZW50ICJBbmltYWwgUmVwb3NpdG9yeSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiRGVyaXZlZCBxdWVyaWVzIGZvciBsb29rdXAgYnkgcmVnaXN0cmF0aW9uIG51bWJlciwgYnkgYXJyaXZhbCBkYXRlIGFzIGEgaGFsZi1vcGVuIGludGVydmFsIGluIHRoZSBjb25maWd1cmVkIHNsYXVnaHRlcmhvdXNlIHRpbWUgem9uZSwgYW5kIGJ5IG9yaWdpbi4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBEYXRhIEpQQSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25FbnRpdHkgPSBjb21wb25lbnQgIkFuaW1hbCBFbnRpdHkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlRoZSByZWdpc3RyYXRpb24gc2VydmljZSdzIG93biB2aWV3IG9mIGFuIGFuaW1hbDogcmVnaXN0cmF0aW9uIG51bWJlciwgYXJyaXZhbCB0aW1lLCB3ZWlnaHQgYW5kIG9yaWdpbi4gQ3JlYXRlZCBvbiByZWdpc3RyYXRpb247IHRoZSBSRVNUIEFQSSBjdXJyZW50bHkgZXhwb3NlcyBubyB1cGRhdGUgb3BlcmF0aW9uLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmFrYXJ0YSBQZXJzaXN0ZW5jZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25PdXRib3ggPSBjb21wb25lbnQgIk91dGJveCIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUGVuZGluZyBldmVudHMgd2FpdGluZyB0byBiZSBmb3J3YXJkZWQsIGVhY2ggd2l0aCBhbiBldmVudCBpZCwgYSB0eXBlLCBhIEpTT04gcGF5bG9hZCBhbmQgYSBzdGF0dXMgb2YgUEVORElORyBvciBGQUlMRUQuIFdyaXR0ZW4gaW4gdGhlIHNhbWUgdHJhbnNhY3Rpb24gYXMgdGhlIGFuaW1hbCwgc28gYSByZWdpc3RyYXRpb24gY2FuIG5ldmVyIGJlIHN0b3JlZCB3aXRob3V0IGl0cyBldmVudC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkpha2FydGEgUGVyc2lzdGVuY2UsIFNwcmluZyBEYXRhIEpQQSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25QdWJsaXNoZXIgPSBjb21wb25lbnQgIk91dGJveCBQdWJsaXNoZXIiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkV2ZXJ5IGZpdmUgc2Vjb25kcyBieSBkZWZhdWx0LCBzZW5kcyB1cCB0byAxMDAgcGVuZGluZyBldmVudHMgb3JkZXJlZCBieSBvY2N1cnJlZEF0LiBTdG9wcyBvbiB0ZW1wb3JhcnkgZmFpbHVyZTsgcmVqZWN0cyBiZWNvbWUgRkFJTEVELiBUaW1lc3RhbXAgdGllcyBoYXZlIG5vIGV4cGxpY2l0IG9yZGVyaW5nOyBubyBnbG9iYWwgc3RhdGlvbiBvcmRlci4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAU2NoZWR1bGVkIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHJlZ2lzdHJhdGlvbkNsaWVudCA9IGNvbXBvbmVudCAiVHJhY2VhYmlsaXR5IENsaWVudCIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUG9zdHMgdGhlIGV2ZW50IHBheWxvYWQgdG8gdGhlIGJhY2tlbmQuIFRyYW5zbGF0ZXMgNXh4IGFuZCBjb25uZWN0aW9uIGZhaWx1cmVzIGludG8gJ3RyeSBhZ2FpbiBsYXRlcicsIGFuZCA0eHggaW50byAndGhpcyBldmVudCB3aWxsIG5ldmVyIGJlIHZhbGlkJy4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBSZXN0Q2xpZW50Ig0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIGFuaW1hbEFwaSAtPiByZWdpc3RyYXRpb25TZXJ2aWNlICJDYWxscyINCiAgICAgICAgICAgICAgICByZXN0RXhjZXB0aW9uSGFuZGxlciAtPiBhbmltYWxBcGkgIkNvbnZlcnRzIGV4Y2VwdGlvbnMgdGhyb3duIGJ5Ig0KICAgICAgICAgICAgICAgIHJlZ2lzdHJhdGlvblNlcnZpY2UgLT4gcmVnaXN0cmF0aW9uUmVwb3NpdG9yeSAiUmVhZHMgYW5kIHdyaXRlcyBhbmltYWxzIHZpYSINCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25TZXJ2aWNlIC0+IHJlZ2lzdHJhdGlvbk91dGJveCAiV3JpdGVzIHRoZSBldmVudCBpbiB0aGUgc2FtZSB0cmFuc2FjdGlvbiB2aWEiDQogICAgICAgICAgICAgICAgcmVnaXN0cmF0aW9uUmVwb3NpdG9yeSAtPiByZWdpc3RyYXRpb25FbnRpdHkgIk1hcHMgcm93cyB0byINCiAgICAgICAgICAgICAgICByZWdpc3RyYXRpb25QdWJsaXNoZXIgLT4gcmVnaXN0cmF0aW9uT3V0Ym94ICJSZWFkcyBwZW5kaW5nIGV2ZW50cyBmcm9tIg0KICAgICAgICAgICAgICAgIHJlZ2lzdHJhdGlvblB1Ymxpc2hlciAtPiByZWdpc3RyYXRpb25DbGllbnQgIlNlbmRzIGVhY2ggZXZlbnQgdGhyb3VnaCINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgc3RhdGlvbjIgPSBjb250YWluZXIgIlN0YXRpb24gMiAtIEN1dHRpbmciIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiQ3V0cyBhbmltYWxzIGludG8gcGFydHMsIHdlaWdocyBlYWNoIHBhcnQgYW5kIHBsYWNlcyBpdCBpbiBhIHRyYXkgdGhhdCBob2xkcyBvbmx5IG9uZSB0eXBlIG9mIHBhcnQgYW5kIGhhcyBhIG1heGltdW0gd2VpZ2h0LiBSdW5zIG9uIHBvcnQgODA4Mi4iDQogICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmF2YSAyMSwgU3ByaW5nIEJvb3QsIFJFU1QiDQoNCiAgICAgICAgICAgICAgICBjdXR0aW5nQXBpID0gY29tcG9uZW50ICJQYXJ0IGFuZCBUcmF5IFJFU1QgQVBJIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJIYW5kbGVzIFBPU1QgL2FuaW1hbC1wYXJ0cywgUE9TVCAvdHJheXMgYW5kIFBVVCAvdHJheXMve3RyYXlJZH0vYW5pbWFsLXBhcnRzL3twYXJ0SWR9LCBwbHVzIGxvb2t1cHMgb2YgYSBzaW5nbGUgcGFydCBvciB0cmF5IGFuZCBvZiBhbGwgb2YgdGhlbS4gVGhlIHBsYWNlbWVudCBpcyBhIFBVVCBiZWNhdXNlIHRoZSBzdGF0aW9uIHJlc2VuZHMgYWZ0ZXIgYSBmYWlsdXJlIGFuZCB0aGUgc2FtZSBwbGFjZW1lbnQgbXVzdCBub3QgY291bnQgdHdpY2UuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgTVZDLCBCZWFuIFZhbGlkYXRpb24iDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgY3V0dGluZ0V4Y2VwdGlvbkhhbmRsZXIgPSBjb21wb25lbnQgIlJFU1QgRXhjZXB0aW9uIEhhbmRsZXIiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlR1cm5zIGRvbWFpbiBleGNlcHRpb25zIGludG8gSFRUUCBzdGF0dXMgY29kZXM6IDQwNCBmb3IgYW4gdW5rbm93biBwYXJ0IG9yIHRyYXksIDQwOSBmb3IgYSBkdXBsaWNhdGUgaWQgYW5kIGZvciBldmVyeSBicm9rZW4gdHJheSBydWxlLCBhbmQgNDAwIGZvciBhbiBpbnZhbGlkIHJlcXVlc3QgYm9keS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAUmVzdENvbnRyb2xsZXJBZHZpY2UiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgY3V0dGluZ1NlcnZpY2UgPSBjb21wb25lbnQgIkN1dHRpbmcgU2VydmljZSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUmVnaXN0ZXJzIHBhcnRzLCBjcmVhdGVzIHRyYXlzIGFuZCBwbGFjZXMgcGFydHMgaW4gdHJheXMuIFdyaXRlcyB0aGUgcGFydCBvciB0cmF5IGFuZCB0aGUgb3V0Ym94IGV2ZW50IGluIG9uZSB0cmFuc2FjdGlvbi4gRGVsZWdhdGVzIHRoZSB0cmF5IHJ1bGVzIHRvIHRoZSBlbnRpdHkgcmF0aGVyIHRoYW4gY2hlY2tpbmcgdGhlbSBpdHNlbGYuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgQFNlcnZpY2UiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgY3V0dGluZ1JlcG9zaXRvcmllcyA9IGNvbXBvbmVudCAiUmVwb3NpdG9yaWVzIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJBbmltYWxQYXJ0UmVwb3NpdG9yeSBhbmQgVHJheVJlcG9zaXRvcnksIGluY2x1ZGluZyBhIGRlcml2ZWQgcXVlcnkgZm9yIHRyYXlzIGJ5IHBhcnQgdHlwZS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBEYXRhIEpQQSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBjdXR0aW5nRW50aXRpZXMgPSBjb21wb25lbnQgIlBhcnQgYW5kIFRyYXkgRW50aXRpZXMiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlRoZSB0cmF5IG93bnMgaXRzIG93biBydWxlczogaXQgYWNjZXB0cyBvbmx5IHBhcnRzIG9mIGl0cyBvd24gdHlwZSwgaXQgcmVmdXNlcyBhIHBhcnQgdGhhdCB3b3VsZCB0YWtlIGl0IHBhc3QgaXRzIG1heGltdW0gd2VpZ2h0LCBwbGFjaW5nIHRoZSBzYW1lIHBhcnQgdHdpY2UgY2hhbmdlcyBub3RoaW5nLCBhbmQgYSBwYXJ0IGFscmVhZHkgaW4gYW5vdGhlciB0cmF5IGNhbm5vdCBiZSBtb3ZlZC4gVGhlIHNlcnZpY2UgdXNlcyBhZGRQYXJ0IHRvIGVuZm9yY2UgdGhlc2UgcnVsZXMuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYWthcnRhIFBlcnNpc3RlbmNlIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIGN1dHRpbmdPdXRib3ggPSBjb21wb25lbnQgIk91dGJveCIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUGVuZGluZyBldmVudHMgZm9yIHJlZ2lzdGVyZWQgcGFydHMsIGNyZWF0ZWQgdHJheXMgYW5kIHBsYWNlbWVudHMsIHdyaXR0ZW4gaW4gdGhlIHNhbWUgdHJhbnNhY3Rpb24gYXMgdGhlIGRhdGEgdGhleSBkZXNjcmliZS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkpha2FydGEgUGVyc2lzdGVuY2UsIFNwcmluZyBEYXRhIEpQQSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBjdXR0aW5nUHVibGlzaGVyID0gY29tcG9uZW50ICJPdXRib3ggUHVibGlzaGVyIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJFdmVyeSBmaXZlIHNlY29uZHMgYnkgZGVmYXVsdCwgc2VuZHMgcGVuZGluZyBldmVudHMgb3JkZXJlZCBieSBvY2N1cnJlZEF0LiBTdG9wcyBvbiB0ZW1wb3JhcnkgZmFpbHVyZTsgcmVqZWN0cyBiZWNvbWUgRkFJTEVELiBObyBnbG9iYWwgb3JkZXIgYWNyb3NzIHN0YXRpb25zLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEBTY2hlZHVsZWQiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgY3V0dGluZ0NsaWVudCA9IGNvbXBvbmVudCAiVHJhY2VhYmlsaXR5IENsaWVudCIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiUG9zdHMgcGFydHMgYW5kIHRyYXlzIHRvIHRoZSBiYWNrZW5kLCBjaG9vc2luZyB0aGUgZW5kcG9pbnQgZnJvbSB0aGUgZXZlbnQgdHlwZS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBSZXN0Q2xpZW50Ig0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIGN1dHRpbmdBcGkgLT4gY3V0dGluZ1NlcnZpY2UgIkNhbGxzIg0KICAgICAgICAgICAgICAgIGN1dHRpbmdFeGNlcHRpb25IYW5kbGVyIC0+IGN1dHRpbmdBcGkgIkNvbnZlcnRzIGV4Y2VwdGlvbnMgdGhyb3duIGJ5Ig0KICAgICAgICAgICAgICAgIGN1dHRpbmdTZXJ2aWNlIC0+IGN1dHRpbmdSZXBvc2l0b3JpZXMgIlJlYWRzIGFuZCB3cml0ZXMgcGFydHMgYW5kIHRyYXlzIHZpYSINCiAgICAgICAgICAgICAgICBjdXR0aW5nU2VydmljZSAtPiBjdXR0aW5nT3V0Ym94ICJXcml0ZXMgdGhlIGV2ZW50IGluIHRoZSBzYW1lIHRyYW5zYWN0aW9uIHZpYSINCiAgICAgICAgICAgICAgICBjdXR0aW5nUmVwb3NpdG9yaWVzIC0+IGN1dHRpbmdFbnRpdGllcyAiTWFwcyByb3dzIHRvIg0KICAgICAgICAgICAgICAgIGN1dHRpbmdTZXJ2aWNlIC0+IGN1dHRpbmdFbnRpdGllcyAiQXNrcyB0aGUgdHJheSB0byBhY2NlcHQgYSBwYXJ0LCBhbmQgbGV0cyBpdCByZWZ1c2UiDQogICAgICAgICAgICAgICAgY3V0dGluZ1B1Ymxpc2hlciAtPiBjdXR0aW5nT3V0Ym94ICJSZWFkcyBwZW5kaW5nIGV2ZW50cyBmcm9tIg0KICAgICAgICAgICAgICAgIGN1dHRpbmdQdWJsaXNoZXIgLT4gY3V0dGluZ0NsaWVudCAiU2VuZHMgZWFjaCBldmVudCB0aHJvdWdoIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBzdGF0aW9uMyA9IGNvbnRhaW5lciAiU3RhdGlvbiAzIC0gUGFja2luZyIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJQYWNrcyBwcm9kdWN0cyBmcm9tIG9uZSBvciBtb3JlIHRyYXlzIGFuZCByZWdpc3RlcnMgd2hpY2ggdHJheXMgZWFjaCBwcm9kdWN0IHdhcyBwYWNrZWQgZnJvbS4gUnVucyBvbiBwb3J0IDgwODMuIg0KICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkphdmEgMjEsIFNwcmluZyBCb290LCBSRVNUIg0KDQogICAgICAgICAgICAgICAgcGFja2luZ0FwaSA9IGNvbXBvbmVudCAiUHJvZHVjdCBSRVNUIEFQSSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiSGFuZGxlcyBQT1NUIC9wcm9kdWN0cyBhbmQgbG9va3VwcyBvZiBhIHNpbmdsZSBwcm9kdWN0IGFuZCBvZiBhbGwgcHJvZHVjdHMuIFJlamVjdHMgYSBwcm9kdWN0IHRoYXQgd2FzIHBhY2tlZCBmcm9tIG5vIHRyYXlzIGF0IGFsbC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBNVkMsIEJlYW4gVmFsaWRhdGlvbiINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBwYWNraW5nRXhjZXB0aW9uSGFuZGxlciA9IGNvbXBvbmVudCAiUkVTVCBFeGNlcHRpb24gSGFuZGxlciIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiVHVybnMgZG9tYWluIGV4Y2VwdGlvbnMgaW50byBIVFRQIHN0YXR1cyBjb2RlczogNDA0IGZvciBhbiB1bmtub3duIHByb2R1Y3QsIDQwOSBmb3IgYSBkdXBsaWNhdGUgcHJvZHVjdCBpZCwgYW5kIDQwMCBmb3IgYW4gaW52YWxpZCByZXF1ZXN0IGJvZHkuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgQFJlc3RDb250cm9sbGVyQWR2aWNlIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBhY2tpbmdTZXJ2aWNlID0gY29tcG9uZW50ICJQYWNraW5nIFNlcnZpY2UiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBhY2tpbmcgcnVsZXMuIFJlamVjdHMgYSBwcm9kdWN0IGlkIHRoYXQgaXMgYWxyZWFkeSBpbiB1c2UsIGFuZCBkZWZhdWx0cyB0aGUgcGFja2luZyB0aW1lIHdoZW4gdGhlIGNhbGxlciBsZWF2ZXMgaXQgb3V0LiBXcml0ZXMgdGhlIHByb2R1Y3QgYW5kIHRoZSBvdXRib3ggZXZlbnQgaW4gb25lIHRyYW5zYWN0aW9uLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEBTZXJ2aWNlIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBhY2tpbmdSZXBvc2l0b3J5ID0gY29tcG9uZW50ICJQcm9kdWN0IFJlcG9zaXRvcnkiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlJlYWRzIGFuZCB3cml0ZXMgcGFja2VkIHByb2R1Y3RzLiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIERhdGEgSlBBIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBhY2tpbmdFbnRpdHkgPSBjb21wb25lbnQgIlByb2R1Y3QgRW50aXR5IiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJBIHBhY2tlZCBwcm9kdWN0IHdpdGggdGhlIHRyYXkgaWRzIGl0IHdhcyBwYWNrZWQgZnJvbSwgc3RvcmVkIGFzIHBsYWluIHZhbHVlcy4gVGhlIHN0YXRpb24gZGVsaWJlcmF0ZWx5IGhvbGRzIG5vIHJlZmVyZW5jZSB0byBTdGF0aW9uIDIncyB0cmF5IG9iamVjdHMsIHNvIHRoZSB0d28gY2FuIHJ1biBhbmQgZmFpbCBpbmRlcGVuZGVudGx5LiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiSmFrYXJ0YSBQZXJzaXN0ZW5jZSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBwYWNraW5nT3V0Ym94ID0gY29tcG9uZW50ICJPdXRib3giIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBlbmRpbmcgZXZlbnRzIGZvciBwYWNrZWQgcHJvZHVjdHMsIHdyaXR0ZW4gaW4gdGhlIHNhbWUgdHJhbnNhY3Rpb24gYXMgdGhlIHByb2R1Y3QuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYWthcnRhIFBlcnNpc3RlbmNlLCBTcHJpbmcgRGF0YSBKUEEiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgcGFja2luZ1B1Ymxpc2hlciA9IGNvbXBvbmVudCAiT3V0Ym94IFB1Ymxpc2hlciIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiRXZlcnkgZml2ZSBzZWNvbmRzIGJ5IGRlZmF1bHQsIHNlbmRzIHBlbmRpbmcgZXZlbnRzIG9yZGVyZWQgYnkgb2NjdXJyZWRBdC4gU3RvcHMgb24gdGVtcG9yYXJ5IGZhaWx1cmU7IHJlamVjdHMgYmVjb21lIEZBSUxFRC4gTm8gZ2xvYmFsIG9yZGVyIGFjcm9zcyBzdGF0aW9ucy4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAU2NoZWR1bGVkIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBhY2tpbmdDbGllbnQgPSBjb21wb25lbnQgIlRyYWNlYWJpbGl0eSBDbGllbnQiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlBvc3RzIHBhY2tlZCBwcm9kdWN0cyB0byB0aGUgYmFja2VuZC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBSZXN0Q2xpZW50Ig0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBhY2tpbmdBcGkgLT4gcGFja2luZ1NlcnZpY2UgIkNhbGxzIg0KICAgICAgICAgICAgICAgIHBhY2tpbmdFeGNlcHRpb25IYW5kbGVyIC0+IHBhY2tpbmdBcGkgIkNvbnZlcnRzIGV4Y2VwdGlvbnMgdGhyb3duIGJ5Ig0KICAgICAgICAgICAgICAgIHBhY2tpbmdTZXJ2aWNlIC0+IHBhY2tpbmdSZXBvc2l0b3J5ICJSZWFkcyBhbmQgd3JpdGVzIHByb2R1Y3RzIHZpYSINCiAgICAgICAgICAgICAgICBwYWNraW5nU2VydmljZSAtPiBwYWNraW5nT3V0Ym94ICJXcml0ZXMgdGhlIGV2ZW50IGluIHRoZSBzYW1lIHRyYW5zYWN0aW9uIHZpYSINCiAgICAgICAgICAgICAgICBwYWNraW5nUmVwb3NpdG9yeSAtPiBwYWNraW5nRW50aXR5ICJNYXBzIHJvd3MgdG8iDQogICAgICAgICAgICAgICAgcGFja2luZ1B1Ymxpc2hlciAtPiBwYWNraW5nT3V0Ym94ICJSZWFkcyBwZW5kaW5nIGV2ZW50cyBmcm9tIg0KICAgICAgICAgICAgICAgIHBhY2tpbmdQdWJsaXNoZXIgLT4gcGFja2luZ0NsaWVudCAiU2VuZHMgZWFjaCBldmVudCB0aHJvdWdoIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBzdG9yZTEgPSBjb250YWluZXIgIlJlZ2lzdHJhdGlvbiBEYXRhYmFzZSIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJPd25zIHRoZSByZWdpc3RlcmVkIGFuaW1hbHMgYW5kIFN0YXRpb24gMSdzIG91dGJveC4gVGhlIHN0YXRpb24gaGFzIGl0cyBvd24gc3RvcmUsIHNvIGEgcmVnaXN0cmF0aW9uIGNhbiBiZSBhY2NlcHRlZCB3aXRob3V0IGFueSBvdGhlciBwYXJ0IG9mIHRoZSBzeXN0ZW0gYmVpbmcgYXZhaWxhYmxlLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJMb2NhbCBwZXJzaXN0ZW50IEgyIGRhdGFiYXNlIg0KICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBzdG9yZTIgPSBjb250YWluZXIgIkN1dHRpbmcgRGF0YWJhc2UiIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiT3ducyB0aGUgcGFydHMgYW5kIHRyYXlzIGFuZCBTdGF0aW9uIDIncyBvdXRib3guIExldHMgdGhlIHN0YXRpb24ga2VlcCBjdXR0aW5nIHdoaWxlIHRoZSBuZXR3b3JrIG9yIHRoZSBiYWNrZW5kIGlzIHVuYXZhaWxhYmxlLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJMb2NhbCBwZXJzaXN0ZW50IEgyIGRhdGFiYXNlIg0KICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBzdG9yZTMgPSBjb250YWluZXIgIlBhY2tpbmcgRGF0YWJhc2UiIHsNCiAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiT3ducyB0aGUgcGFja2VkIHByb2R1Y3RzIGFuZCBTdGF0aW9uIDMncyBvdXRib3guIExldHMgdGhlIHN0YXRpb24ga2VlcCBwYWNraW5nIHdoaWxlIHRoZSBuZXR3b3JrIG9yIHRoZSBiYWNrZW5kIGlzIHVuYXZhaWxhYmxlLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJMb2NhbCBwZXJzaXN0ZW50IEgyIGRhdGFiYXNlIg0KICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBjbGllbnQgPSBjb250YWluZXIgIkNvbnNvbGUgQ2xpZW50IiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkNvbW1hbmQgbGluZSBjbGllbnQgdXNlZCB0byBjYWxsIHRoZSB0cmFjZWFiaWxpdHkgc2VydmljZS4gVXNlcyB0aGUgY2xpZW50IHN0dWIgZ2VuZXJhdGVkIGZyb20gdHJhY2VhYmlsaXR5LnByb3RvLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIDIxLCBnUlBDLCBnZW5lcmF0ZWQgY2xpZW50IHN0dWIiDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIHRyYWNlYWJpbGl0eVNlcnZlciA9IGNvbnRhaW5lciAiVHJhY2VhYmlsaXR5IFNlcnZlciIgew0KICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJSZWNlaXZlcyB3aGF0IHRoZSBzdGF0aW9ucyByZXBvcnQsIHN0b3JlcyB0aGUgd2hvbGUgY2hhaW4sIGFuZCBhbnN3ZXJzIHRyYWNlYWJpbGl0eSBsb29rdXBzIGluIGJvdGggZGlyZWN0aW9ucy4gUkVTVCBvbiBwb3J0IDgwODAsIGdSUEMgb24gcG9ydCA5MDkwLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIDIxLCBTcHJpbmcgQm9vdCwgUkVTVCBhbmQgZ1JQQyINCg0KICAgICAgICAgICAgICAgIGluZ2VzdGlvbkFwaSA9IGNvbXBvbmVudCAiSW5nZXN0aW9uIFJFU1QgQVBJIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJSZWNlaXZlcyBhbmltYWxzLCBwYXJ0cywgdHJheXMgYW5kIHByb2R1Y3RzIGZyb20gdGhlIHN0YXRpb25zIG9uIFBPU1QgL2FuaW1hbHMsIC9hbmltYWwtcGFydHMsIC90cmF5cyBhbmQgL3Byb2R1Y3RzLiBCZWNhdXNlIHRoZSBzdGF0aW9ucyBhc3NpZ24gdGhlIGlkcywgdGhlIHNhbWUgbWVzc2FnZSB0d2ljZSBnaXZlcyB0aGUgc2FtZSByZXN1bHQuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJTcHJpbmcgTVZDLCBCZWFuIFZhbGlkYXRpb24iDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgYmFja2VuZEV4Y2VwdGlvbkhhbmRsZXIgPSBjb21wb25lbnQgIkJhY2tlbmQgRXhjZXB0aW9uIEhhbmRsZXIiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIk1hcHMgdmFsaWRhdGlvbiBlcnJvcnMgdG8gNDAwLiBBIE5vU3VjaEVsZW1lbnRFeGNlcHRpb24gbWFwcyB0byA1MDMsIGJ1dCBjdXJyZW50IGluZ2VzdGlvbiBjcmVhdGVzIHBsYWNlaG9sZGVycyBmb3IgdW5rbm93biBhbmltYWxzIGFuZCB0cmF5cy4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBAUmVzdENvbnRyb2xsZXJBZHZpY2UiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgaW5nZXN0aW9uU2VydmljZSA9IGNvbXBvbmVudCAiSW5nZXN0aW9uIFNlcnZpY2UiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlN0b3JlcyB3aGF0IGl0IGlzIHRvbGQsIGFzIGFuIHVwc2VydC4gQ3JlYXRlcyBwbGFjZWhvbGRlciBhbmltYWxzIGFuZCB0cmF5cyB3aGVuIHJlZmVyZW5jZXMgYXJyaXZlIGJlZm9yZSB0aGVpciBkZXRhaWxzLiBMYXRlciBtZXNzYWdlcyBmaWxsIHRoZW0gaW4uIFRyYXkgd2VpZ2h0IGlzIGNvcGllZCBmcm9tIHRyYXkgbWVzc2FnZXM7IHBhcnQgcGxhY2VtZW50IGN1cnJlbnRseSBkb2VzIG5vdCByZWZyZXNoIGl0LiINCiAgICAgICAgICAgICAgICAgICAgdGVjaG5vbG9neSAiU3ByaW5nIEBTZXJ2aWNlIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIGdycGNTZXJ2ZXJSdW5uZXIgPSBjb21wb25lbnQgImdSUEMgU2VydmVyIFJ1bm5lciIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiU3RhcnRzIHRoZSBnUlBDIHNlcnZlciBvbiB0aGUgY29uZmlndXJlZCBwb3J0IGFuZCByZWdpc3RlcnMgYm90aCB0aGUgc2VydmljZSBhbmQgcmVmbGVjdGlvbiwgc28gUG9zdG1hbiBhbmQgQmxvb21SUEMgY2FuIGRpc2NvdmVyIHRoZSBjb250cmFjdC4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBDb21tYW5kTGluZVJ1bm5lciwgZ1JQQyINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBncnBjQXBpID0gY29tcG9uZW50ICJnUlBDIEFQSSIgew0KICAgICAgICAgICAgICAgICAgICBkZXNjcmlwdGlvbiAiSW1wbGVtZW50cyB0aGUgc2VydmVyIHN0dWIgZ2VuZXJhdGVkIGZyb20gdHJhY2VhYmlsaXR5LnByb3RvLiBWYWxpZGF0ZXMgaW5wdXQgYW5kIG1hcHMgZG9tYWluIGVycm9ycyB0byBzdGF0dXMgY29kZXM6IE5PVF9GT1VORCwgSU5WQUxJRF9BUkdVTUVOVCBhbmQgSU5URVJOQUwuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJnUlBDLCBQcm90b2NvbCBCdWZmZXJzLCBnZW5lcmF0ZWQgc2VydmVyIHN0dWIiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgdHJhY2VhYmlsaXR5U2VydmljZSA9IGNvbXBvbmVudCAiVHJhY2VhYmlsaXR5IFNlcnZpY2UiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlRyYWNlcyBwcm9kdWN0cyB0byBhbmltYWxzIGFuZCBhbmltYWxzIHRvIHByb2R1Y3RzIHRocm91Z2ggdHJheXMuIFN0b3JlcyBhIGNhc2UgY291bnRlciBhbmQgdGhlIGxhdGVzdCBjYXNlIGluIG1lbW9yeS4gVXNlcyBTcHJpbmcgRGF0YSByZXBvc2l0b3JpZXMgYW5kIHJlYWQtb25seSB0cmFuc2FjdGlvbnM7IGluZGVwZW5kZW50IG9mIGdSUEMuIg0KICAgICAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJKYXZhIg0KICAgICAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgICAgIHBlcnNpc3RlbmNlID0gY29tcG9uZW50ICJSZXBvc2l0b3JpZXMiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkFuaW1hbFJlcG9zaXRvcnksIEFuaW1hbFBhcnRSZXBvc2l0b3J5LCBUcmF5UmVwb3NpdG9yeSBhbmQgUHJvZHVjdFJlcG9zaXRvcnksIGFsbCBuYXJyb3dlZCB0byBzYXZlLCBmaW5kQnlJZCBhbmQgZmluZEFsbCBieSBhIHNoYXJlZCBiYXNlIGludGVyZmFjZS4gRGVyaXZlZCBxdWVyaWVzIHB1c2ggdGhlIHRyYWNpbmcgZG93biBpbnRvIHRoZSBkYXRhYmFzZS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBEYXRhIEpQQSINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBlbnRpdGllcyA9IGNvbXBvbmVudCAiRG9tYWluIEVudGl0aWVzIiB7DQogICAgICAgICAgICAgICAgICAgIGRlc2NyaXB0aW9uICJBbmltYWwsIEFuaW1hbFBhcnQsIFRyYXkgYW5kIFByb2R1Y3QsIGluY2x1ZGluZyB0aGUgcmVmZXJlbmNlcyB0aGF0IG1ha2UgdHJhY2luZyBwb3NzaWJsZS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIkpha2FydGEgUGVyc2lzdGVuY2UiDQogICAgICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICAgICAgZGVtb0RhdGFTZWVkZXIgPSBjb21wb25lbnQgIkRlbW8gRGF0YSBTZWVkZXIiIHsNCiAgICAgICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIkNyZWF0ZXMgZGVtbyBkYXRhIG9uIHN0YXJ0dXAuIERpc2FibGVkIGJ5IGRlZmF1bHQgdmlhIGFwcC5zZWVkLWRlbW8tZGF0YS4iDQogICAgICAgICAgICAgICAgICAgIHRlY2hub2xvZ3kgIlNwcmluZyBDb21tYW5kTGluZVJ1bm5lciINCiAgICAgICAgICAgICAgICB9DQoNCiAgICAgICAgICAgICAgICBpbmdlc3Rpb25BcGkgLT4gaW5nZXN0aW9uU2VydmljZSAiQ2FsbHMiDQogICAgICAgICAgICAgICAgYmFja2VuZEV4Y2VwdGlvbkhhbmRsZXIgLT4gaW5nZXN0aW9uQXBpICJDb252ZXJ0cyBleGNlcHRpb25zIHRocm93biBieSINCiAgICAgICAgICAgICAgICBpbmdlc3Rpb25TZXJ2aWNlIC0+IHBlcnNpc3RlbmNlICJTdG9yZXMgcmVwb3J0ZWQgZGF0YSB2aWEiDQogICAgICAgICAgICAgICAgZ3JwY1NlcnZlclJ1bm5lciAtPiBncnBjQXBpICJSZWdpc3RlcnMgYXMgYSBnUlBDIHNlcnZpY2UgYW5kIHN0YXJ0cyINCiAgICAgICAgICAgICAgICBncnBjQXBpIC0+IHRyYWNlYWJpbGl0eVNlcnZpY2UgIkNhbGxzIg0KICAgICAgICAgICAgICAgIHRyYWNlYWJpbGl0eVNlcnZpY2UgLT4gcGVyc2lzdGVuY2UgIlJlYWRzIHRyYWNlYWJpbGl0eSBkYXRhIHZpYSINCiAgICAgICAgICAgICAgICBkZW1vRGF0YVNlZWRlciAtPiBwZXJzaXN0ZW5jZSAiV3JpdGVzIGRlbW8gZGF0YSB2aWEiDQogICAgICAgICAgICAgICAgcGVyc2lzdGVuY2UgLT4gZW50aXRpZXMgIk1hcHMgcm93cyB0byINCiAgICAgICAgICAgIH0NCg0KICAgICAgICAgICAgZGF0YWJhc2UgPSBjb250YWluZXIgIlNsYXVnaHRlcmhvdXNlIERhdGFiYXNlIiB7DQogICAgICAgICAgICAgICAgZGVzY3JpcHRpb24gIlN0b3JlcyBhbmltYWxzLCBhbmltYWwgcGFydHMsIHRyYXlzIGFuZCBwcm9kdWN0czogdGhlIHdob2xlIGNoYWluIHRoZSBzdGF0aW9ucyBoYXZlIHJlcG9ydGVkLiINCiAgICAgICAgICAgICAgICB0ZWNobm9sb2d5ICJQb3N0Z3JlU1FMIg0KICAgICAgICAgICAgICAgIHRhZ3MgIkRhdGFiYXNlIg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICByZWdpc3RyYXRpb25SZXBvc2l0b3J5IC0+IHN0b3JlMSAiUmVhZHMgYW5kIHdyaXRlcyBhbmltYWwgcmVnaXN0cmF0aW9ucyIgIkpQQSAvIEpEQkMiDQogICAgICAgICAgICByZWdpc3RyYXRpb25PdXRib3ggLT4gc3RvcmUxICJTdG9yZXMgcGVuZGluZyBldmVudHMgaW4iICJKUEEgLyBKREJDIg0KDQogICAgICAgICAgICBjdXR0aW5nUmVwb3NpdG9yaWVzIC0+IHN0b3JlMiAiUmVhZHMgYW5kIHdyaXRlcyBwYXJ0cyBhbmQgdHJheXMiICJKUEEgLyBKREJDIg0KICAgICAgICAgICAgY3V0dGluZ091dGJveCAtPiBzdG9yZTIgIlN0b3JlcyBwZW5kaW5nIGV2ZW50cyBpbiIgIkpQQSAvIEpEQkMiDQoNCiAgICAgICAgICAgIHBhY2tpbmdSZXBvc2l0b3J5IC0+IHN0b3JlMyAiUmVhZHMgYW5kIHdyaXRlcyBwYWNrZWQgcHJvZHVjdHMiICJKUEEgLyBKREJDIg0KICAgICAgICAgICAgcGFja2luZ091dGJveCAtPiBzdG9yZTMgIlN0b3JlcyBwZW5kaW5nIGV2ZW50cyBpbiIgIkpQQSAvIEpEQkMiDQoNCiAgICAgICAgICAgIHJlZ2lzdHJhdGlvbkNsaWVudCAtPiBpbmdlc3Rpb25BcGkgIkRlbGl2ZXJzIHF1ZXVlZCBhbmltYWwgZXZlbnRzIHVzaW5nIHN5bmNocm9ub3VzIEhUVFAiICJSRVNUIC8gSlNPTiINCiAgICAgICAgICAgIGN1dHRpbmdDbGllbnQgLT4gaW5nZXN0aW9uQXBpICJEZWxpdmVycyBxdWV1ZWQgcGFydCBhbmQgdHJheSBldmVudHMgdXNpbmcgc3luY2hyb25vdXMgSFRUUCIgIlJFU1QgLyBKU09OIg0KICAgICAgICAgICAgcGFja2luZ0NsaWVudCAtPiBpbmdlc3Rpb25BcGkgIkRlbGl2ZXJzIHF1ZXVlZCBwcm9kdWN0IGV2ZW50cyB1c2luZyBzeW5jaHJvbm91cyBIVFRQIiAiUkVTVCAvIEpTT04iDQoNCiAgICAgICAgICAgIHBlcnNpc3RlbmNlIC0+IGRhdGFiYXNlICJSZWFkcyBhbmQgd3JpdGVzIGRhdGEiICJKUEEgLyBKREJDIg0KICAgICAgICB9DQoNCiAgICAgICAgc3RhdGlvbjFPcGVyYXRvciAtPiBzbGF1Z2h0ZXJob3VzZSAiUmVnaXN0ZXJzIGFuZCB3ZWlnaHMgYXJyaXZpbmcgYW5pbWFscyB1c2luZyINCiAgICAgICAgcmVjYWxsU3lzdGVtIC0+IHNsYXVnaHRlcmhvdXNlICJEaXJlY3Q6IHJlcXVlc3RzIGFmZmVjdGVkIHByb2R1Y3RzIGZvciBhbiBhbmltYWwiDQoNCiAgICAgICAgc3RhdGlvbjFPcGVyYXRvciAtPiBhbmltYWxBcGkgIlJlZ2lzdGVycyBhbmQgd2VpZ2hzIGFycml2aW5nIGFuaW1hbHMgdXNpbmciICJSRVNUIC8gSlNPTiINCiAgICAgICAgc3RhdGlvbjJPcGVyYXRvciAtPiBjdXR0aW5nQXBpICJSZWdpc3RlcnMgZWFjaCBwYXJ0IHdpdGggaXRzIHdlaWdodCBhbmQgaXRzIGFuaW1hbCwgYW5kIHBsYWNlcyBpdCBpbiBhIHRyYXksIHVzaW5nIiAiUkVTVCAvIEpTT04iDQogICAgICAgIHN0YXRpb24zT3BlcmF0b3IgLT4gcGFja2luZ0FwaSAiUmVnaXN0ZXJzIHBhY2tlZCBwcm9kdWN0cyBhbmQgdGhlIHRyYXlzIHRoZXkgd2VyZSBwYWNrZWQgZnJvbSwgdXNpbmciICJSRVNUIC8gSlNPTiINCg0KICAgICAgICBxdWFsaXR5T2ZmaWNlciAtPiByZWNhbGxTeXN0ZW0gIlJlcXVlc3RzIGEgcmVjYWxsIGxvb2t1cCB1c2luZyINCg0KICAgICAgICBzdXBwbGllciAtPiBzdGF0aW9uMSAiUGh5c2ljYWwgZGVsaXZlcnkgb2YgYW5pbWFscyINCiAgICAgICAgc3RhdGlvbjMgLT4gbG9naXN0aWNzICJQaHlzaWNhbCBoYW5kb3ZlciBvZiBwYWNrZWQgcHJvZHVjdHMiDQogICAgICAgIGxvZ2lzdGljcyAtPiBjdXN0b21lciAiUGh5c2ljYWwgZGlzdHJpYnV0aW9uIG9mIHByb2R1Y3RzIg0KDQogICAgICAgIHJlY2FsbFN5c3RlbSAtPiBncnBjQXBpICJEaXJlY3Q6IHJlcXVlc3RzIGFmZmVjdGVkIHByb2R1Y3RzIGZvciBhbiBhbmltYWwiICJnUlBDIC8gUHJvdG9jb2wgQnVmZmVycyINCiAgICAgICAgY2xpZW50IC0+IGdycGNBcGkgIlJlcXVlc3RzIHRyYWNlYWJpbGl0eSBpbmZvcm1hdGlvbiIgImdSUEMgLyBQcm90b2NvbCBCdWZmZXJzIg0KICAgIH0NCg0KICAgIHZpZXdzIHsNCg0KICAgICAgICBzeXN0ZW1Db250ZXh0IHNsYXVnaHRlcmhvdXNlICJDMSIgIkMxIC0gU3lzdGVtIENvbnRleHQgVmlldy4gRm9jdXMgaXMgb24gdGhlIHR5cGVzIG9mIGNvbW11bmljYXRpb24gd2l0aCB0aGUgb3V0c2lkZSB3b3JsZCByYXRoZXIgdGhhbiBvbiB0ZWNobm9sb2d5LiIgew0KICAgICAgICAgICAgaW5jbHVkZSAqDQogICAgICAgICAgICBpbmNsdWRlIHF1YWxpdHlPZmZpY2VyIGN1c3RvbWVyDQogICAgICAgICAgICBhdXRvbGF5b3V0IHRiDQogICAgICAgIH0NCg0KICAgICAgICBjb250YWluZXIgc2xhdWdodGVyaG91c2UgIkMyIiAiQzIgLSBDb250YWluZXIgVmlldy4gU2hvd3MgdGhlIHJ1bm5pbmcgcGFydHMsIHRoZSBmb3VyIGluZGVwZW5kZW50IGRhdGFiYXNlcywgYW5kIGhvdyBlYWNoIHN0YXRpb24ga2VlcHMgd29ya2luZyB3aGVuIHRoZSBuZXR3b3JrIGlzIGRvd24uIiB7DQogICAgICAgICAgICBpbmNsdWRlICoNCiAgICAgICAgICAgIGluY2x1ZGUgcXVhbGl0eU9mZmljZXIgY3VzdG9tZXINCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGINCiAgICAgICAgfQ0KDQogICAgICAgIGNvbXBvbmVudCB0cmFjZWFiaWxpdHlTZXJ2ZXIgIkMzLVRyYWNlYWJpbGl0eSIgIkMzIC0gQ29tcG9uZW50IFZpZXcgb2YgdGhlIFRyYWNlYWJpbGl0eSBTZXJ2ZXIuIE1pcnJvcnMgdGhlIGFjdHVhbCBjb2RlIGluIHRoZSBzZXJ2ZXIgbW9kdWxlLiIgew0KICAgICAgICAgICAgaW5jbHVkZSAqDQogICAgICAgICAgICBhdXRvbGF5b3V0IHRiDQogICAgICAgIH0NCg0KICAgICAgICBjb21wb25lbnQgc3RhdGlvbjEgIkMzLVJlZ2lzdHJhdGlvbiIgIkMzIC0gQ29tcG9uZW50IFZpZXcgb2YgU3RhdGlvbiAxIFJlZ2lzdHJhdGlvbi4gTWlycm9ycyB0aGUgYWN0dWFsIGNvZGUgaW4gdGhlIHJlZ2lzdHJhdGlvbi1zZXJ2aWNlIG1vZHVsZS4iIHsNCiAgICAgICAgICAgIGluY2x1ZGUgKg0KICAgICAgICAgICAgYXV0b2xheW91dCB0Yg0KICAgICAgICB9DQoNCiAgICAgICAgY29tcG9uZW50IHN0YXRpb24yICJDMy1DdXR0aW5nIiAiQzMgLSBDb21wb25lbnQgVmlldyBvZiBTdGF0aW9uIDIgQ3V0dGluZy4gTWlycm9ycyB0aGUgYWN0dWFsIGNvZGUgaW4gdGhlIGN1dHRpbmctc2VydmljZSBtb2R1bGUuIiB7DQogICAgICAgICAgICBpbmNsdWRlICoNCiAgICAgICAgICAgIGF1dG9sYXlvdXQgdGINCiAgICAgICAgfQ0KDQogICAgICAgIGNvbXBvbmVudCBzdGF0aW9uMyAiQzMtUGFja2luZyIgIkMzIC0gQ29tcG9uZW50IFZpZXcgb2YgU3RhdGlvbiAzIFBhY2tpbmcuIE1pcnJvcnMgdGhlIGFjdHVhbCBjb2RlIGluIHRoZSBwYWNraW5nLXNlcnZpY2UgbW9kdWxlLiIgew0KICAgICAgICAgICAgaW5jbHVkZSAqDQogICAgICAgICAgICBhdXRvbGF5b3V0IHRiDQogICAgICAgIH0NCg0KICAgICAgICBzdHlsZXMgew0KICAgICAgICAgICAgZWxlbWVudCAiUGVyc29uIiB7DQogICAgICAgICAgICAgICAgYmFja2dyb3VuZCAjMDg0MjdiDQogICAgICAgICAgICAgICAgY29sb3IgI2ZmZmZmZg0KICAgICAgICAgICAgICAgIHNoYXBlIHBlcnNvbg0KICAgICAgICAgICAgfQ0KDQogICAgICAgICAgICBlbGVtZW50ICJTb2Z0d2FyZSBTeXN0ZW0iIHsNCiAgICAgICAgICAgICAgICBiYWNrZ3JvdW5kICMxMTY4YmQNCiAgICAgICAgICAgICAgICBjb2xvciAjZmZmZmZmDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkNvbnRhaW5lciIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzQzOGRkNQ0KICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYNCiAgICAgICAgICAgICAgICB3aWR0aCA1MjANCiAgICAgICAgICAgICAgICBoZWlnaHQgNDAwDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkNvbXBvbmVudCIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzg1YmJmMA0KICAgICAgICAgICAgICAgIGNvbG9yICMwMDAwMDANCiAgICAgICAgICAgICAgICB3aWR0aCA1MjANCiAgICAgICAgICAgICAgICBoZWlnaHQgNDQwDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkRhdGFiYXNlIiB7DQogICAgICAgICAgICAgICAgc2hhcGUgY3lsaW5kZXINCiAgICAgICAgICAgICAgICB3aWR0aCA1MjANCiAgICAgICAgICAgICAgICBoZWlnaHQgNDQwDQogICAgICAgICAgICB9DQoNCiAgICAgICAgICAgIGVsZW1lbnQgIkV4dGVybmFsIFN5c3RlbSIgew0KICAgICAgICAgICAgICAgIGJhY2tncm91bmQgIzhjOGM4Yw0KICAgICAgICAgICAgICAgIGNvbG9yICNmZmZmZmYNCiAgICAgICAgICAgIH0NCiAgICAgICAgfQ0KICAgIH0NCg0KICAgIGNvbmZpZ3VyYXRpb24gew0KICAgICAgICBzY29wZSBzb2Z0d2FyZXN5c3RlbQ0KICAgIH0NCn0=",
     "structurizr.inspection.info" : "0",
     "structurizr.inspection.ignore" : "0",
     "structurizr.inspection.warning" : "0"
@@ -557,42 +1044,66 @@
         "rankSeparation" : 100,
         "vertices" : true
       },
-      "containerId" : "26",
+      "containerId" : "63",
       "description" : "C3 - Component View of the Traceability Server. Mirrors the actual code in the server module.",
       "elements" : [ {
         "id" : "8",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "25",
+        "id" : "10",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "27",
+        "id" : "26",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "28",
+        "id" : "43",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "29",
+        "id" : "62",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "30",
+        "id" : "64",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "31",
+        "id" : "65",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "32",
+        "id" : "66",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "38",
+        "id" : "67",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "68",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "69",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "70",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "71",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "72",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "81",
         "x" : 0,
         "y" : 0
       } ],
@@ -601,21 +1112,33 @@
       "name" : "Component View: Slaughterhouse System - Traceability Server",
       "order" : 3,
       "relationships" : [ {
-        "id" : "33"
+        "id" : "101"
       }, {
-        "id" : "34"
+        "id" : "103"
       }, {
-        "id" : "35"
+        "id" : "121"
       }, {
-        "id" : "36"
+        "id" : "123"
       }, {
-        "id" : "37"
+        "id" : "73"
       }, {
-        "id" : "46"
+        "id" : "74"
       }, {
-        "id" : "62"
+        "id" : "75"
       }, {
-        "id" : "64"
+        "id" : "76"
+      }, {
+        "id" : "77"
+      }, {
+        "id" : "78"
+      }, {
+        "id" : "79"
+      }, {
+        "id" : "80"
+      }, {
+        "id" : "93"
+      }, {
+        "id" : "97"
       } ]
     }, {
       "automaticLayout" : {
@@ -652,7 +1175,23 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "22",
+        "id" : "16",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "17",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "18",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "59",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "63",
         "x" : 0,
         "y" : 0
       } ],
@@ -661,17 +1200,193 @@
       "name" : "Component View: Slaughterhouse System - Station 1 - Registration",
       "order" : 4,
       "relationships" : [ {
-        "id" : "16"
-      }, {
-        "id" : "17"
-      }, {
-        "id" : "18"
+        "id" : "107"
       }, {
         "id" : "19"
       }, {
+        "id" : "20"
+      }, {
+        "id" : "21"
+      }, {
+        "id" : "22"
+      }, {
+        "id" : "23"
+      }, {
+        "id" : "24"
+      }, {
+        "id" : "25"
+      }, {
+        "id" : "82"
+      }, {
+        "id" : "84"
+      }, {
+        "id" : "92"
+      } ]
+    }, {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "containerId" : "26",
+      "description" : "C3 - Component View of Station 2 Cutting. Mirrors the actual code in the cutting-service module.",
+      "elements" : [ {
+        "id" : "2",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "27",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "28",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "29",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "30",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "31",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "32",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "33",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "34",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "60",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "63",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "C3-Cutting",
+      "name" : "Component View: Slaughterhouse System - Station 2 - Cutting",
+      "order" : 5,
+      "relationships" : [ {
+        "id" : "109"
+      }, {
+        "id" : "35"
+      }, {
+        "id" : "36"
+      }, {
+        "id" : "37"
+      }, {
+        "id" : "38"
+      }, {
         "id" : "39"
       }, {
-        "id" : "50"
+        "id" : "40"
+      }, {
+        "id" : "41"
+      }, {
+        "id" : "42"
+      }, {
+        "id" : "85"
+      }, {
+        "id" : "87"
+      }, {
+        "id" : "96"
+      } ]
+    }, {
+      "automaticLayout" : {
+        "edgeSeparation" : 50,
+        "nodeSeparation" : 50,
+        "rankDirection" : "TopBottom",
+        "rankSeparation" : 100,
+        "vertices" : true
+      },
+      "containerId" : "43",
+      "description" : "C3 - Component View of Station 3 Packing. Mirrors the actual code in the packing-service module.",
+      "elements" : [ {
+        "id" : "3",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "44",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "45",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "46",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "47",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "48",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "49",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "50",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "51",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "61",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "63",
+        "x" : 0,
+        "y" : 0
+      } ],
+      "externalContainerBoundariesVisible" : false,
+      "key" : "C3-Packing",
+      "name" : "Component View: Slaughterhouse System - Station 3 - Packing",
+      "order" : 6,
+      "relationships" : [ {
+        "id" : "100"
+      }, {
+        "id" : "112"
+      }, {
+        "id" : "52"
+      }, {
+        "id" : "53"
+      }, {
+        "id" : "54"
+      }, {
+        "id" : "55"
+      }, {
+        "id" : "56"
+      }, {
+        "id" : "57"
+      }, {
+        "id" : "58"
+      }, {
+        "id" : "88"
+      }, {
+        "id" : "90"
       } ]
     } ],
     "configuration" : {
@@ -679,14 +1394,20 @@
         "elements" : [ {
           "background" : "#85bbf0",
           "color" : "#000000",
-          "tag" : "Component"
+          "height" : 440,
+          "tag" : "Component",
+          "width" : 520
         }, {
           "background" : "#438dd5",
           "color" : "#ffffff",
-          "tag" : "Container"
+          "height" : 400,
+          "tag" : "Container",
+          "width" : 520
         }, {
+          "height" : 440,
           "shape" : "Cylinder",
-          "tag" : "Database"
+          "tag" : "Database",
+          "width" : 520
         }, {
           "background" : "#8c8c8c",
           "color" : "#ffffff",
@@ -697,19 +1418,9 @@
           "shape" : "Person",
           "tag" : "Person"
         }, {
-          "background" : "#b3b3b3",
-          "border" : "Dashed",
-          "color" : "#000000",
-          "tag" : "Planned"
-        }, {
           "background" : "#1168bd",
           "color" : "#ffffff",
           "tag" : "Software System"
-        } ],
-        "relationships" : [ {
-          "color" : "#808080",
-          "dashed" : true,
-          "tag" : "Planned"
         } ]
       },
       "terminology" : { }
@@ -722,7 +1433,7 @@
         "rankSeparation" : 100,
         "vertices" : true
       },
-      "description" : "C2 - Container View. Shows the running parts and how each station keeps working when the network is down.",
+      "description" : "C2 - Container View. Shows the running parts, the four independent databases, and how each station keeps working when the network is down.",
       "elements" : [ {
         "id" : "1",
         "x" : 0,
@@ -760,35 +1471,35 @@
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "20",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "21",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "22",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "23",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "24",
-        "x" : 0,
-        "y" : 0
-      }, {
-        "id" : "25",
-        "x" : 0,
-        "y" : 0
-      }, {
         "id" : "26",
         "x" : 0,
         "y" : 0
       }, {
-        "id" : "38",
+        "id" : "43",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "59",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "60",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "61",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "62",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "63",
+        "x" : 0,
+        "y" : 0
+      }, {
+        "id" : "81",
         "x" : 0,
         "y" : 0
       } ],
@@ -797,37 +1508,37 @@
       "name" : "Container View: Slaughterhouse System",
       "order" : 2,
       "relationships" : [ {
-        "id" : "40"
+        "id" : "102"
       }, {
-        "id" : "41"
+        "id" : "104"
       }, {
-        "id" : "42"
+        "id" : "108"
       }, {
-        "id" : "43"
+        "id" : "110"
       }, {
-        "id" : "44"
+        "id" : "113"
       }, {
-        "id" : "45"
+        "id" : "115"
       }, {
-        "id" : "47"
+        "id" : "116"
       }, {
-        "id" : "51"
+        "id" : "118"
       }, {
-        "id" : "52"
+        "id" : "120"
       }, {
-        "id" : "54"
+        "id" : "122"
       }, {
-        "id" : "56"
+        "id" : "124"
       }, {
-        "id" : "57"
+        "id" : "83"
       }, {
-        "id" : "59"
+        "id" : "86"
       }, {
-        "id" : "61"
+        "id" : "89"
       }, {
-        "id" : "63"
+        "id" : "94"
       }, {
-        "id" : "65"
+        "id" : "98"
       } ],
       "softwareSystemId" : "9"
     } ],
@@ -882,21 +1593,21 @@
       "name" : "System Context View: Slaughterhouse System",
       "order" : 1,
       "relationships" : [ {
-        "id" : "48"
+        "id" : "105"
       }, {
-        "id" : "49"
+        "id" : "106"
       }, {
-        "id" : "53"
+        "id" : "111"
       }, {
-        "id" : "55"
+        "id" : "114"
       }, {
-        "id" : "56"
+        "id" : "115"
       }, {
-        "id" : "58"
+        "id" : "117"
       }, {
-        "id" : "60"
+        "id" : "119"
       }, {
-        "id" : "61"
+        "id" : "120"
       } ],
       "softwareSystemId" : "9"
     } ]

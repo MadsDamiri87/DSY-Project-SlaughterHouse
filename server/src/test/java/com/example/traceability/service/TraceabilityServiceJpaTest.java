@@ -68,10 +68,10 @@ class TraceabilityServiceJpaTest
     AnimalPart bellyFromPig1 = part("PART-3", "BELLY", 4.5, pig1);
     AnimalPart ribFromPig3 = part("PART-4", "RIB", 3.1, pig3);
 
-    loinTray.addPart(loinFromPig1);
-    loinTray.addPart(loinFromPig2);
-    bellyTray.addPart(bellyFromPig1);
-    ribTray.addPart(ribFromPig3);
+    loinFromPig1.setTray(loinTray);
+    loinFromPig2.setTray(loinTray);
+    bellyFromPig1.setTray(bellyTray);
+    ribFromPig3.setTray(ribTray);
 
     em.persist(loinTray);
     em.persist(bellyTray);
@@ -138,6 +138,97 @@ class TraceabilityServiceJpaTest
   void anUnknownAnimalIsRejected()
   {
     assertThatThrownBy(() -> service.getProductsForAnimal(99))
+        .isInstanceOf(NoSuchElementException.class);
+  }
+
+  /*
+   * Den fulde sporing af ét dyr: ikke bare hvilke produkter det endte i, men hvilke
+   * dele det blev skåret i, og hvilken bakke hver del havnede i. Det er den vej
+   * man går, når man står med et sygt dyr og skal finde ud af hvad der skal tilbage.
+   */
+  @Test
+  void anAnimalTraceShowsEveryPartAndTheTrayItEndedUpIn()
+  {
+    AnimalTrace trace = service.traceAnimal(1);
+
+    assertThat(trace.species()).isEqualTo("Pig");
+    assertThat(trace.parts()).extracting(TracedPart::partId)
+        .containsExactlyInAnyOrder("PART-1", "PART-3");
+
+    TracedPart belly = trace.parts().stream()
+        .filter(part -> part.partId().equals("PART-3")).findFirst().orElseThrow();
+
+    assertThat(belly.type()).isEqualTo("BELLY");
+    assertThat(belly.trayId()).isEqualTo("TRAY-BELLY-1");
+    assertThat(belly.productIds()).containsExactly("PROD-HALF-ANIMAL");
+  }
+
+  /*
+   * Lændebakken er pakket i begge produkter, så den del der ligger i den, kan
+   * være endt begge steder. Listen er en overvurdering og skal være det.
+   */
+  @Test
+  void aPartInATrayUsedByTwoProductsListsBoth()
+  {
+    TracedPart loin = service.traceAnimal(1).parts().stream()
+        .filter(part -> part.partId().equals("PART-1")).findFirst().orElseThrow();
+
+    assertThat(loin.productIds())
+        .containsExactlyInAnyOrder("PROD-LOIN-PACK", "PROD-HALF-ANIMAL");
+  }
+
+  // Gris 3's bakke er aldrig blevet pakket. Delen findes, men den endte ingen steder endnu.
+  @Test
+  void aPartInATrayThatWasNeverPackedHasNoProducts()
+  {
+    TracedPart rib = service.traceAnimal(3).parts().getFirst();
+
+    assertThat(rib.trayId()).isEqualTo("TRAY-RIB-1");
+    assertThat(rib.productIds()).isEmpty();
+  }
+
+  /*
+   * En del kan være skåret uden at være lagt i en bakke endnu. Så skal sporingen
+   * stadig virke og bare vise at delen ikke er kommet videre.
+   */
+  @Test
+  void aPartThatIsNotInATrayYetIsStillPartOfTheTrace()
+  {
+    Animal pig1 = em.find(Animal.class, 1);
+    em.persist(part("PART-5", "SHOULDER", 5.0, pig1));
+    em.flush();
+    em.clear();
+
+    TracedPart shoulder = service.traceAnimal(1).parts().stream()
+        .filter(part -> part.partId().equals("PART-5")).findFirst().orElseThrow();
+
+    assertThat(shoulder.trayId()).isNull();
+    assertThat(shoulder.productIds()).isEmpty();
+  }
+
+  // Den modsatte vej: står man med en enkelt del, skal man kunne finde tilbage til dyret.
+  @Test
+  void aPartTraceLeadsBackToItsAnimalAndForwardToTheProducts()
+  {
+    PartTrace trace = service.tracePart("PART-3");
+
+    assertThat(trace.registrationNumber()).isEqualTo(1);
+    assertThat(trace.species()).isEqualTo("Pig");
+    assertThat(trace.part().trayId()).isEqualTo("TRAY-BELLY-1");
+    assertThat(trace.part().productIds()).containsExactly("PROD-HALF-ANIMAL");
+  }
+
+  @Test
+  void anUnknownPartIsRejected()
+  {
+    assertThatThrownBy(() -> service.tracePart("PART-DOES-NOT-EXIST"))
+        .isInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
+  void anUnknownAnimalHasNoTrace()
+  {
+    assertThatThrownBy(() -> service.traceAnimal(99))
         .isInstanceOf(NoSuchElementException.class);
   }
 

@@ -14,21 +14,68 @@ service TraceabilityService {
 
   rpc GetProductsForAnimal(GetProductsForAnimalRequest)
       returns (GetProductsForAnimalResponse);
+
+  rpc GetAnimalTrace(GetAnimalTraceRequest)
+      returns (GetAnimalTraceResponse);
+
+  rpc GetPartTrace(GetPartTraceRequest)
+      returns (GetPartTraceResponse);
 }
 
 message GetAnimalsForProductRequest {
-  string productId = 1;
+  string product_id = 1;
 }
 
 message GetAnimalsForProductResponse {
-  repeated int32 registrationNumbers = 1;
+  repeated int32 registration_numbers = 1;
 }
 
 message GetProductsForAnimalRequest {
-  int32 registrationNumber = 1;
+  int32 registration_number = 1;
 }
 
 message GetProductsForAnimalResponse {
-  repeated string productIds = 1;
+  repeated string product_ids = 1;
 }
 
+// A single part, with the tray it ended up in and the products that tray was packed into.
+message TracedPart {
+  string part_id = 1;
+  string type = 2;
+  double weight = 3;
+  string registration_date_time = 4;
+
+  // Empty while the part has been cut but not yet placed in a tray.
+  string tray_id = 5;
+
+  // Products that may contain this part. A product knows which trays it was packed
+  // from, but not which individual part ended up in which pack, so this is a
+  // deliberate over-approximation: these products may contain the part, not must.
+  repeated string product_ids = 6;
+}
+
+message GetAnimalTraceRequest {
+  int32 registration_number = 1;
+}
+
+// The whole chain for one animal: every part it was cut into, and where each one went.
+message GetAnimalTraceResponse {
+  int32 registration_number = 1;
+  string species = 2;
+  string origin = 3;
+  double weight = 4;
+  string arrival_date_time = 5;
+  repeated TracedPart parts = 6;
+}
+
+message GetPartTraceRequest {
+  string part_id = 1;
+}
+
+// The chain seen from one part: which animal it came from, and where it went.
+message GetPartTraceResponse {
+  TracedPart part = 1;
+  int32 registration_number = 2;
+  string species = 3;
+  string origin = 4;
+}

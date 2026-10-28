@@ -63,6 +63,11 @@ public class IngestionService
     tray.setPartType(reported.partType());
     tray.setMaxWeight(reported.maxWeight());
 
+    if (reported.currentWeight() != null)
+    {
+      tray.setCurrentWeight(reported.currentWeight());
+    }
+
     trayRepository.save(tray);
   }
 

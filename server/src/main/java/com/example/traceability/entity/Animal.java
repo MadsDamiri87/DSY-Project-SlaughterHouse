@@ -34,11 +34,6 @@ public class Animal
     return registrationNumber;
   }
 
-  public void setRegistrationNumber(int registrationNumber)
-  {
-    this.registrationNumber = registrationNumber;
-  }
-
   public double getWeight()
   {
     return weight;

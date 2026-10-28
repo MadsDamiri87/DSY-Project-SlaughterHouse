@@ -1,5 +1,6 @@
 package com.example;
 
+import generated.GetAnimalTraceRequest;
 import generated.GetAnimalsForProductRequest;
 import generated.GetProductsForAnimalRequest;
 import generated.TraceabilityServiceGrpc;
@@ -44,6 +45,30 @@ public class Client
       catch (StatusRuntimeException e)
       {
         System.out.println("getProductsForAnimal failed: " + e.getStatus());
+      }
+
+      try
+      {
+        var trace = stub.getAnimalTrace(
+            GetAnimalTraceRequest.newBuilder().setRegistrationNumber(registrationNumber).build());
+
+        System.out.println("Trace for animal " + trace.getRegistrationNumber()
+            + " (" + trace.getSpecies() + ", " + trace.getOrigin() + "):");
+
+        for (var part : trace.getPartsList())
+        {
+          String tray = part.getTrayId().isEmpty() ? "not in a tray yet" : part.getTrayId();
+          String products = part.getProductIdsList().isEmpty()
+              ? "not packed yet"
+              : "may be in " + String.join(", ", part.getProductIdsList());
+
+          System.out.println("  " + part.getPartId() + "  " + part.getType() + "  "
+              + part.getWeight() + " kg  ->  " + tray + "  ->  " + products);
+        }
+      }
+      catch (StatusRuntimeException e)
+      {
+        System.out.println("getAnimalTrace failed: " + e.getStatus());
       }
     }
     finally

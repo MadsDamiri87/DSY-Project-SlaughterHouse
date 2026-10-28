@@ -17,6 +17,7 @@ import com.example.traceability.repository.ProductRepository;
 import com.example.traceability.repository.TrayRepository;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -111,7 +112,7 @@ public class DemoDataSeeder implements CommandLineRunner
     product.setProductType(type);
     product.setTotalWeight(totalWeight);
     product.setPackingDateTime(Instant.now());
-    product.setTrays(new java.util.ArrayList<>(trays));
+    product.setTrays(new ArrayList<>(trays));
     return product;
   }
 }

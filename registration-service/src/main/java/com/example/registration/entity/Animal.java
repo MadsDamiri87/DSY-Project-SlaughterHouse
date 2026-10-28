@@ -37,19 +37,9 @@ public class Animal
     return registrationNumber;
   }
 
-  public void setRegistrationNumber(int registrationNumber)
-  {
-    this.registrationNumber = registrationNumber;
-  }
-
   public Instant getArrivalDateTime()
   {
     return arrivalDateTime;
-  }
-
-  public void setArrivalDateTime(Instant arrivalDateTime)
-  {
-    this.arrivalDateTime = arrivalDateTime;
   }
 
   public double getWeight()
@@ -57,18 +47,8 @@ public class Animal
     return weight;
   }
 
-  public void setWeight(double weight)
-  {
-    this.weight = weight;
-  }
-
   public String getOrigin()
   {
     return origin;
-  }
-
-  public void setOrigin(String origin)
-  {
-    this.origin = origin;
   }
 }

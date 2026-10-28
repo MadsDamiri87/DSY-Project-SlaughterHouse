@@ -8,7 +8,7 @@ import java.time.Instant;
 
 public record AnimalDTO(
 
-    @NotNull Integer registrationNumber,
+    @NotNull @Positive Integer registrationNumber,
 
     Instant arrivalDateTime,
 

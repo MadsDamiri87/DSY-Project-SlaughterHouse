@@ -86,12 +86,27 @@ class IngestionServiceJpaTest
     assertThat(em.find(Animal.class, 9003).getArrivalDateTime()).isEqualTo(longAgo);
   }
 
+  /*
+   * Bakkens vægt kommer fra Station 2 og regnes ikke ud her. Stationen ejer reglerne
+   * om deltype og kapacitet, og backenden gemmer det den får besked om - ellers kunne
+   * de to komme til at vise hver sin vægt for samme bakke.
+   */
+  @Test
+  void theReportedTrayWeightIsMirrored()
+  {
+    service.receiveTray(new TrayDTO("TRAY-W", "LOIN", 50.0, 12.4));
+    em.flush();
+    em.clear();
+
+    assertThat(em.find(Tray.class, "TRAY-W").getCurrentWeight()).isEqualTo(12.4);
+  }
+
   // En del skal kobles til både sit dyr og sin bakke, så sporingen kan følge kæden.
   @Test
   void aPartIsLinkedToItsAnimalAndTray()
   {
     service.receiveAnimal(new AnimalDTO(9004, ARRIVAL, 95.0, "Nørregaard"));
-    service.receiveTray(new TrayDTO("TRAY-A", "LOIN", 50.0));
+    service.receiveTray(new TrayDTO("TRAY-A", "LOIN", 50.0, 6.2));
     service.receivePart(new AnimalPartDTO("PART-A", "LOIN", 6.2, 9004, "TRAY-A", ARRIVAL));
     em.flush();
     em.clear();
@@ -156,8 +171,8 @@ class IngestionServiceJpaTest
   @Test
   void aProductKeepsEveryTrayItWasPackedFrom()
   {
-    service.receiveTray(new TrayDTO("TRAY-B", "LOIN", 50.0));
-    service.receiveTray(new TrayDTO("TRAY-C", "BELLY", 40.0));
+    service.receiveTray(new TrayDTO("TRAY-B", "LOIN", 50.0, 0.0));
+    service.receiveTray(new TrayDTO("TRAY-C", "BELLY", 40.0, 0.0));
     service.receiveProduct(
         new ProductDTO("PROD-Y", "HALF_ANIMAL", ARRIVAL, 17.5, List.of("TRAY-B", "TRAY-C")));
     em.flush();
