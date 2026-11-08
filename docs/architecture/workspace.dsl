@@ -130,7 +130,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 cuttingPublisher = component "Outbox Publisher" {
-                    description "Every five seconds by default, sends pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations."
+                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations."
                     technology "Spring @Scheduled"
                 }
 
@@ -184,7 +184,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 packingPublisher = component "Outbox Publisher" {
-                    description "Every five seconds by default, sends pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations."
+                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations."
                     technology "Spring @Scheduled"
                 }
 
@@ -250,12 +250,12 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 grpcApi = component "gRPC API" {
-                    description "Implements the server stub generated from traceability.proto. Validates input and maps domain errors to status codes: NOT_FOUND, INVALID_ARGUMENT and INTERNAL."
+                    description "Implements the server stub generated from traceability.proto: two list lookups and two full traces. Validates input and maps domain errors to status codes: NOT_FOUND, INVALID_ARGUMENT and INTERNAL."
                     technology "gRPC, Protocol Buffers, generated server stub"
                 }
 
                 traceabilityService = component "Traceability Service" {
-                    description "Traces products to animals and animals to products through trays. Stores a case counter and the latest case in memory. Uses Spring Data repositories and read-only transactions; independent of gRPC."
+                    description "Traces products to animals and animals to products through trays, and returns the full chain for one animal or one part: every part, its tray and the products that tray reached. Stores a case counter and the latest case in memory. Independent of gRPC."
                     technology "Java"
                 }
 
@@ -299,14 +299,16 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             packingRepository -> store3 "Reads and writes packed products" "JPA / JDBC"
             packingOutbox -> store3 "Stores pending events in" "JPA / JDBC"
 
-            registrationClient -> ingestionApi "Delivers queued animal events using synchronous HTTP" "REST / JSON"
             cuttingClient -> ingestionApi "Delivers queued part and tray events using synchronous HTTP" "REST / JSON"
             packingClient -> ingestionApi "Delivers queued product events using synchronous HTTP" "REST / JSON"
+            registrationClient -> ingestionApi "Delivers queued animal events using synchronous HTTP" "REST / JSON"
 
             persistence -> database "Reads and writes data" "JPA / JDBC"
         }
 
         station1Operator -> slaughterhouse "Registers and weighs arriving animals using"
+        station2Operator -> slaughterhouse "Registers each part and places it in a tray using"
+        station3Operator -> slaughterhouse "Registers packed products and the trays they came from using"
         recallSystem -> slaughterhouse "Direct: requests affected products for an animal"
 
         station1Operator -> animalApi "Registers and weighs arriving animals using" "REST / JSON"
@@ -334,7 +336,6 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
         container slaughterhouse "C2" "C2 - Container View. Shows the running parts, the four independent databases, and how each station keeps working when the network is down." {
             include *
             include qualityOfficer customer
-            autolayout tb
         }
 
         component traceabilityServer "C3-Traceability" "C3 - Component View of the Traceability Server. Mirrors the actual code in the server module." {

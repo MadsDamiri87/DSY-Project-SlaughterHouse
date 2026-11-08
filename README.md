@@ -27,11 +27,12 @@ Kræver Java 21, Maven og PostgreSQL.
 <details>
 <summary><strong>Projektets formål</strong></summary>
 
-Dette er et studieprojekt og projektet har dermed ikke til formål at bygge et produktionsklart slagterisystem, men at give den studerende (mig) praktisk erfaring med distribuerede systemer, som er et nyt fagområde dette semester.
+Studieprojekt til kurset **DSY - Distribuerede Systemer**. Formålet er praktisk erfaring med distribuerede systemer, ikke et produktionsklart slagteri.
 
-Repository indeholder en simulering af et slagteri og er en del af kurset **'DSY - Distribuerede Systemer'**. Casen er et slagteri hvor levende dyr ankommer i den ene ende, og færdigpakkede produkter leveres i den anden ende. Undervejs passerer dyret tre stationer: registrering, opskæring i dele, og pakning af produkter.
-
-Det centrale krav er **sporbarhed / tracking**. Hvis det senere viser sig at der er problemer med et slagtet dyr, skal alle produkter der kan indeholde dele fra dyret, kunne kaldes tilbage. Den funktion skal kunne tilgås udefra, og derfor er den eksponeret som en gRPC-service.
+- Levende dyr ankommer i den ene ende, færdigpakkede produkter leveres i den anden.
+- Undervejs passerer dyret tre stationer: registrering, opskæring og pakning.
+- Det centrale krav er **sporbarhed**: viser et dyr sig at være problematisk, skal alle produkter der kan indeholde dele fra det, kunne kaldes tilbage.
+- Sporingen skal kunne tilgås udefra og er derfor eksponeret som en gRPC-service.
 
 </details>
 
@@ -48,90 +49,93 @@ Sporingskæden er en vigtig del af modellen:
 - En `AnimalPart` kan være uden bakke, indtil den lægges i én `Tray`. En bakke indeholder kun én type dele og har en maksimal vægtkapacitet.
 - Et `Product` pakkes ud fra en eller flere `Tray`, og gemmer referencer tilbage til de bakker delene kom fra.
 
-Et produkt peger på bakker, ikke på enkelte dele. Det matcher virkeligheden: når man pakker fra en bakke, ved man hvilke dyr der kan være i bakken, men ikke nødvendigvis hvilken del der er endt i hvilken pakke. Sporingen bliver derfor en bevidst overvurdering — den finder alle dyr der **kan** være i produktet.
+Et produkt peger på bakker, ikke på enkelte dele. Derfor er sporingen en **bevidst overvurdering**: den finder alle dyr der *kan* være i produktet.
 
 </details>
 
 <details>
 <summary><strong>Arkitektur (C4-modellen)</strong></summary>
 
-Arkitekturen er modelleret i **Structurizr** med C4-modellens tre første niveauer. Kilden er én tekstfil, `docs/architecture/workspace.dsl`, som alle diagrammerne genereres ud fra.
+Arkitekturen er modelleret i **Structurizr**. Kilden er `docs/architecture/workspace.dsl`, som alle diagrammerne genereres ud fra. Klik på et diagram for at se det i fuld størrelse.
 
-Diagrammerne er store. Klik på et diagram for at åbne det i fuld størrelse.
+### Tegnforklaring
+Samme notation i alle seks diagrammer.
+
+<a href="docs/diagrams/C4-Key.svg" target="_blank" rel="noopener">
+  <img src="docs/diagrams/C4-Key.svg" alt="Tegnforklaring til C4-diagrammerne" width="600">
+</a>
 
 ### C1 - System Context
-Hvad bygger vi, hvem bruger det, hvad gør brugerne, og hvordan passer systemet ind i det eksisterende systemlandskab. Fokus er på **typerne af kommunikation** frem for på teknologi.
 
 <a href="docs/diagrams/C1-SystemContext.svg" target="_blank" rel="noopener">
   <img src="docs/diagrams/C1-SystemContext.svg" alt="C1 - System Context View" width="600">
 </a>
 
-De blå figurer er systemets faktiske **brugere**: de tre stationsoperatører og en quality officer. De grå kasser er **eksterne systemer og parter** omkring systemet — de bruger ikke softwaren, men afgrænser processen.
-
-- **Animal Supplier**, **Transport / Logistics** og **Customer / Supermarket** viser **fysisk vareflow**, ikke implementerede softwareintegrationer. De udveksler fysiske varer, og systemet må ikke gå i stå fordi en af dem er utilgængelig.
-- **External Recall System** kommunikerer **direkte** over gRPC. Det er her sporbarhedsopslaget kaldes, og det er den del der er implementeret i dette projekt.
+- Blå figurer er brugere, grå kasser er eksterne parter.
+- Leverandør, transport og kunde viser **fysisk vareflow** — ikke softwareintegrationer.
+- Kun **External Recall System** taler direkte med systemet, over gRPC.
 
 ### C2 - Container View
-Hvordan systemet er delt op i kørende enheder, og hvordan de taler sammen.
 
 <a href="docs/diagrams/C2-Container.svg" target="_blank" rel="noopener">
   <img src="docs/diagrams/C2-Container.svg" alt="C2 - Container View" width="600">
 </a>
 
-Alle tre stationer, serveren og de fire databaser er implementeret.
+- Alle tre stationer, serveren og de fire databaser er implementeret.
+- Hver station har sin egen database og kan arbejde videre uden netværk.
+- Forbindelsen til serveren er indirekte: hændelsen skrives i stationens egen outbox og sendes videre over HTTP, når serveren kan nås. Ingen message broker.
 
-Hver station har sin egen lokale database. Det er den del der opfylder casens krav om at *"work shouldn't stop at a station just because the network is down"*. Registreringen er tidsmæssigt afkoblet fra serveren: stationen skriver en hændelse i sin egen outbox i samme transaktion som dataene, og en baggrundsproces sender den videre med et synkront HTTP-kald, når serveren kan nås. Der bruges ingen message broker.
-
-### C3 - Component View: Traceability Server
-Serveren zoomet ind. Diagrammet afspejler den faktiske kode i `server`-modulet.
+### C3 - Traceability Server
 
 <a href="docs/diagrams/C3-Component-Traceability.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/C3-Component-Traceability.svg" alt="C3 - Component View: Traceability Server" width="600">
+  <img src="docs/diagrams/C3-Component-Traceability.svg" alt="C3 - Traceability Server" width="600">
 </a>
 
-Serveren har to indgange. **Ind** kommer stationernes data over REST: `Ingestion Service` gemmer dem som upsert, så samme besked to gange giver samme resultat, og opretter pladsholdere for både dyr og bakker, hvis referencerne når frem før deres detaljer. Derfor behøver stationerne ingen aftalt rækkefølge.
+- **Ind:** stationernes data over REST, gemt som upsert med pladsholdere for ukendte referencer.
+- **Ud:** sporingsopslag over gRPC, kontrakten ligger i `traceability.proto`.
 
-**Ud** går sporingsopslagene over gRPC. Kontrakten bor i `traceability.proto`, og gRPC genererer en **client stub** og en **server stub** ud fra den. `gRPC API` implementerer server-stubben og oversætter domænefejl til statuskoder, mens `Traceability Service` bruger Spring Data-repositories og læsetransaktioner, men er uafhængig af gRPC.
-
-### C3 - Component View: Station 1 (Registration)
-Registration-servicen zoomet ind. Afspejler koden i `registration-service`-modulet.
+### C3 - Station 1 (Registration)
 
 <a href="docs/diagrams/C3-Component-Registration.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/C3-Component-Registration.svg" alt="C3 - Component View: Station 1 Registration" width="600">
+  <img src="docs/diagrams/C3-Component-Registration.svg" alt="C3 - Station 1 Registration" width="600">
 </a>
 
-`Animal REST API` validerer input og holder HTTP ude af resten, `Animal Registration Service` har registreringsreglerne, og `REST Exception Handler` oversætter domænefejl til 404, 409 og 400.
+- Dyret og outbox-hændelsen skrives i **samme transaktion**.
+- `Outbox Publisher` tømmer køen hvert femte sekund: 5xx betyder prøv igen, 4xx markeres `FAILED`.
+- Alle tre stationer bruger samme mønster.
 
-Dyret og hændelsen skrives i **samme transaktion**, så en gemt registrering også har en gemt hændelse. Levering kan være forsinket; `FAILED`-hændelser kræver særskilt håndtering. `Outbox Publisher` tømmer køen hvert femte sekund; en 5xx betyder *prøv igen senere*, en 4xx betyder *aldrig gyldig* og hændelsen markeres `FAILED` så den ikke blokerer de øvrige. Alle tre stationer bruger samme mønster.
-
-### C3 - Component View: Station 2 (Cutting)
-Opskæringsservicen zoomet ind. Afspejler koden i `cutting-service`-modulet.
+### C3 - Station 2 (Cutting)
 
 <a href="docs/diagrams/C3-Component-Cutting.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/C3-Component-Cutting.svg" alt="C3 - Component View: Station 2 Cutting" width="600">
+  <img src="docs/diagrams/C3-Component-Cutting.svg" alt="C3 - Station 2 Cutting" width="600">
 </a>
 
-Bakken håndhæver **selv** sine regler: kun dele af sin egen type, ingen del der ville føre den over sin maksimale vægt, samme del to gange ændrer ingenting, og en del i en anden bakke kan ikke flyttes. Reglerne ligger i entiteten og ikke i servicen, når servicen bruger `Tray.addPart(...)`.
+- Bakken håndhæver **selv** sine regler: én deltype, maksimal vægt, samme del tæller kun én gang, og en del kan ikke flyttes mellem bakker.
+- Reglerne ligger i entiteten, ikke i servicen.
 
-### C3 - Component View: Station 3 (Packing)
-Pakkeservicen zoomet ind. Afspejler koden i `packing-service`-modulet.
+### C3 - Station 3 (Packing)
 
 <a href="docs/diagrams/C3-Component-Packing.svg" target="_blank" rel="noopener">
-  <img src="docs/diagrams/C3-Component-Packing.svg" alt="C3 - Component View: Station 3 Packing" width="600">
+  <img src="docs/diagrams/C3-Component-Packing.svg" alt="C3 - Station 3 Packing" width="600">
 </a>
 
-`Product` gemmer bakke-id'erne som **almindelige værdier**, ikke som referencer til Station 2's bakkeobjekter. Holdt den en reference til opskæringsstationens `Tray`-klasse, kunne de to moduler ikke længere bygges eller fejle uafhængigt af hinanden.
+- `Product` gemmer bakke-id'er som **værdier**, ikke som referencer til Station 2's klasser.
+- Derfor kan de to moduler bygges, køre og fejle uafhængigt af hinanden.
 
 </details>
 
 <details>
-<summary><strong>Lokal infrastruktur</strong></summary>
+<summary><strong>Persistens og lokal infrastruktur</strong></summary>
 
-De fire applikationer har hver sin database: serveren bruger PostgreSQL, og de tre stationer hver sin H2-fil under `DSY-SlaughterHouse/data/`. H2 er indlejret og kræver ingen opsætning.
+Ingen af de fire applikationer deler database eller skema:
 
-Serverens egen `application.properties` er ikke i versionsstyring, fordi den indeholder databasekodeordet. Kopiér `server/src/main/resources/application.properties.example` til `application.properties` og udfyld `DB_PASSWORD` første gang.
+- Serveren ejer `animal`, `animal_part`, `tray` og `product` i **PostgreSQL**.
+- Hver station ejer sine egne tabeller plus sin egen `outbox_entry` i en **H2-fil** under `data/`. H2 er indlejret og kræver ingen opsætning.
+- De kan startes, stoppes og udvikles uafhængigt af hinanden.
 
-PostgreSQL kører som en lokal installation på maskinen. Vil du i stedet køre den i Docker, skal den lokale tjeneste stoppes først, og `.env` oprettes ud fra `.env.example`:
+Opslagene bruger afledte queries, fx `findByTrayIn(...)` og `findByOriginIgnoreCase(...)`, så filtreringen sker i databasen frem for i hukommelsen.
+
+PostgreSQL kører som en lokal installation. Vil du i stedet bruge Docker, skal den lokale tjeneste stoppes først, og `.env` oprettes ud fra `.env.example`:
 
 ```powershell
 docker compose up -d
@@ -253,9 +257,9 @@ Fejl oversættes til gRPC-statuskoder i stedet for at boble op som tekniske exce
 | Tomt `product_id` eller `part_id`, eller `registration_number` der ikke er positivt | `INVALID_ARGUMENT` |
 | Uventet fejl, f.eks. databasen er nede | `INTERNAL` |
 
-Et dyr der findes, men endnu ikke er pakket, er ikke en fejl. Det giver `OK` med en tom liste.
-
-Sporingen fra bakke til produkt er en bevidst overvurdering. Et produkt ved hvilke bakker det er pakket fra, men ikke hvilken enkelt del der endte i hvilken pakke, så `product_ids` på en del betyder *may contain* og ikke *does contain*. Protobuf har ingen `null`, så en del der endnu ikke er lagt i en bakke, får et tomt `tray_id`.
+- Et dyr der findes, men endnu ikke er pakket, giver `OK` med en tom liste.
+- `product_ids` på en del betyder *may contain*, ikke *does contain*.
+- Protobuf har ingen `null`: en del uden bakke får et tomt `tray_id`.
 
 </details>
 
@@ -273,6 +277,8 @@ De tre stationer ligger på port 8081, 8082 og 8083.
 | `GET /animals?date=2026-10-20` | Alle dyr ankommet den dato | `200` |
 | `GET /animals?origin=Noerregaard` | Alle dyr fra den gård | `200` |
 | `GET /animals` | Alle dyr | `200` |
+
+De to filtre kan ikke kombineres — `?date=…&origin=…` svarer `400` i stedet for at ignorere det ene i stilhed.
 
 **Station 2 — opskæring (8082)**
 
@@ -295,8 +301,6 @@ Placeringen er en `PUT` fordi den skal kunne gentages: stationen gensender efter
 
 Serveren har de samme fire stier på port 8080, men de bruges kun af stationernes outbox og ikke af mennesker.
 
-De to filtre kan ikke kombineres — `?date=…&origin=…` svarer `400` i stedet for at ignorere det ene i stilhed.
-
 Fejl følger samme princip som på gRPC-siden — domænefejl bliver til statuskoder, ikke stacktraces:
 
 | Situation | Statuskode |
@@ -307,15 +311,6 @@ Fejl følger samme princip som på gRPC-siden — domænefejl bliver til statusk
 | `date` og `origin` i samme kald | `400 Bad Request` |
 
 Datoopslaget bruger den konfigurerede `app.slaughterhouse.timezone` og et halvåbent interval `[dagen 00:00, dagen efter 00:00)`, så et dyr der ankom 23:59 tæller med på sin egen dag. Opslag på gård er ikke versalfølsomt.
-
-</details>
-
-<details>
-<summary><strong>Persistens</strong></summary>
-
-Ingen af de fire applikationer deler database eller skema. Serveren ejer `animal`, `animal_part`, `tray` og `product` i PostgreSQL. Hver station ejer sine egne tabeller plus sin egen `outbox_entry` i sin egen H2-fil. De kan startes, stoppes og udvikles uafhængigt af hinanden.
-
-Opslagene bruger afledte queries, fx `findByTrayIn(...)` og `findByOriginIgnoreCase(...)`, så filtreringen sker i databasen frem for i hukommelsen.
 
 </details>
 
@@ -375,27 +370,15 @@ Ikke implementeret:
 - Grafisk brugerflade
 - Autentificering og autorisation
 - Rettelse og sletning af data der allerede er registreret
+- Automatisk tildeling af registreringsnummer; `species` og `slaughterDateTime` udfyldes ikke af registreringsflowet
+
+Kendte begrænsninger:
+
+- `placeInTray` sender ingen opdateret bakkevægt, så serverens `Tray.currentWeight` kan forblive 0.
+- Serveren accepterer pladsholdere, så et sporingsopslag kan give `OK` med et ufuldstændigt resultat midt i en synkronisering.
+- `FAILED`-hændelser springes over og kan hverken ses eller gensendes.
+- Outboxen sorterer kun efter `occurredAt` og garanterer ikke rækkefølgen ved samme tidsstempel eller på tværs af stationer.
 
 </details>
 
 
-<details>
-<summary><strong>Diagramgennemgang og kendte afvigelser — 27. oktober 2026</strong></summary>
-
-Domænemodellen er rettet til serverens aktuelle entiteter. `Product` refererer til `Tray`, ikke direkte til `AnimalPart`. En del har ét dyr og kan endnu være uden bakke. En tom bakke kan være uden produkter; et produkt oprettes fra mindst én bakke i stationens API.
-
-C4-kilden, JSON-modellen og SVG-teksterne er rettet: konfigureret tidszone, pladsholdere for både dyr og bakker, faktisk brug af JPA samt HTTP-levering fra outbox. Fysisk vareflow er adskilt fra softwarekald. `FAILED` betyder ikke automatisk genlevering, og køerne giver ingen global rækkefølge på tværs af stationer.
-
-**Forhold i implementeringen, der bør følges op på:**
-
-- `CuttingService.placeInTray` øger vægten lokalt, men opretter kun en `PART_PLACED_IN_TRAY`-hændelse. Serveren opdaterer kun `Tray.currentWeight` i `receiveTray`, så dens vægt kan forblive 0. Send også en opdateret bakke eller beregn vægten på serveren.
-- Serveren accepterer pladsholdere. Under synkronisering kan sporingsopslag derfor returnere ufuldstændige resultater som `OK`; der findes ingen markering af, om hele kæden er modtaget.
-- `FAILED`-hændelser springes over. Der findes endnu ingen brugerflade til at se, rette eller gensende dem.
-- Outbox sorterer kun efter `occurredAt`. Samme tidsstempel har ingen ekstra sorteringsnøgle; streng rækkefølge er derfor ikke garanteret ved lighed.
-- Registreringsnummer vælges manuelt. Automatisk nummer, dyretypekatalog, login, redigering og sletning fra GUI-planen er fremtidigt arbejde. `species` og `slaughterDateTime` findes på serverens `Animal`, men udfyldes ikke af registreringsflowet.
-
-Den tidligere Astah-fil er en konceptuel original og er ikke omskrevet. Den opdaterede domænemodel har en redigerbar [PlantUML-kilde](docs/architecture/domain-model.puml). C4-SVG’ernes eksisterende layout er bevaret; beskrivelserne er opdateret på stedet.
-
-Gennemgangen er baseret på kode og diagrammer; den er ikke en ny kørsel af systemets integrationstests.
-
-</details>
