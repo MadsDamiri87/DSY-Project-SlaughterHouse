@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Kaldes ikke længere af packing-service. Stationens outbox sender nu
+// PRODUCT_PACKED over AMQP med routingnøglen product.packed, som serverens
+// lytter på køen traceability.product modtager.
+// Endepunktet er bevaret, så modtagelsen også kan afprøves med Postman.
+
 @RestController
 @RequestMapping("/products")
 public class ProductController

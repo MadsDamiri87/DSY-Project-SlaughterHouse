@@ -189,7 +189,7 @@ public class TraceView implements View
 
     if (trace.getPartsList().isEmpty())
     {
-      root.getChildren().add(new TreeItem<>("dyret er ikke skåret op endnu"));
+      root.getChildren().add(new TreeItem<>("ingen dele modtaget for dette dyr endnu"));
     }
 
     tree.setRoot(root);
@@ -201,7 +201,8 @@ public class TraceView implements View
 
     if (packed > 0)
     {
-      showFoot(packed + " af " + trace.getPartsCount() + " dele er pakket.");
+      showFoot(packed + " af " + trace.getPartsCount()
+               + " dele ligger i en bakke der kan indgå i produkter.");
     }
   }
 
@@ -254,7 +255,7 @@ public class TraceView implements View
 
     if (part.getProductIdsCount() == 0)
     {
-      tray.getChildren().add(new TreeItem<>("ikke pakket endnu"));
+      tray.getChildren().add(new TreeItem<>("ingen produkter modtaget for denne bakke endnu"));
       return tray;
     }
 

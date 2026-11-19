@@ -1,6 +1,7 @@
 package com.example.desktop.ui;
 
 import com.example.desktop.api.CuttingApi;
+import com.example.desktop.api.ApiException;
 import com.example.desktop.api.Apis;
 import com.example.desktop.api.RegistrationApi;
 import com.example.desktop.domain.Ids;
@@ -228,16 +229,53 @@ public class CuttingView implements View
     Async.run(() ->
               {
                 AnimalPartDTO registered = api.registerPart(part);
-                return placeInTray ? api.placeInTray(registered.partId(), trayId) : registered;
+
+                if (!placeInTray)
+                {
+                  return new Outcome(registered, null);
+                }
+
+                try
+                {
+                  return new Outcome(api.placeInTray(registered.partId(), trayId), null);
+                }
+                catch (RuntimeException placementFailed)
+                {
+                  return new Outcome(registered, placementFailed);
+                }
               },
-              saved ->
+              outcome ->
               {
-                notice.showReceipt("201 Created",
-                                   saved.partId() + (placeInTray ? " · " + trayId : ""));
+                if (outcome.placementFailure() == null)
+                {
+                  notice.showReceipt("201 Created",
+                                     outcome.part().partId() + (placeInTray ? " · " + trayId : ""));
+                }
+                else
+                {
+                  notice.showError("Delen er registreret, men ikke lagt i bakken",
+                                   outcome.part().partId() + " findes nu uden bakke. "
+                                   + reasonFor(outcome.placementFailure())
+                                   + " Placeringen kan ikke gentages herfra.");
+                }
+
                 weightField.clear();
                 reload();
               },
               notice::showError);
+  }
+
+  private record Outcome(AnimalPartDTO part, RuntimeException placementFailure)
+  {
+  }
+
+  private String reasonFor(RuntimeException failure)
+  {
+    if (failure instanceof ApiException apiException)
+    {
+      return apiException.status() + ": " + apiException.getMessage();
+    }
+    return String.valueOf(failure.getMessage());
   }
 
   private void createTray()

@@ -7,6 +7,7 @@ import com.example.cuttingservice.service.AnimalPartNotFoundException;
 import com.example.cuttingservice.service.DuplicateAnimalPartException;
 import com.example.cuttingservice.service.DuplicateTrayException;
 import com.example.cuttingservice.service.TrayNotFoundException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -35,6 +36,13 @@ public class RestExceptionHandler
   public ProblemDetail handleTrayRule(RuntimeException exception)
   {
     return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, exception.getMessage());
+  }
+
+  @ExceptionHandler(OptimisticLockingFailureException.class)
+  public ProblemDetail handleConcurrentChange(OptimisticLockingFailureException exception)
+  {
+    return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT,
+        "The tray or part was changed by someone else at the same time. Read it again and retry.");
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)

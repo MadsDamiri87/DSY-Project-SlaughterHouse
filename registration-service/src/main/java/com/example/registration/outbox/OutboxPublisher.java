@@ -1,6 +1,5 @@
 package com.example.registration.outbox;
 
-import com.example.registration.sync.BackendRejectedException;
 import com.example.registration.sync.BackendUnavailableException;
 import com.example.registration.sync.TraceabilityClient;
 import org.slf4j.Logger;
@@ -40,11 +39,6 @@ public class OutboxPublisher
       {
         log.warn("Backend unavailable, event {} is still waiting", entry.getEventId());
         break;
-      }
-      catch (BackendRejectedException exception)
-      {
-        log.error("Backend permanently rejected event {}: {}", entry.getEventId(), exception.getMessage());
-        entry.markFailed();
       }
     }
 

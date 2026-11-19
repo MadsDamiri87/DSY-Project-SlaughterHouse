@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+// Kaldes ikke længere af registration-service. Stationens outbox sender nu
+// ANIMAL_REGISTERED over AMQP med routingnøglen animal.registered, som
+// serverens lytter på køen traceability.animal modtager.
+// Endepunktet er bevaret, så modtagelsen også kan afprøves med Postman.
+
 @RestController
 @RequestMapping("/animals")
 public class AnimalController

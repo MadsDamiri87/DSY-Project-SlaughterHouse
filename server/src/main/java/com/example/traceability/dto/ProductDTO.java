@@ -18,6 +18,6 @@ public record ProductDTO(
 
     @NotNull @Positive Double totalWeight,
 
-    @NotEmpty List<String> trayIds)
+    @NotEmpty List<@NotBlank String> trayIds)
 {
 }

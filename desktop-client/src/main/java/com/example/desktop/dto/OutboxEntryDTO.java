@@ -19,8 +19,4 @@ public record OutboxEntryDTO(
 
     String status)
 {
-  public boolean isFailed()
-  {
-    return "FAILED".equals(status);
-  }
 }

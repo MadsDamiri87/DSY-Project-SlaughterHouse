@@ -1,6 +1,5 @@
 package com.example.cuttingservice.outbox;
 
-import com.example.cuttingservice.sync.BackendRejectedException;
 import com.example.cuttingservice.sync.BackendUnavailableException;
 import com.example.cuttingservice.sync.TraceabilityClient;
 import org.junit.jupiter.api.Test;
@@ -20,10 +19,10 @@ import static org.mockito.Mockito.when;
 
 /*
  * Test af at outboxen tømmes rigtigt. Klienten er mocket, så der hverken er
- * netværk eller backend med - det der testes er de tre udfald.
+ * netværk eller broker med - det der testes er de to udfald.
  *
- * Forskellen mellem de to exceptions er hele pointen: den ene betyder
- * "ikke lige nu", den anden betyder "aldrig".
+ * Stationen kender kun ét udfald nu: enten bekræfter brokeren, eller også
+ * bliver hændelsen liggende. "Vil aldrig lykkes" afgøres i dead-letter-køen.
  */
 @ExtendWith(MockitoExtension.class)
 class OutboxPublisherTest
@@ -66,25 +65,5 @@ class OutboxPublisherTest
     assertThat(first.getStatus()).isEqualTo(OutboxStatus.PENDING);
     verify(outboxRepository, never()).delete(any());
     verify(traceabilityClient, never()).send(second);
-  }
-
-  /*
-   * En afvist besked bliver aldrig gyldig. Den markeres FAILED, så den ryger
-   * ud af køen uden at blive slettet - og de næste kan komme igennem.
-   */
-  @Test
-  void aRejectedEventIsMarkedFailedAndTheRestContinues()
-  {
-    OutboxEntry bad = OutboxEntry.of(OutboxEventType.PART_REGISTERED, "{}");
-    OutboxEntry good = OutboxEntry.of(OutboxEventType.TRAY_CREATED, "{}");
-    when(outboxRepository.findTop100ByStatusOrderByOccurredAtAsc(OutboxStatus.PENDING))
-        .thenReturn(List.of(bad, good));
-    doThrow(new BackendRejectedException("ugyldig")).when(traceabilityClient).send(bad);
-
-    publisher.publishPending();
-
-    assertThat(bad.getStatus()).isEqualTo(OutboxStatus.FAILED);
-    verify(outboxRepository, never()).delete(bad);
-    verify(outboxRepository).delete(good);
   }
 }

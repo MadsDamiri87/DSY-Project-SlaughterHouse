@@ -81,7 +81,7 @@ public class MainWindow extends BorderPane
     {
       boolean up = health.backendUpProperty().get();
 
-      live.setText(up ? "BACKEND FORBUNDET" : "BACKEND UTILGÆNGELIG");
+      live.setText(up ? "SERVER RASK" : "SERVER SVARER IKKE");
       live.getStyleClass().removeAll("live-up", "live-down");
       live.getStyleClass().add(up ? "live-up" : "live-down");
 

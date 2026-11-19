@@ -72,18 +72,18 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 registrationOutbox = component "Outbox" {
-                    description "Pending events waiting to be forwarded, each with an event id, a type, a JSON payload and a status of PENDING or FAILED. Written in the same transaction as the animal, so a registration can never be stored without its event."
+                    description "Pending events waiting to be forwarded, each with an event id, a type and a JSON payload. Written in the same transaction as the animal, so a registration can never be stored without its event. An event leaves the table only once the broker has confirmed it."
                     technology "Jakarta Persistence, Spring Data JPA"
                 }
 
                 registrationPublisher = component "Outbox Publisher" {
-                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. Timestamp ties have no explicit ordering; no global station order."
+                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops at the first event the broker does not confirm, so nothing is deleted before it is safe and the order is kept. Timestamp ties have no explicit ordering; no global station order."
                     technology "Spring @Scheduled"
                 }
 
                 registrationClient = component "Traceability Client" {
-                    description "Posts the event payload to the backend. Translates 5xx and connection failures into 'try again later', and 4xx into 'this event will never be valid'."
-                    technology "Spring RestClient"
+                    description "Publishes the event payload to the broker's topic exchange under the routing key animal.registered. Waits for the broker to confirm it, and counts a message the broker accepted but could not route to any queue as a failure too, so the event stays in the outbox instead of being deleted."
+                    technology "Spring AMQP, RabbitTemplate"
                 }
 
                 animalApi -> registrationService "Calls"
@@ -130,13 +130,13 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 cuttingPublisher = component "Outbox Publisher" {
-                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations."
+                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops at the first event the broker does not confirm, so events leave in the order they happened. Redelivery can still repeat an older event, which is why the server never lets a registration undo a placement. No global order across stations."
                     technology "Spring @Scheduled"
                 }
 
                 cuttingClient = component "Traceability Client" {
-                    description "Posts parts and trays to the backend, choosing the endpoint from the event type."
-                    technology "Spring RestClient"
+                    description "Publishes parts and trays to the broker's topic exchange, choosing the routing key from the event type: tray.created, part.registered or part.placed. Waits for the broker to confirm each event, and counts an unroutable message as a failure, so the event stays in the outbox."
+                    technology "Spring AMQP, RabbitTemplate"
                 }
 
                 cuttingApi -> cuttingService "Calls"
@@ -184,13 +184,13 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 packingPublisher = component "Outbox Publisher" {
-                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops on temporary failure; rejects become FAILED. No global order across stations."
+                    description "Every five seconds by default, sends up to 100 pending events ordered by occurredAt. Stops at the first event the broker does not confirm, so nothing is deleted before it is safe. No global order across stations."
                     technology "Spring @Scheduled"
                 }
 
                 packingClient = component "Traceability Client" {
-                    description "Posts packed products to the backend."
-                    technology "Spring RestClient"
+                    description "Publishes packed products to the broker's topic exchange under the routing key product.packed. Waits for the broker to confirm each event, and counts an unroutable message as a failure, so the event stays in the outbox."
+                    technology "Spring AMQP, RabbitTemplate"
                 }
 
                 packingApi -> packingService "Calls"
@@ -220,9 +220,20 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 tags "Database"
             }
 
+            desktopClient = container "Desktop Client" {
+                description "Operator user interface. Logging in as station1, station2, station3 or admin decides what is shown. Calls the stations' own REST APIs and the traceability gRPC service. Not required by the assignment."
+                technology "Java 21, JavaFX"
+            }
+
             client = container "Console Client" {
                 description "Command line client used to call the traceability service. Uses the client stub generated from traceability.proto."
                 technology "Java 21, gRPC, generated client stub"
+            }
+
+            broker = container "Message Broker" {
+                description "Carries the stations' events to the traceability server. A topic exchange routes each event by its routing key to one queue per aggregate: animal, tray, part and product. Queues and messages are durable, so queued events survive a broker restart."
+                technology "RabbitMQ, AMQP 0-9-1"
+                tags "Message Broker"
             }
 
             traceabilityServer = container "Traceability Server" {
@@ -230,8 +241,13 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 technology "Java 21, Spring Boot, REST and gRPC"
 
                 ingestionApi = component "Ingestion REST API" {
-                    description "Receives animals, parts, trays and products from the stations on POST /animals, /animal-parts, /trays and /products. Because the stations assign the ids, the same message twice gives the same result."
+                    description "POST /animals, /animal-parts, /trays and /products. The stations no longer call these; they publish to the broker instead. Kept so ingestion can still be exercised by hand with Postman."
                     technology "Spring MVC, Bean Validation"
+                }
+
+                eventListener = component "Ingestion Event Listener" {
+                    description "Consumes the four queues and hands each event to the ingestion service. Because the stations assign the ids, the same message twice gives the same result, and a repeated registration never clears a placement that already arrived. A temporary failure is retried five times with a growing pause; a message it can never read is rejected without requeue and dead-lettered straight away."
+                    technology "Spring AMQP, @RabbitListener"
                 }
 
                 backendExceptionHandler = component "Backend Exception Handler" {
@@ -240,7 +256,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 ingestionService = component "Ingestion Service" {
-                    description "Stores what it is told, as an upsert. Creates placeholder animals and trays when references arrive before their details. Later messages fill them in. Tray weight is copied from tray messages; part placement currently does not refresh it."
+                    description "Stores what it is told, as an upsert. Creates placeholder animals and trays when references arrive before their details. Later messages fill them in. Tray weight is derived from the parts the server has actually received, so it never claims weight for parts it has not seen."
                     technology "Spring @Service"
                 }
 
@@ -275,6 +291,7 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
                 }
 
                 ingestionApi -> ingestionService "Calls"
+                eventListener -> ingestionService "Calls"
                 backendExceptionHandler -> ingestionApi "Converts exceptions thrown by"
                 ingestionService -> persistence "Stores reported data via"
                 grpcServerRunner -> grpcApi "Registers as a gRPC service and starts"
@@ -299,11 +316,18 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             packingRepository -> store3 "Reads and writes packed products" "JPA / JDBC"
             packingOutbox -> store3 "Stores pending events in" "JPA / JDBC"
 
-            cuttingClient -> ingestionApi "Delivers queued part and tray events using synchronous HTTP" "REST / JSON"
-            packingClient -> ingestionApi "Delivers queued product events using synchronous HTTP" "REST / JSON"
-            registrationClient -> ingestionApi "Delivers queued animal events using synchronous HTTP" "REST / JSON"
+            cuttingClient -> broker "Publishes queued part and tray events" "AMQP / JSON"
+            packingClient -> broker "Publishes queued product events" "AMQP / JSON"
+            registrationClient -> broker "Publishes queued animal events" "AMQP / JSON"
+
+            broker -> eventListener "Delivers events from the four durable queues" "AMQP / JSON"
 
             persistence -> database "Reads and writes data" "JPA / JDBC"
+
+            desktopClient -> animalApi "Registers animals and lists them using" "REST / JSON"
+            desktopClient -> cuttingApi "Registers parts and trays using" "REST / JSON"
+            desktopClient -> packingApi "Registers packed products using" "REST / JSON"
+            desktopClient -> grpcApi "Looks up the chain from animal to product and back using" "gRPC / Protocol Buffers"
         }
 
         station1Operator -> slaughterhouse "Registers and weighs arriving animals using"
@@ -311,9 +335,9 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
         station3Operator -> slaughterhouse "Registers packed products and the trays they came from using"
         recallSystem -> slaughterhouse "Direct: requests affected products for an animal"
 
-        station1Operator -> animalApi "Registers and weighs arriving animals using" "REST / JSON"
-        station2Operator -> cuttingApi "Registers each part with its weight and its animal, and places it in a tray, using" "REST / JSON"
-        station3Operator -> packingApi "Registers packed products and the trays they were packed from, using" "REST / JSON"
+        station1Operator -> desktopClient "Registers and weighs arriving animals using"
+        station2Operator -> desktopClient "Registers each part with its weight and its animal, and places it in a tray, using"
+        station3Operator -> desktopClient "Registers packed products and the trays they were packed from, using"
 
         qualityOfficer -> recallSystem "Requests a recall lookup using"
 
@@ -333,9 +357,10 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             autolayout tb
         }
 
-        container slaughterhouse "C2" "C2 - Container View. Shows the running parts, the four independent databases, and how each station keeps working when the network is down." {
+        container slaughterhouse "C2" "C2 - Container View. Shows the running parts, the four independent databases, the broker that carries the events, and how each station keeps working when the network is down." {
             include *
             include qualityOfficer customer
+            autolayout tb
         }
 
         component traceabilityServer "C3-Traceability" "C3 - Component View of the Traceability Server. Mirrors the actual code in the server module." {
@@ -387,6 +412,14 @@ workspace "Slaughterhouse" "C4 model for the DSY course assignment: a slaughterh
             element "Database" {
                 shape cylinder
                 width 520
+                height 440
+            }
+
+            element "Message Broker" {
+                background #438dd5
+                color #ffffff
+                shape pipe
+                width 560
                 height 440
             }
 

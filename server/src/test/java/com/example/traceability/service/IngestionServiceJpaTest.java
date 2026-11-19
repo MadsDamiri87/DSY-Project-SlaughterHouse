@@ -87,18 +87,45 @@ class IngestionServiceJpaTest
   }
 
   /*
-   * Bakkens vægt kommer fra Station 2 og regnes ikke ud her. Stationen ejer reglerne
-   * om deltype og kapacitet, og backenden gemmer det den får besked om - ellers kunne
-   * de to komme til at vise hver sin vægt for samme bakke.
+   * Bakkens vægt udledes af de dele serveren rent faktisk har modtaget, ikke af tallet
+   * i bakkebeskeden. Stationen ejer reglerne om deltype og kapacitet, men serveren kan
+   * kun stå inde for det den har set - og beskeder kan ankomme i vilkårlig rækkefølge.
    */
   @Test
-  void theReportedTrayWeightIsMirrored()
+  void theTrayWeightIsDerivedFromTheRecievedParts()
   {
     service.receiveTray(new TrayDTO("TRAY-W", "LOIN", 50.0, 12.4));
     em.flush();
     em.clear();
 
+    // Ingen dele er nået frem endnu, så serveren påstår ikke at bakken vejer noget.
+    assertThat(em.find(Tray.class, "TRAY-W").getCurrentWeight()).isZero();
+
+    service.receivePart(new AnimalPartDTO("PART-W1", "LOIN", 7.0, 1, "TRAY-W", ARRIVAL));
+    service.receivePart(new AnimalPartDTO("PART-W2", "LOIN", 5.4, 1, "TRAY-W", ARRIVAL));
+    em.flush();
+    em.clear();
+
     assertThat(em.find(Tray.class, "TRAY-W").getCurrentWeight()).isEqualTo(12.4);
+  }
+
+  /*
+   * F01: en gensendt registrering uden bakke må ikke ophæve en placering der allerede
+   * er nået frem. Ellers kunne sporingen miste forbindelsen fra dyret til produkterne.
+   */
+  @Test
+  void aResentRegistrationDoesNotUndoAPlacement()
+  {
+    service.receiveTray(new TrayDTO("TRAY-R", "LOIN", 50.0, 0.0));
+    service.receivePart(new AnimalPartDTO("PART-R", "LOIN", 6.0, 1, "TRAY-R", ARRIVAL));
+    em.flush();
+
+    // Den oprindelige registrering kommer om igen, uden bakke.
+    service.receivePart(new AnimalPartDTO("PART-R", "LOIN", 6.0, 1, null, ARRIVAL));
+    em.flush();
+    em.clear();
+
+    assertThat(em.find(AnimalPart.class, "PART-R").getTray()).isNotNull();
   }
 
   // En del skal kobles til både sit dyr og sin bakke, så sporingen kan følge kæden.

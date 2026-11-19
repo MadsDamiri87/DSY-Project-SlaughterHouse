@@ -2,7 +2,6 @@ package com.example.desktop.ui;
 
 import com.example.desktop.api.Apis;
 import com.example.desktop.domain.Station;
-import com.example.desktop.dto.OutboxEntryDTO;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
@@ -10,7 +9,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -83,12 +81,7 @@ public class Health
   {
     try
     {
-      List<OutboxEntryDTO> entries = apis.station(station).outbox();
-
-      int failed = (int) entries.stream().filter(OutboxEntryDTO::isFailed).count();
-      int pending = entries.size() - failed;
-
-      return new OutboxCount(pending, failed, true);
+      return new OutboxCount(apis.station(station).outbox().size(), true);
     }
     catch (RuntimeException exception)
     {

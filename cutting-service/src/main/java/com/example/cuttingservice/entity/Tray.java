@@ -3,6 +3,7 @@ package com.example.cuttingservice.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,9 @@ public class Tray
 {
   @Id
   private String trayId;
+
+  @Version
+  private long version;
 
   private String partType;
   private double maxWeight;

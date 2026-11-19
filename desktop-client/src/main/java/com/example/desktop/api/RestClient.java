@@ -59,11 +59,16 @@ public class RestClient
 
   public boolean reachable()
   {
+    return respondsWith2xx("/actuator/health");
+  }
+
+  public boolean respondsWith2xx(String path)
+  {
     try
     {
-      HttpRequest request = request("/").GET().timeout(TIMEOUT).build();
-      http.send(request, HttpResponse.BodyHandlers.discarding());
-      return true;
+      HttpRequest request = request(path).GET().timeout(TIMEOUT).build();
+      HttpResponse<Void> response = http.send(request, HttpResponse.BodyHandlers.discarding());
+      return response.statusCode() >= 200 && response.statusCode() < 300;
     }
     catch (IOException exception)
     {

@@ -27,20 +27,6 @@ public class AdminOutboxView implements View
   {
   }
 
-  private enum Filter
-  {
-    ALL("Alle"),
-    PENDING("I kø"),
-    FAILED("Fejlet");
-
-    private final String label;
-
-    Filter(String label)
-    {
-      this.label = label;
-    }
-  }
-
   private final Apis apis;
   private final VBox root = Ui.column(14);
 
@@ -90,17 +76,11 @@ public class AdminOutboxView implements View
   {
     HBox segment = new HBox();
 
-    for (Filter filter : Filter.values())
+    segment.getChildren().add(filterButton("Alle", null));
+
+    for (Station station : Station.all())
     {
-      ToggleButton button = new ToggleButton(filter.label);
-      button.setToggleGroup(filters);
-      button.setUserData(filter);
-      button.setOnAction(event ->
-      {
-        button.setSelected(true);
-        applyFilter();
-      });
-      segment.getChildren().add(button);
+      segment.getChildren().add(filterButton(station.shortName(), station));
     }
 
     ((ToggleButton) segment.getChildren().get(0)).setSelected(true);
@@ -110,6 +90,20 @@ public class AdminOutboxView implements View
     refresh.setOnAction(event -> reload());
 
     return Ui.row(12, segment, Ui.spacer(), refresh);
+  }
+
+  private ToggleButton filterButton(String label, Station station)
+  {
+    ToggleButton button = new ToggleButton(label);
+    button.setToggleGroup(filters);
+    button.setUserData(station);
+    button.setOnAction(event ->
+    {
+      button.setSelected(true);
+      applyFilter();
+    });
+
+    return button;
   }
 
   private TableView<Row> buildTable()
@@ -155,10 +149,8 @@ public class AdminOutboxView implements View
           return;
         }
 
-        boolean failed = "FAILED".equals(value);
-
-        Label badge = Ui.label(failed ? "Fejlet" : "I kø",
-                               "badge", failed ? "badge-failed" : "badge-pending");
+        Label badge = Ui.label("PENDING".equals(value) ? "I kø" : value,
+                               "badge", "badge-pending");
 
         setGraphic(badge);
         setText(null);
@@ -199,13 +191,10 @@ public class AdminOutboxView implements View
   private void applyFilter()
   {
     ToggleButton selected = (ToggleButton) filters.getSelectedToggle();
-    Filter filter = selected == null ? Filter.ALL : (Filter) selected.getUserData();
+    Station station = selected == null ? null : (Station) selected.getUserData();
 
-    rows.setAll(loaded.stream().filter(row -> switch (filter)
-    {
-      case ALL -> true;
-      case PENDING -> !row.entry().isFailed();
-      case FAILED -> row.entry().isFailed();
-    }).toList());
+    rows.setAll(loaded.stream()
+                      .filter(row -> station == null || row.station() == station)
+                      .toList());
   }
 }

@@ -406,7 +406,6 @@
 
 .badge         { -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 3 9 3 9; -fx-background-radius: 3px; }
 .badge-pending { -fx-background-color: #2a2411; -fx-text-fill: -am; }
-.badge-failed  { -fx-background-color: #2a1412; -fx-text-fill: -rd; }
 
 .payload
 {

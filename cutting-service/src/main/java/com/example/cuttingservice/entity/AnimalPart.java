@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Version;
 
 import java.time.Instant;
 
@@ -12,6 +13,9 @@ public class AnimalPart
 {
   @Id
   private String partId;
+
+  @Version
+  private long version;
 
   private String type;
   private double weight;

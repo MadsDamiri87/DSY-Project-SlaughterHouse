@@ -1,74 +1,73 @@
 package com.example.registration.sync;
 
-import com.example.registration.dto.AnimalDTO;
 import com.example.registration.outbox.OutboxEntry;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.registration.outbox.OutboxEventType;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClient;
 
-@Component
-public class TraceabilityClient
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+@Component public class TraceabilityClient
 {
-  private final RestClient restClient;
-  private final ObjectMapper objectMapper;
+  private static final long CONFIRM_TIMEOUT_SECONDS = 5;
 
-  public TraceabilityClient(RestClient.Builder restClientBuilder, ObjectMapper objectMapper,
-                            @Value("${app.backend.base-url}") String baseUrl)
+  private final RabbitTemplate rabbitTemplate;
+  private final String exchange;
+
+  public TraceabilityClient(RabbitTemplate rabbitTemplate,
+                            @Value("${app.events.exchange}") String exchange)
   {
-    this.restClient = restClientBuilder.baseUrl(baseUrl).build();
-    this.objectMapper = objectMapper;
+    this.rabbitTemplate = rabbitTemplate;
+    this.exchange       = exchange;
   }
 
   public void send(OutboxEntry entry)
   {
-    switch (entry.getType())
+    CorrelationData correlation = new CorrelationData(entry.getEventId().toString());
+
+    try
     {
-      case ANIMAL_REGISTERED -> post("/animals", read(entry, AnimalDTO.class));
-      default -> throw new BackendRejectedException(
-          "Unsupported event type " + entry.getType());
+      rabbitTemplate.convertAndSend(exchange, routingKeyFor(entry.getType()), entry.getPayload(),
+                                    message -> {
+                                      message.getMessageProperties()
+                                             .setContentType(MessageProperties.CONTENT_TYPE_JSON);
+                                      message.getMessageProperties()
+                                             .setMessageId(entry.getEventId().toString());
+                                      return message;
+                                    }, correlation);
+
+      CorrelationData.Confirm confirm = correlation.getFuture()
+                                                   .get(CONFIRM_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+      if (confirm == null || !confirm.isAck() || correlation.getReturned() != null)
+      {
+        throw new BackendUnavailableException(
+            "The broker did not acknowledge event " + entry.getEventId());
+      }
+    }
+    catch (AmqpException | ExecutionException | TimeoutException exception)
+    {
+      throw new BackendUnavailableException(
+          "The broker could not be reached for event " + entry.getEventId(), exception);
+    }
+    catch (InterruptedException e)
+    {
+      Thread.currentThread().interrupt();
+      throw new BackendUnavailableException("Interrupted while waiting for confirmation " + e);
     }
   }
 
-  private void post(String path, Object body)
+  private String routingKeyFor(OutboxEventType type)
   {
-    try
+    return switch (type)
     {
-      restClient.post()
-          .uri(path)
-          .contentType(MediaType.APPLICATION_JSON)
-          .body(body)
-          .retrieve()
-          .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
-            throw new BackendRejectedException(
-                "Backend responded " + response.getStatusCode() + " for " + path);
-          })
-          .onStatus(HttpStatusCode::is5xxServerError, (request, response) -> {
-            throw new BackendUnavailableException(
-                "Backend responded " + response.getStatusCode() + " for " + path);
-          })
-          .toBodilessEntity();
-    }
-    catch (ResourceAccessException exception)
-    {
-      throw new BackendUnavailableException("Backend could not be reached at " + path, exception);
-    }
+      case ANIMAL_REGISTERED -> "animal.registered";
+    };
   }
 
-  private <T> T read(OutboxEntry entry, Class<T> type)
-  {
-    try
-    {
-      return objectMapper.readValue(entry.getPayload(), type);
-    }
-    catch (JsonProcessingException exception)
-    {
-      throw new BackendRejectedException(
-          "Event " + entry.getEventId() + " has an unreadable payload", exception);
-    }
-  }
 }

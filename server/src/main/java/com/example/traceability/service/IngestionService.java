@@ -63,12 +63,8 @@ public class IngestionService
     tray.setPartType(reported.partType());
     tray.setMaxWeight(reported.maxWeight());
 
-    if (reported.currentWeight() != null)
-    {
-      tray.setCurrentWeight(reported.currentWeight());
-    }
-
     trayRepository.save(tray);
+    refreshTrayWeight(tray);
   }
 
   @Transactional
@@ -83,9 +79,30 @@ public class IngestionService
     part.setWeight(reported.weight());
     part.setRegistrationDateTime(reported.registrationDateTime());
     part.setAnimal(animal);
-    part.setTray(findTray(reported.trayId()));
+
+    Tray reportedTray = findTray(reported.trayId());
+    if (reportedTray != null)
+    {
+      part.setTray(reportedTray);
+    }
 
     animalPartRepository.save(part);
+
+    if (part.getTray() != null)
+    {
+      refreshTrayWeight(part.getTray());
+    }
+  }
+
+  private void refreshTrayWeight(Tray tray)
+  {
+    double total = animalPartRepository.findByTrayIn(List.of(tray))
+        .stream()
+        .mapToDouble(AnimalPart::getWeight)
+        .sum();
+
+    tray.setCurrentWeight(total);
+    trayRepository.save(tray);
   }
 
   @Transactional
